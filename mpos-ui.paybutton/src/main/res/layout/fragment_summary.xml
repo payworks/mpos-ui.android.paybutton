@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2015 payworks GmbH
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin_half"
+        android:paddingRight="@dimen/activity_horizontal_margin_half"
+        android:paddingTop="@dimen/activity_vertical_margin_half"
+        android:paddingBottom="@dimen/activity_vertical_margin_half">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/summary_receipt_card_view"
+            android:layout_width="fill_parent"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="@dimen/card_radius"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/summary_tx_status_view"
+                    android:layout_width="fill_parent"
+                    android:singleLine="true"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/content_padding"
+                    android:textSize="@dimen/card_heading"
+                    tools:text="Payment successful."/>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:background="@color/divider"
+                    android:layout_marginRight="@dimen/divider_padding"
+                    android:layout_marginLeft="@dimen/divider_padding"
+                    android:layout_height="@dimen/divider"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/content_padding"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/summary_tx_type_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/card_body"
+                        tools:text="Sale"/>
+
+                    <TextView
+                        android:id="@+id/summary_amount_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/card_body"
+                        tools:text="12.34$"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_marginRight="@dimen/divider_padding"
+                    android:layout_marginLeft="@dimen/divider_padding"
+                    android:background="@color/divider"
+                    android:layout_height="@dimen/divider"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/summary_scheme_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/issuer_card_icon_size"
+                        android:paddingLeft="@dimen/card_image_padding"
+                        tools:drawableLeft="@drawable/visacard_image"
+                        android:gravity="center"
+                        tools:text="Unknown"/>
+
+                    <TextView
+                        android:id="@+id/summary_account_number_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/content_padding"
+                        android:textSize="@dimen/card_body"
+                        android:gravity="right"
+                        tools:text="****1234"/>
+
+                </LinearLayout>
+
+
+                <View
+                    android:id="@+id/summary_divider_scheme_accno_view"
+                    android:layout_width="fill_parent"
+                    android:background="@color/divider"
+                    android:layout_marginRight="@dimen/divider_padding"
+                    android:layout_marginLeft="@dimen/divider_padding"
+                    android:layout_height="@dimen/divider"/>
+
+                <TextView
+                    android:id="@+id/summary_subject_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/content_padding"
+                    android:textSize="@dimen/card_body"
+                    tools:text="White crisp bar"/>
+
+                <View
+                    android:id="@+id/summary_divider_subject_view"
+                    android:layout_width="fill_parent"
+                    android:background="@color/divider"
+                    android:layout_marginRight="@dimen/divider_padding"
+                    android:layout_marginLeft="@dimen/divider_padding"
+                    android:layout_height="@dimen/divider"/>
+
+
+                <TextView
+                    android:id="@+id/summary_datetime_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/content_padding"
+                    android:textSize="@dimen/card_body"
+                    android:gravity="center"
+                    tools:text="9:05 am / Today"/>
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:layout_marginTop="@dimen/content_padding"
+            android:id="@+id/summary_action_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            tools:text="@string/send_receipt"/>
+
+        <Button
+            style="@style/mPOS.UI.NegativeButton"
+            android:id="@+id/summary_close_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/close_button"/>
+    </LinearLayout>
+</ScrollView>
