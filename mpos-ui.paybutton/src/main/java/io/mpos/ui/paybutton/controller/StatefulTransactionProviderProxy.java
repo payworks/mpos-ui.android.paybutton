@@ -32,6 +32,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import io.mpos.Mpos;
+import io.mpos.accessories.Accessory;
+import io.mpos.accessories.AccessoryConnectionState;
 import io.mpos.accessories.AccessoryFamily;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
@@ -214,6 +216,9 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
     }
 
     public Receipt getMerchantReceipt() {
+        if(mCurrentTransaction == null)
+            return null;
+
         return mCurrentPaymentProcess.getReceiptFactory().createMerchantReceipt(mCurrentTransaction);
     }
 
@@ -224,6 +229,23 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
 
     public boolean abortPayment() {
         return mCurrentPaymentProcess.requestAbort();
+    }
+
+    public boolean paymentCanBeAborted() {
+        boolean stateIsAbortable = mLastPaymentProcessDetails.getState().equals(PaymentProcessDetailsState.CONNECTING_TO_ACCESSORY);
+        boolean accessoryConnected = true;
+        if(mCurrentPaymentProcess != null && mCurrentPaymentProcess.getAccessory() != null) {
+            Accessory accessory = mCurrentPaymentProcess.getAccessory();
+            if(accessory.getConnectionState().equals(AccessoryConnectionState.UNKNOWN) || accessory.getConnectionState().equals(AccessoryConnectionState.DISCONNECTED)) {
+                accessoryConnected = false;
+            }
+        }
+
+        if(stateIsAbortable && !accessoryConnected) {
+            return true;
+        }
+
+        return mCurrentTransaction != null && mCurrentTransaction.canBeAborted();
     }
 
     public void teardown() {

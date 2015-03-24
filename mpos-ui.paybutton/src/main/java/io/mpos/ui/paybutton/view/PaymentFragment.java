@@ -40,6 +40,7 @@ import io.mpos.transactionprovider.PaymentProcessDetailsStateDetails;
 import io.mpos.transactions.Transaction;
 import io.mpos.ui.paybutton.R;
 import io.mpos.ui.paybutton.controller.PaymentController;
+import io.mpos.ui.paybutton.controller.StatefulTransactionProviderProxy;
 import io.mpos.ui.paybutton.util.UIHelper;
 
 public class PaymentFragment extends AbstractPaymentFragment {
@@ -99,7 +100,8 @@ public class PaymentFragment extends AbstractPaymentFragment {
 
     public void updateStatus(PaymentProcessDetails details, Transaction transaction) {
         mProcessDetails = details;
-        mAbortable = (transaction != null && transaction.canBeAborted());
+
+        mAbortable = StatefulTransactionProviderProxy.getInstance().paymentCanBeAborted();
         updateViews();
     }
 

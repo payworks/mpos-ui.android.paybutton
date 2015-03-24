@@ -35,10 +35,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
 import io.mpos.paymentdetails.PaymentDetailsScheme;
 import io.mpos.provider.ProviderMode;
+import io.mpos.shared.errors.DefaultMposError;
 import io.mpos.transactionprovider.PaymentProcessDetails;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
@@ -191,7 +193,14 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
 
     @Override
     public void onCompleted(Transaction transaction, MposError error) {
-        if(error == null) {
+        if(transaction == null) {
+            MposError e = new DefaultMposError(ErrorType.TRANSACTION_ABORTED);
+            PaymentErrorFragment fragment = PaymentErrorFragment.newInstance(true, e);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, fragment, PaymentErrorFragment.TAG)
+                    .commit();
+        } else if(error == null) {
             Receipt merchantReceipt = mStatefulPaymentProcess.getMerchantReceipt();
             SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), constructTitle(), transaction, merchantReceipt, error);
             getSupportFragmentManager()
@@ -205,7 +214,6 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
                     .replace(R.id.container, fragment, PaymentErrorFragment.TAG)
                     .commit();
         }
-
     }
 
     @Override
