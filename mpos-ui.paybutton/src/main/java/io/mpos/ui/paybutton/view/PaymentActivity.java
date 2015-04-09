@@ -193,7 +193,7 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
 
     @Override
     public void onCompleted(Transaction transaction, MposError error) {
-        if(transaction == null) {
+        if(transaction == null && error == null) {
             MposError e = new DefaultMposError(ErrorType.TRANSACTION_ABORTED);
             PaymentErrorFragment fragment = PaymentErrorFragment.newInstance(true, e);
             getSupportFragmentManager()
