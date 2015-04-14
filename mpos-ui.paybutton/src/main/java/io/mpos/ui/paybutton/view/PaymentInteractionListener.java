@@ -39,4 +39,8 @@ public interface PaymentInteractionListener {
     void onCancelPaymentButtonClicked();
 
     void onRetryPaymentButtonClicked();
+
+    void onSendReceiptButtonClicked(Transaction transaction);
+
+    void onReceiptSent();
 }

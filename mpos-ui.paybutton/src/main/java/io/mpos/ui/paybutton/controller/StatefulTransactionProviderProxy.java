@@ -26,6 +26,7 @@ package io.mpos.ui.paybutton.controller;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.util.Log;
 
 import java.math.BigDecimal;
@@ -35,13 +36,16 @@ import io.mpos.Mpos;
 import io.mpos.accessories.Accessory;
 import io.mpos.accessories.AccessoryConnectionState;
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
 import io.mpos.provider.ProviderMode;
+import io.mpos.shared.errors.DefaultMposError;
 import io.mpos.transactionprovider.PaymentProcess;
 import io.mpos.transactionprovider.PaymentProcessDetails;
 import io.mpos.transactionprovider.PaymentProcessDetailsState;
 import io.mpos.transactionprovider.PaymentProcessWithRegistrationListener;
+import io.mpos.transactionprovider.SendReceiptListener;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
@@ -67,12 +71,20 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
         void onCompleted(Transaction transaction, MposError error);
     }
 
+    public interface SendReceiptCallback {
+
+        void onSendingStarted();
+
+        void onCompleted(MposError error);
+    }
+
     private final static StatefulTransactionProviderProxy INSTANCE = new StatefulTransactionProviderProxy();
 
     private Transaction mCurrentTransaction;
     private PaymentProcess mCurrentPaymentProcess;
 
     private Callback mCallback;
+    private SendReceiptCallback mSendReceiptCallback;
 
     private boolean mAwaitingSignature;
     private boolean mAwaitingApplicationSelection;
@@ -81,6 +93,7 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
     private Context mContext;
 
     private boolean mPaymentIsOnGoing;
+    private boolean mSendReceiptOnGoing;
     private PaymentProcessDetails mLastPaymentProcessDetails;
     private TransactionProvider mTransactionProvider;
 
@@ -208,7 +221,7 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
             if(mAwaitingSignature) {
                 callback.onCustomerSignatureRequired();
             } else if(mAwaitingApplicationSelection) {
-              callback.onApplicationSelectionRequired(mApplicationInformationList);
+                callback.onApplicationSelectionRequired(mApplicationInformationList);
             } else {
                 callback.onStatusChanged(mLastPaymentProcessDetails, mCurrentTransaction);
             }
@@ -246,6 +259,32 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
         }
 
         return mCurrentTransaction != null && mCurrentTransaction.canBeAborted();
+    }
+
+    public void sendReceipt(final String email) {
+        mSendReceiptOnGoing = true;
+        if (mSendReceiptCallback != null) {
+            mSendReceiptCallback.onSendingStarted();
+        }
+
+        mCurrentPaymentProcess.setSendReceiptListener(new SendReceiptListener() {
+            @Override
+            public void onCompleted(PaymentProcess paymentProcess, MposError error) {
+                mSendReceiptOnGoing = false;
+                if (mSendReceiptCallback != null) {
+                    mSendReceiptCallback.onCompleted(error);
+                }
+            }
+        });
+        mCurrentPaymentProcess.sendReceiptForTransaction(email);
+    }
+
+    public void attachSendReceiptCallback(SendReceiptCallback callback) {
+        mSendReceiptCallback = callback;
+
+        if (callback != null && mSendReceiptOnGoing) {
+            callback.onSendingStarted();
+        }
     }
 
     public void teardown() {
@@ -292,6 +331,7 @@ public class StatefulTransactionProviderProxy implements PaymentProcessWithRegis
         mCurrentPaymentProcess = null;
         mCurrentTransaction = null;
         mPaymentIsOnGoing = false;
+        mSendReceiptOnGoing = false;
         mApplicationInformationList = null;
         mAwaitingApplicationSelection = false;
         mAwaitingSignature = false;

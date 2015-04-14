@@ -39,7 +39,7 @@ public class PaymentControllerConfiguration {
     }
 
     private PaymentControllerAppearance mAppearance = new PaymentControllerAppearance();
-    private ReceiptMethod mReceiptMethod = ReceiptMethod.OWN_IMPLEMENTATION;
+    private ReceiptMethod mReceiptMethod = ReceiptMethod.READY_MADE;
     private SignatureMethod mSignatureMethod = SignatureMethod.ON_SCREEN;
 
     private AccessoryFamily mAccessoryFamily = AccessoryFamily.MOCK;

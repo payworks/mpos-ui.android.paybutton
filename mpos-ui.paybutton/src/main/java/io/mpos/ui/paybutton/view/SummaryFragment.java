@@ -130,20 +130,19 @@ public class SummaryFragment extends AbstractPaymentFragment {
         showSubject();
         showTransactionDateTime();
 
-        mCloseButton.findViewById(R.id.summary_close_button).setOnClickListener(new View.OnClickListener() {
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getPaymentInteractionListener().onSummaryClosed(mTransaction, mError);
             }
         });
 
-        mActionButton.findViewById(R.id.summary_action_button).setOnClickListener(new View.OnClickListener() {
+        mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TransactionStatus status = mTransaction.getStatus();
                 if (status.equals(TransactionStatus.APPROVED)) {
-                    SendReceiptDialog dialog = SendReceiptDialog.newInstance();
-                    dialog.show(getFragmentManager(), SendReceiptDialog.TAG);
+                    getPaymentInteractionListener().onSendReceiptButtonClicked(mTransaction);
                 } else if (status.equals(TransactionStatus.DECLINED)) {
                     getPaymentInteractionListener().onRetryPaymentButtonClicked();
                 } else if (status.equals(TransactionStatus.ABORTED)) {
@@ -160,7 +159,7 @@ public class SummaryFragment extends AbstractPaymentFragment {
             if(hideReceiptButton) {
                 mActionButton.setVisibility(View.GONE);
             } else {
-                mActionButton.setVisibility(View.INVISIBLE);
+                mActionButton.setVisibility(View.VISIBLE);
             }
         } else if(TransactionStatus.DECLINED.equals(mTransaction.getStatus()) || TransactionStatus.ABORTED.equals(mTransaction.getStatus())) {
             if(mRetryEnabled) {
@@ -178,7 +177,7 @@ public class SummaryFragment extends AbstractPaymentFragment {
         if (status.equals(TransactionStatus.APPROVED)) {
             mTransactionStatusView.setTextColor(getResources().getColor(R.color.transaction_state_approved));
             mTransactionStatusView.setText(R.string.transaction_approved);
-            mActionButton.setText(R.string.send_receipt);
+            mActionButton.setText(R.string.send_receipt_title);
         } else if (status.equals(TransactionStatus.DECLINED)) {
             mTransactionStatusView.setText(R.string.transaction_declined);
             mTransactionStatusView.setTextColor(getResources().getColor(R.color.transaction_state_declined_aborted));

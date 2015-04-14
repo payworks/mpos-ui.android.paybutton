@@ -149,6 +149,7 @@ public class PaymentFragment extends AbstractPaymentFragment {
             case CONNECTING_TO_ACCESSORY:
             case CONNECTING_TO_ACCESSORY_CHECKING_FOR_UPDATE:
             case CONNECTING_TO_ACCESSORY_UPDATING:
+            case CONNECTING_TO_ACCESSORY_WAITING_FOR_READER:
                 return getString(R.string.fa_lock);
             case PROCESSING_WAITING_FOR_PIN:
                 return getString(R.string.fa_th);

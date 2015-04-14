@@ -8,8 +8,8 @@ android {
         applicationId "io.mpos.ui.paybutton"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 7
-        versionName "2.3.0-BETA05"
+        versionCode 8
+        versionName "2.3.0-BETA06"
     }
     buildTypes {
         release {
@@ -47,11 +47,11 @@ dependencies {
 
     compile project(':mpos-ui.paybutton')
 
-    compile 'io.payworks:mpos.android.core:2.3.0-BETA05@aar'
-    compile 'io.payworks:mpos.android.accessories.miura:2.3.0-BETA05@aar'
-    compile 'io.payworks:mpos.android.comlinks.bluetooth:2.3.0-BETA05@aar'
-    compile 'io.payworks:mpos.android.accessories.verifone-e105:2.3.0-BETA05@aar'
-    compile 'io.payworks:mpos.android.comlinks.verifone-e105:2.3.0-BETA05@aar'
+    compile 'io.payworks:mpos.android.core:2.3.0-BETA06@aar'
+    compile 'io.payworks:mpos.android.accessories.miura:2.3.0-BETA06@aar'
+    compile 'io.payworks:mpos.android.comlinks.bluetooth:2.3.0-BETA06@aar'
+    compile 'io.payworks:mpos.android.accessories.verifone-e105:2.3.0-BETA06@aar'
+    compile 'io.payworks:mpos.android.comlinks.verifone-e105:2.3.0-BETA06@aar'
 
     compile 'com.verifone:e105:1.0'
     compile ':simple-xml:2.7:'

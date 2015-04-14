@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -75,7 +76,6 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
     private String mFormattedAmount;
     private String mTitleTransactionType;
 
-
     private StatefulTransactionProviderProxy mStatefulPaymentProcess = StatefulTransactionProviderProxy.getInstance();
 
     @Override
@@ -104,7 +104,6 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
 
             setTitle(constructTitle());
         }
-
 
         if(!mStatefulPaymentProcess.isPaymentOnGoing() && savedInstanceState == null) {
             startPayment();
@@ -148,6 +147,15 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
                 Bitmap signature = BitmapFactory.decodeByteArray(byteArraySignature, 0, byteArraySignature.length);
                 mStatefulPaymentProcess.continueWithSignature(signature, true);
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().findFragmentByTag(SendReceiptFragment.TAG) != null) {
+            showSummaryFragment(mStatefulPaymentProcess.getCurrentTransaction(), null);
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -201,12 +209,7 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
                     .replace(R.id.container, fragment, PaymentErrorFragment.TAG)
                     .commit();
         } else if(error == null) {
-            Receipt merchantReceipt = mStatefulPaymentProcess.getMerchantReceipt();
-            SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), constructTitle(), transaction, merchantReceipt, error);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, summaryFragment, SummaryFragment.TAG)
-                    .commit();
+            showSummaryFragment(transaction, error);
         } else {
             PaymentErrorFragment fragment = PaymentErrorFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), error);
             getSupportFragmentManager()
@@ -245,6 +248,16 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
     @Override
     public void onRetryPaymentButtonClicked() {
         startPayment();
+    }
+
+    @Override
+    public void onSendReceiptButtonClicked(Transaction transaction) {
+        showSendReceiptFragment(transaction);
+    }
+
+    @Override
+    public void onReceiptSent() {
+        showSummaryFragment(mStatefulPaymentProcess.getCurrentTransaction(), null);
     }
 
     private void startPayment() {
@@ -287,6 +300,23 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
             intent.putExtra(SignatureActivity.BUNDLE_KEY_CARD_SCHEME_ID, resId);
         }
         startActivityForResult(intent, REQUEST_CODE_SIGNATURE);
+    }
+
+    private void showSendReceiptFragment(Transaction transaction) {
+        SendReceiptFragment fragment = SendReceiptFragment.newInstance(transaction, constructTitle());
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment, SendReceiptFragment.TAG)
+                .commit();
+    }
+
+    private void showSummaryFragment(Transaction transaction, MposError error) {
+        Receipt merchantReceipt = mStatefulPaymentProcess.getMerchantReceipt();
+        SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), constructTitle(), transaction, merchantReceipt, error);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, summaryFragment, SummaryFragment.TAG)
+                .commit();
     }
 
     private String constructTitle() {

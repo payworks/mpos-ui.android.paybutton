@@ -26,6 +26,7 @@ package io.ui;
 
 import android.content.Intent;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.EspressoException;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.assertion.ViewAssertions;
@@ -94,13 +95,52 @@ public class PaymentActivityTest extends ActivityInstrumentationTestCase2<Paymen
         Espresso.unregisterIdlingResources(idlingResource);
     }
 
-    public void testNoReceiptButtonOnSummaryPage() {
+    public void testReceiptButtonOnSummaryPage() {
+        initWithAmount(106);
+        TransactionProviderControllerIdlingResource idlingResource = new TransactionProviderControllerIdlingResource();
+        Espresso.registerIdlingResources(idlingResource);
+        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.unregisterIdlingResources(idlingResource);
+    }
+
+    public void testNoReceiptButtonOnSummaryPageWithOwnImplementation() {
         initWithAmount(106);
         PaymentController.getInitializedInstance().getConfiguration().setReceiptMethod(PaymentControllerConfiguration.ReceiptMethod.OWN_IMPLEMENTATION);
         TransactionProviderControllerIdlingResource idlingResource = new TransactionProviderControllerIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
         Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
                 .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())));
+        Espresso.unregisterIdlingResources(idlingResource);
+    }
+
+    public void testSendReceiptFragment() {
+        initWithAmount(106);
+        TransactionProviderControllerIdlingResource idlingResource = new TransactionProviderControllerIdlingResource();
+        Espresso.registerIdlingResources(idlingResource);
+        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+                .perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.email_address_view))
+                .perform(ViewActions.typeText("a@example.com"));
+        Espresso.onView(ViewMatchers.withId(R.id.send_button))
+                .perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.receipt_sent)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.unregisterIdlingResources(idlingResource);
+    }
+
+    public void testSendReceiptFragmentWhenInvalidEmail() {
+        initWithAmount(106);
+        TransactionProviderControllerIdlingResource idlingResource = new TransactionProviderControllerIdlingResource();
+        Espresso.registerIdlingResources(idlingResource);
+        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+                .perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.email_address_view))
+                .perform(ViewActions.typeText("aexample.com"));
+        Espresso.onView(ViewMatchers.withId(R.id.send_button))
+                .perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withText(R.string.email_invalid)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
     }
 
