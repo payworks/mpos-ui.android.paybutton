@@ -53,8 +53,8 @@ import static android.view.View.OnClickListener;
 
 public class CheckoutActivity extends ActionBarActivity {
 
-    private final static String MERCHANT_ID = "<contact your account manager in case you don't have one>";
-    private final static String MERCHANT_SECRET = "<contact your account manager in case you don't have one>";
+    private final static String MERCHANT_ID = "<create a test merchant in the gateway manager>";
+    private final static String MERCHANT_SECRET = "<create a test merchant in the gateway manager>";
 
     @Override
     protected void onResume() {

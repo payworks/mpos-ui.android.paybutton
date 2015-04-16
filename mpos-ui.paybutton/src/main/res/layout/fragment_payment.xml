@@ -57,7 +57,7 @@ IN THE SOFTWARE.
         android:id="@+id/abort_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/abort_button"
+        android:text="@string/MPUAbort"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
     />

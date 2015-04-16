@@ -13,10 +13,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE.
 -->
 <resources>
-    <string name="continue_button">CONTINUE</string>
-    <string name="abort_button">ABORT</string>
-    <string name="cancel_button">CANCEL</string>
-    <string name="close_button">CLOSE</string>
     <string name="fa_bank">&#xf19c;</string>
     <string name="fa_th">&#xf00a;</string>
     <string name="fa_lock">&#xf023;</string>
@@ -25,26 +21,8 @@ IN THE SOFTWARE.
     <string name="fa_compress">&#xf066;</string>
     <string name="fa_close">&#xf00d;</string>
     <string name="fa_email">&#xf0e0;</string>
-    <string name="account_selection">Select account</string>
     <string name="request_abort_failure">Abort not possible right now.</string>
-    <string name="back_button_hint">A payment is going on. Use the abort button, if you want to abort it.</string>
-    <string name="transaction_approved">Payment\nsuccessful.</string>
-    <string name="transaction_declined">Payment\ndeclined.</string>
-    <string name="transaction_aborted">Payment\naborted.</string>
-    <string name="receipt_dialog_hint">Sends a receipt to the following email address.</string>
-    <string name="receipt_sent">Receipt sent successfully.</string>
-    <string name="send_receipt">Send receipt</string>
-    <string name="send_receipt_title">SEND RECEIPT</string>
-    <string name="send">SEND</string>
-    <string name="retry_button">RETRY</string>
-    <string name="signature_screen_authorize_amount">"I agree to pay the amount of %1$s."</string>
-    <string name="summary">Summary</string>
-    <string name="enter_email">Enter email address</string>
-    <string name="error">Error</string>
-    <string name="email_invalid">You have entered an invalid email address, please correct it.</string>
 
-
-    <string name="tx_type_charge">Sale</string>
     <string name="tx_type_refund">Refund</string>
     <string name="tx_type_unknown">Unknown</string>
 </resources>

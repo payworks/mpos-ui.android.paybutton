@@ -78,7 +78,7 @@ public class SignatureFragment extends Fragment implements SignatureView.Signatu
         schemeView.setImageResource(resId);
 
         TextView authorizeView = (TextView) view.findViewById(R.id.authorize_amount_view);
-        String txt = String.format(getString(R.string.signature_screen_authorize_amount), amount);
+        String txt = String.format(getString(R.string.MPUSignatureStatusLine), amount);
         authorizeView.setText(txt);
 
         view.findViewById(R.id.continue_button).setOnClickListener(new View.OnClickListener() {

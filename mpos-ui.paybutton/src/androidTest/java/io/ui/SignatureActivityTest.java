@@ -73,6 +73,6 @@ public class SignatureActivityTest extends ActivityInstrumentationTestCase2<Sign
 
     public void testBackKeyShowsToast() {
         Espresso.pressBack();
-        Espresso.onView(ViewMatchers.withText(R.string.back_button_hint)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.MPUBackButtonDisabled)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }

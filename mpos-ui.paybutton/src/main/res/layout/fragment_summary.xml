@@ -156,13 +156,13 @@ IN THE SOFTWARE.
             android:id="@+id/summary_action_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            tools:text="@string/send_receipt"/>
+            tools:text="@string/MPUSendReceipt"/>
 
         <Button
             style="@style/mPOS.UI.NegativeButton"
             android:id="@+id/summary_close_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/close_button"/>
+            android:text="@string/MPUClose"/>
     </LinearLayout>
 </ScrollView>

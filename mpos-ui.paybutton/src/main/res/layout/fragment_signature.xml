@@ -21,7 +21,7 @@ IN THE SOFTWARE.
 
     <Button
         android:id="@+id/continue_button"
-        android:text="@string/continue_button"
+        android:text="@string/MPUContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -105,7 +105,7 @@ IN THE SOFTWARE.
     <Button
         style="@style/mPOS.UI.NegativeButton"
         android:id="@+id/abort_button"
-        android:text="@string/abort_button"
+        android:text="@string/MPUAbort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/continue_button"

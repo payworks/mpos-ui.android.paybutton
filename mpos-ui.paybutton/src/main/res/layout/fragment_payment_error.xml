@@ -59,7 +59,7 @@ IN THE SOFTWARE.
         android:id="@+id/retry_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/retry_button"
+        android:text="@string/MPURetry"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         />
@@ -68,7 +68,7 @@ IN THE SOFTWARE.
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel_button"
+        android:text="@string/MPUAbort"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
     />

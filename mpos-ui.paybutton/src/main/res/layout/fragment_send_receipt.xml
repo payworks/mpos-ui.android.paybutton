@@ -49,7 +49,8 @@ IN THE SOFTWARE.
         android:layout_marginRight="@dimen/dialog_content_padding"
         android:id="@+id/email_address_view"
         android:inputType="textEmailAddress"
-        android:hint="@string/enter_email"
+        android:hint="@string/MPUEnterEmailAddress"
+        android:ellipsize="end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/send_button"
@@ -60,7 +61,7 @@ IN THE SOFTWARE.
         android:id="@id/send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send"
+        android:text="@string/MPUSend"
         android:layout_alignParentRight="true"
         android:layout_below="@id/status_icon_view_container"/>
 

@@ -112,7 +112,7 @@ public class PaymentActivity extends AbstractPaymentActivity implements Stateful
 
     private void constructTransactionTypeTitle() {
         TransactionType transactionType = (TransactionType) getIntent().getSerializableExtra(BUNDLE_EXTRA_TRANSACTION_TYPE);
-        mTitleTransactionType = getString(R.string.tx_type_charge);
+        mTitleTransactionType = getString(R.string.MPUSale);
         if(transactionType != null && transactionType.equals(TransactionType.REFUND)) {
             mTitleTransactionType = getString(R.string.tx_type_refund);
         }

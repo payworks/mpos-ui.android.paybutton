@@ -81,7 +81,7 @@ public class SendReceiptFragment extends AbstractPaymentFragment implements Stat
 
                     StatefulTransactionProviderProxy.getInstance().sendReceipt(email);
                 } else {
-                    showErrorDialog(getString(R.string.email_invalid));
+                    showErrorDialog(getString(R.string.MPUInvalidEmailAddress), getString(R.string.MPUEnterValidEmailAddress));
                 }
             }
         });
@@ -95,7 +95,7 @@ public class SendReceiptFragment extends AbstractPaymentFragment implements Stat
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(R.string.send_receipt);
+        getActivity().setTitle(R.string.MPUSendReceipt);
         StatefulTransactionProviderProxy.getInstance().attachSendReceiptCallback(this);
     }
 
@@ -128,7 +128,7 @@ public class SendReceiptFragment extends AbstractPaymentFragment implements Stat
         mProgressView.setVisibility(View.INVISIBLE);
 
         if (error == null) {
-            Toast.makeText(getActivity(), R.string.receipt_sent, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.MPUReceiptSent, Toast.LENGTH_LONG).show();
             getPaymentInteractionListener().onReceiptSent();
         } else {
             showErrorDialog(error);
@@ -145,11 +145,15 @@ public class SendReceiptFragment extends AbstractPaymentFragment implements Stat
     }
 
     private void showErrorDialog(String message) {
+        showErrorDialog(getString(R.string.MPUError), message);
+    }
+
+    private void showErrorDialog(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder
-                .setTitle(R.string.error)
+                .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.close_button, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.MPUClose, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

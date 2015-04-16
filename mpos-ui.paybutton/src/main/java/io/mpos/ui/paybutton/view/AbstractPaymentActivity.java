@@ -35,7 +35,7 @@ public class AbstractPaymentActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, R.string.back_button_hint, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.MPUBackButtonDisabled, Toast.LENGTH_LONG).show();
     }
 
     @Override

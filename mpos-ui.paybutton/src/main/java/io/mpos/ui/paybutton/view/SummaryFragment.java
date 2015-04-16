@@ -27,11 +27,14 @@ package io.mpos.ui.paybutton.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.PaymentDetailsScheme;
@@ -111,7 +114,7 @@ public class SummaryFragment extends AbstractPaymentFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(R.string.summary);
+        getActivity().setTitle(R.string.MPUSummary);
     }
 
     @Override
@@ -176,19 +179,19 @@ public class SummaryFragment extends AbstractPaymentFragment {
         TransactionStatus status = mTransaction.getStatus();
         if (status.equals(TransactionStatus.APPROVED)) {
             mTransactionStatusView.setTextColor(getResources().getColor(R.color.transaction_state_approved));
-            mTransactionStatusView.setText(R.string.transaction_approved);
-            mActionButton.setText(R.string.send_receipt_title);
+            mTransactionStatusView.setText(R.string.MPUPaymentSuccessful);
+            mActionButton.setText(R.string.MPUSendReceipt);
         } else if (status.equals(TransactionStatus.DECLINED)) {
-            mTransactionStatusView.setText(R.string.transaction_declined);
+            mTransactionStatusView.setText(R.string.MPUPaymentDeclined);
             mTransactionStatusView.setTextColor(getResources().getColor(R.color.transaction_state_declined_aborted));
-            mActionButton.setText(R.string.retry_button);
+            mActionButton.setText(R.string.MPURetry);
         } else if (status.equals(TransactionStatus.ABORTED)) {
-            mTransactionStatusView.setText(R.string.transaction_aborted);
+            mTransactionStatusView.setText(R.string.MPUPaymentAborted);
             mTransactionStatusView.setTextColor(getResources().getColor(R.color.transaction_state_declined_aborted));
-            mActionButton.setText(R.string.retry_button);
+            mActionButton.setText(R.string.MPURetry);
         } else {
             mTransactionStatusView.setTextColor(getResources().getColor(R.color.transaction_state_declined_aborted));
-            mActionButton.setText(R.string.retry_button);
+            mActionButton.setText(R.string.MPURetry);
         }
     }
 
@@ -196,7 +199,7 @@ public class SummaryFragment extends AbstractPaymentFragment {
         mAmountView.setText(UIHelper.formatAmountWithSymbol(mTransaction.getCurrency(), mTransaction.getAmount()));
 
         if (mTransaction.getType().equals(TransactionType.CHARGE)) {
-            mTransactionTypeView.setText(R.string.tx_type_charge);
+            mTransactionTypeView.setText(R.string.MPUSale);
         } else if (mTransaction.getType().equals(TransactionType.REFUND)) {
             mTransactionTypeView.setText(R.string.tx_type_refund);
         } else {
@@ -251,12 +254,7 @@ public class SummaryFragment extends AbstractPaymentFragment {
         if (mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.DATE) == null && mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.TIME) == null) {
             mDateTimeView.setVisibility(View.GONE);
         } else {
-            String date = mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.DATE).getValue();
-            String time = mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.TIME).getValue();
-            String timeValues[] = time.split(":");
-            String formattedTime = timeValues[0] + ":" + timeValues[1];
-
-            mDateTimeView.setText(date + " at " + formattedTime);
+            mDateTimeView.setText(DateUtils.formatDateTime(this.getActivity().getApplicationContext(), mTransaction.getCreatedTimestamp(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
         }
     }
 

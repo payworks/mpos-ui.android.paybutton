@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="MPUAbort">"Interrompre"</string>
+<string name="MPURetry">"Répéter"</string>
+<string name="MPUSendReceipt">"Envoyer le justificatif"</string>
+<string name="MPUResendReceipt">"Reenvoyer le justificatif"</string>
+<string name="MPUClose">"Fermer"</string>
+<string name="MPUPaymentSuccessful">"Paiement effectué avec succès"</string>
+<string name="MPUPaymentDeclined">"Paiement refusé."</string>
+<string name="MPUPaymentAborted">"Paiement interrompu."</string>
+<string name="MPUSummary">"Résumé"</string>
+<string name="MPUInvalidEmailAddress">"Adresse mail invalide"</string>
+<string name="MPUEnterValidEmailAddress">"Veuillez saisir une adresse e-mail valide."</string>
+<string name="MPUOK">"OK"</string>
+<string name="MPUCouldNotSendReceipt">"Impossible d'envoyer le justifactif"</string>
+<string name="MPUPleaseTryAgain">"Veuillez réessayer."</string>
+<string name="MPUSelectAccount">"Sélectionnez compte"</string>
+<string name="MPUSale">"Paiement"</string>
+<string name="MPUEnterEmailAddress">"Saisir l'adresse e-mail"</string>
+<string name="MPUSend">"Envoyer"</string>
+<string name="MPUContinue">"Continuer"</string>
+<string name="MPUBackButtonDisabled">"La fonction «Retour» est désactivée pendant le paiement. Veuillez utiliser les fonctions ci-dessus."</string>
+<string name="MPUSignatureStatusLine">"J'autorise par la présente le paiement d'un montant de %1$s."</string>
+<string name="MPUError">"Erreur"</string>
+<string name="MPUReceiptSent">"Justificatif envoyé"</string>
+</resources>

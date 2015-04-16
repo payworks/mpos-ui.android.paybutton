@@ -91,7 +91,7 @@ public class PaymentActivityTest extends ActivityInstrumentationTestCase2<Paymen
         TransactionProviderControllerIdlingResource idlingResource = new TransactionProviderControllerIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
         Espresso.pressBack();
-        Espresso.onView(ViewMatchers.withText(R.string.back_button_hint)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.MPUBackButtonDisabled)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
     }
 
@@ -126,7 +126,7 @@ public class PaymentActivityTest extends ActivityInstrumentationTestCase2<Paymen
                 .perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        Espresso.onView(ViewMatchers.withText(R.string.receipt_sent)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.MPUReceiptSent)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
     }
 
@@ -140,7 +140,7 @@ public class PaymentActivityTest extends ActivityInstrumentationTestCase2<Paymen
                 .perform(ViewActions.typeText("aexample.com"));
         Espresso.onView(ViewMatchers.withId(R.id.send_button))
                 .perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText(R.string.email_invalid)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.MPUInvalidEmailAddress)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
     }
 
