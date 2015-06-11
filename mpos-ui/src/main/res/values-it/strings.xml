@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="MPUAbort">"Interrompi"</string>
+<string name="MPURetry">"Ripeti"</string>
+<string name="MPUSendReceipt">"Invia giustificativo"</string>
+<string name="MPUResendReceipt">"Invia giustificativo a nuovo"</string>
+<string name="MPUClose">"Chiudi"</string>
+<string name="MPUPaymentSuccessful">"Pagamento riuscito."</string>
+<string name="MPUPaymentRefunded">"Pagamento rimborsato."</string>
+<string name="MPUPaymentDeclined">"Pagamento rifiutato."</string>
+<string name="MPUPaymentAborted">"Pagamento interrotto."</string>
+<string name="MPURefundApproved">"Rimborso riuscito."</string>
+<string name="MPURefundDeclined">"Rimborso rifiutato."</string>
+<string name="MPURefundAborted">"Rimborso interrotto."</string>
+<string name="MPURefundPayment">"Rimborsa pagamento"</string>
+<string name="MPURefundPrompt">"Sei sicuro di voler rimborsare questo pagamento?"</string>
+<string name="MPURefund">"Rimborso"</string>
+<string name="MPUSummary">"Sommario"</string>
+<string name="MPUInvalidEmailAddress">"Indirizzo email non valido"</string>
+<string name="MPUEnterValidEmailAddress">"Si prega di inserire un indirizzo e-mail valido."</string>
+<string name="MPUOK">"OK"</string>
+<string name="MPUCouldNotSendReceipt">"Non è possibile inviare il giustificativo"</string>
+<string name="MPUPleaseTryAgain">"Riprovate per favore."</string>
+<string name="MPUSelectAccount">"Selezionare conto"</string>
+<string name="MPUSale">"Pagamento"</string>
+<string name="MPUEnterEmailAddress">"Inserisci indirizzo e-mail"</string>
+<string name="MPUSend">"Invia"</string>
+<string name="MPUContinue">"Avanti"</string>
+<string name="MPUBackButtonDisabled">"La funzione «Indietro» è disattivata durante la procedura di pagamento. Utilizzate le funzioni in alto."</string>
+<string name="MPUSignatureStatusLine">"Con la presente autorizzo il pagamento dell’importo di %1$s."</string>
+<string name="MPUError">"Errore"</string>
+<string name="MPUReceiptSent">"Giustificativo inviato."</string>
+</resources>

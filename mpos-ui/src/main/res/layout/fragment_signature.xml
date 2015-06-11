@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ mpos-ui : http://www.payworksmobile.com
+  ~
+  ~ Copyright (c) 2015 payworks GmbH
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:paddingBottom="@dimen/activity_vertical_margin"
+             android:paddingTop="@dimen/activity_vertical_margin"
+             >
+
+    <Button
+        style="@style/mPOS.UI.Button"
+        android:id="@+id/continue_button"
+        android:text="@string/MPUContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:enabled="false"
+    />
+
+    <io.mpos.ui.paybutton.view.SignatureView
+        android:id="@+id/signature_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/continue_button"
+    />
+
+    <TextView
+        android:id="@+id/authorize_amount_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/continue_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:paddingTop="2dp"
+        android:gravity="center"
+        />
+
+    <View
+        android:id="@+id/signature_view_separator"
+        android:layout_height="1px"
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_above="@id/authorize_amount_view"
+    />
+
+    <LinearLayout
+        android:id="@+id/amount_view_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+    >
+        <ImageView
+            android:id="@+id/scheme_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+        />
+
+        <TextView
+            android:id="@+id/amount_view"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+
+    <Button
+        style="@style/mPOS.UI.Button"
+        android:id="@+id/clear_button"
+        android:layout_width="@dimen/action_button_min_width_material"
+        android:layout_height="@dimen/action_button_min_height_material"
+        android:text="@string/fa_close"
+        android:layout_alignRight="@id/continue_button"
+        android:enabled="false"
+        android:layout_alignTop="@id/amount_view_container"
+        android:layout_alignEnd="@id/continue_button"
+    />
+
+
+    <Button
+        style="@style/mPOS.UI.Button"
+        android:id="@+id/abort_button"
+        android:text="@string/MPUAbort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/continue_button"
+        android:layout_alignLeft="@id/amount_view_container"
+    />
+
+
+</RelativeLayout>

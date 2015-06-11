@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ mpos-ui : http://www.payworksmobile.com
+  ~
+  ~ Copyright (c) 2015 payworks GmbH
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+<resources>
+    <string name="fa_bank" translatable="false">&#xf19c;</string>
+    <string name="fa_th" translatable="false">&#xf00a;</string>
+    <string name="fa_lock" translatable="false">&#xf023;</string>
+    <string name="fa_credit_card" translatable="false">&#xf09d;</string>
+    <string name="fa_times_circle" translatable="false">&#xf057;</string>
+    <string name="fa_compress" translatable="false">&#xf066;</string>
+    <string name="fa_close" translatable="false">&#xf00d;</string>
+    <string name="fa_email" translatable="false">&#xf0e0;</string>
+    <string name="fa_history" translatable="false">&#xf1da;</string>
+    <string name="MPUUnknown" translatable="false">Unknown</string>
+</resources>

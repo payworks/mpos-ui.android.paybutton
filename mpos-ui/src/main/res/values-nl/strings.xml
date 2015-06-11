@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="MPUAbort">"Afbreken"</string>
+<string name="MPURetry">"Herhalen"</string>
+<string name="MPUSendReceipt">"Betalingsbewijs sturen"</string>
+<string name="MPUResendReceipt">"Betalingsbewijs opnieuw sturen"</string>
+<string name="MPUClose">"Sluiten"</string>
+<string name="MPUPaymentSuccessful">"Betaling geslaagd."</string>
+<string name="MPUPaymentRefunded">"Betaling terugbetaald."</string>
+<string name="MPUPaymentDeclined">"Betaling geweigerd."</string>
+<string name="MPUPaymentAborted">"Betaling afgebroken."</string>
+<string name="MPURefundApproved">"Terugbetaling geslaagd."</string>
+<string name="MPURefundDeclined">"Terugbetaling geweigerd."</string>
+<string name="MPURefundAborted">"Terugbetaling afgebroken."</string>
+<string name="MPURefundPayment">"Terugbetaling transactie"</string>
+<string name="MPURefundPrompt">"Bent u zeker dat u wilt deze transactie terug te betalen?"</string>
+<string name="MPURefund">"Terugbetaling"</string>
+<string name="MPUSummary">"Overzicht"</string>
+<string name="MPUInvalidEmailAddress">"Ongeldig e-mailadres"</string>
+<string name="MPUEnterValidEmailAddress">"Vul een geldig e-mailadres in."</string>
+<string name="MPUOK">"OK"</string>
+<string name="MPUCouldNotSendReceipt">"Kon Betalingsbewijs niet verzenden"</string>
+<string name="MPUPleaseTryAgain">"Probeer het nog eens."</string>
+<string name="MPUSelectAccount">"Selecteer rekening"</string>
+<string name="MPUSale">"Betaling"</string>
+<string name="MPUEnterEmailAddress">"E-mailadres invoeren"</string>
+<string name="MPUSend">"Sturen"</string>
+<string name="MPUContinue">"Verder"</string>
+<string name="MPUBackButtonDisabled">"De functie "Terug" is gedeactiveerd tijdens de betaalprocedure. Gebruik de functies hierboven."</string>
+<string name="MPUSignatureStatusLine">"Hiermee machtig ik de betaling van %1$s."</string>
+<string name="MPUError">"Fout"</string>
+<string name="MPUReceiptSent">"Betalingsbewijs verzonden."</string>
+</resources>

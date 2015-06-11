@@ -1,1 +1,1 @@
-include ':mpos-ui.paybutton', ':mpos-ui.paybutton-sample'
+include ':mpos-ui', ':mpos-ui.sample'

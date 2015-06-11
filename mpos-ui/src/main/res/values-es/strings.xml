@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="MPUAbort">"Cancelar"</string>
+<string name="MPURetry">"Volver a intentar"</string>
+<string name="MPUSendReceipt">"Enviar Recibo"</string>
+<string name="MPUResendReceipt">"Reenviar Recibo"</string>
+<string name="MPUClose">"Cerrar"</string>
+<string name="MPUPaymentSuccessful">"Pago completado."</string>
+<string name="MPUPaymentRefunded">"Pago reembolsado."</string>
+<string name="MPUPaymentDeclined">"Pago rechazado."</string>
+<string name="MPUPaymentAborted">"Pago abortado."</string>
+<string name="MPURefundApproved">"Reembolso completado con éxito."</string>
+<string name="MPURefundDeclined">"Reembolso rechazado."</string>
+<string name="MPURefundAborted">"Reembolso cancelado."</string>
+<string name="MPURefundPayment">"Reembolsar pago"</string>
+<string name="MPURefundPrompt">"¿Está seguro de que quiere reembolsar el pago?"</string>
+<string name="MPURefund">"Reembolso"</string>
+<string name="MPUSummary">"Sumario"</string>
+<string name="MPUInvalidEmailAddress">"Correo electrónico inválido"</string>
+<string name="MPUEnterValidEmailAddress">"Por favor introduzca un correo electrónico válido."</string>
+<string name="MPUOK">"OK"</string>
+<string name="MPUCouldNotSendReceipt">"No se pudo enviar el recibo"</string>
+<string name="MPUPleaseTryAgain">"Por favor, inténtelo de nuevo"</string>
+<string name="MPUSelectAccount">"Selecione una cuenta"</string>
+<string name="MPUSale">"Venta"</string>
+<string name="MPUEnterEmailAddress">"Correo electrónico"</string>
+<string name="MPUSend">"Enviar"</string>
+<string name="MPUContinue">"Continuar"</string>
+<string name="MPUBackButtonDisabled">"El botón Atrás ha sido desactivado durante el proceso de pago. Por favor, utilice los botones de arriba."</string>
+<string name="MPUSignatureStatusLine">"Estoy de acuerdo en pagar la cantidad de %1$s."</string>
+<string name="MPUError">"Error"</string>
+<string name="MPUReceiptSent">"Recibo enviado."</string>
+</resources>
