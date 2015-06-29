@@ -30,4 +30,29 @@
 <string name="MPUSignatureStatusLine">"Con la presente autorizzo il pagamento dell’importo di %1$s."</string>
 <string name="MPUError">"Errore"</string>
 <string name="MPUReceiptSent">"Giustificativo inviato."</string>
+<string name="MPUFetching">"Caricamento del transazione"</string>
+<string name="MPULoading">"Caricamento in corso..."</string>
+<string name="MPUVersion">"Versione"</string>
+<string name="MPULoggedInAs">"Login come"</string>
+<string name="MPULogout">"Logout"</string>
+<string name="MPUHelp">"Aiuto"</string>
+<string name="MPUForgot">"Dati dimenticati?"</string>
+<string name="MPULogin">"Login"</string>
+<string name="MPUEmail">"E-mail"</string>
+<string name="MPUEmailAddress">"Indirizzo e-mail"</string>
+<string name="MPUPassword">"Password"</string>
+<string name="MPURequired">"richiesta"</string>
+<string name="MPUWrongCredentials">"La password inserita è errata o non esiste ancora un account per il vostro indirizzo e-mail."</string>
+<string name="MPUUnknownUsername">"Non esiste un account con questo indirizzo email."</string>
+<string name="MPUBack">"Indietro"</string>
+<string name="MPUPasswordReset">"Abbiamo inviato una email con ulteriori istruzioni."</string>
+<string name="MPURequestPassword">"Resetta password"</string>
+<string name="MPUActions">"Azioni"</string>
+<string name="MPUSettings">"Impostazioni"</string>
+<string name="MPUInfo">"Info"</string>
+<string name="MPUPrintReceipt">"Stampare giustificativo
+"</string>
+<string name="MPUReprintReceipt">"Stampara giustificativo a nuovo"</string>
+<string name="MPUPrinting">"Stampando...
+"</string>
 </resources>

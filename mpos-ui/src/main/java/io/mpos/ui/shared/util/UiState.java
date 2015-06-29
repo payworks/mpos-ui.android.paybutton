@@ -1,3 +1,4 @@
+
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
@@ -21,43 +22,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package io.mpos.ui.shared.util;
 
-package io.mpos.ui.paybutton.view;
+public enum UiState {
+    /**
+     * Initial idle state
+     */
+    IDLE,
 
-import android.app.Activity;
-import android.app.Fragment;
+    /**
+     * Transaction is ongoing
+     */
+    TRANSACTION_ONGOING,
 
-import io.mpos.paymentdetails.ApplicationInformation;
+    /**
+     * Transaction is waiting for signature
+     */
+    TRANSACTION_WAITING_SIGNATURE,
 
-public class AbstractTransactionFragment extends Fragment {
+    /**
+     * Transaction is waiting for application selection
+     */
+    TRANSACTION_WAITING_APPLICATION_SELECTION,
 
-    public interface Interaction {
+    /**
+     * Error in transaction process
+     */
+    TRANSACTION_ERROR,
 
-        void onAbortTransactionButtonClicked();
+    /**
+     * Loading summary from the backend
+     */
+    SUMMARY_LOADING,
+    /**
+     * Displaying summary
+     */
+    SUMMARY_DISPLAYING,
 
-        void onApplicationSelected(ApplicationInformation applicationInformation);
+    /**
+     * Error displaying summary
+     */
+    SUMMARY_ERROR,
 
-    }
+    /**
+     * Sending receipt via Email
+     */
+    RECEIPT_SENDING,
 
-    private Interaction mInteractionActivity;
+    /**
+     * Printing receipt on printer
+     */
+    RECEIPT_PRINTING,
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mInteractionActivity = (Interaction) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement AbstractTransactionFragment.Interaction");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mInteractionActivity = null;
-    }
-
-    public Interaction getInteractionActivity() {
-        return mInteractionActivity;
-    }
+    /**
+     * Error printing receipt
+     */
+    RECEIPT_PRINTING_ERROR
 }

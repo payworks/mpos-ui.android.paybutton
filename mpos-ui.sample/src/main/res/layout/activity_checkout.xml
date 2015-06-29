@@ -31,18 +31,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
             android:id="@+id/sdk_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="SDK version:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="SDK version:"
             />
 
 
@@ -60,8 +60,8 @@
             android:background="#707070"/>
 
         <TextView
-            style="@style/CheckoutButton"
             android:id="@+id/transaction_signature"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ff9800"
@@ -69,8 +69,8 @@
             />
 
         <TextView
-            style="@style/CheckoutButton"
             android:id="@+id/transaction_application_selection"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#8bc34a"
@@ -78,8 +78,8 @@
             />
 
         <TextView
-            style="@style/CheckoutButton"
             android:id="@+id/transaction_declined"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_transaction_declined"
@@ -101,16 +101,16 @@
             android:background="#707070"/>
 
         <TextView
-            style="@style/CheckoutButton"
             android:id="@+id/transaction_e105_charge"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_e105"
             />
 
         <TextView
-            style="@style/CheckoutButton"
             android:id="@+id/transaction_miura_charge"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_miura"
@@ -132,16 +132,23 @@
             android:background="#707070"/>
 
         <TextView
-            style="@style/CheckoutButton"
             android:id="@+id/summary_last"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_last_summary"
             />
 
         <TextView
+            android:id="@+id/print_last"
             style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/option_last_print"/>
+
+        <TextView
             android:id="@+id/refund_last"
+            style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_last_refund"

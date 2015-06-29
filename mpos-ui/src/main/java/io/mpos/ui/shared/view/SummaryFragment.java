@@ -24,10 +24,10 @@
 package io.mpos.ui.shared.view;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -37,48 +37,45 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.PaymentDetailsScheme;
+import io.mpos.transactions.Currency;
 import io.mpos.transactions.RefundDetailsStatus;
-import io.mpos.transactions.Transaction;
 import io.mpos.transactions.TransactionStatus;
 import io.mpos.transactions.TransactionType;
-import io.mpos.transactions.receipts.Receipt;
-import io.mpos.transactions.receipts.ReceiptLineItemKey;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.model.MposUiConfiguration;
+import io.mpos.ui.shared.model.TransactionDataHolder;
 import io.mpos.ui.shared.util.UiHelper;
 
 public class SummaryFragment extends Fragment {
 
     public interface Interaction {
 
-        void onSendReceiptButtonClicked(Transaction transaction);
+        void onSendReceiptButtonClicked(String transactionIdentifier);
 
         void onSummaryRetryButtonClicked();
 
-        void onSummaryRefundButtonClicked(Transaction transaction);
+        void onSummaryRefundButtonClicked(String transactionIdentifier);
 
-        void onSummaryClosed(Transaction transaction, MposError error);
+        void onSummaryClosed(TransactionDataHolder transaction, MposError error);
+
+        void onSummaryPrintReceiptButtonClicked(String transactionIdentifier);
     }
 
     public final static String TAG = "SummaryFragment";
-    private Transaction mTransaction;
+    private TransactionDataHolder mTransactionDataHolder;
     private MposError mError;
     private boolean mRetryEnabled;
-    private Receipt mMerchantReceipt;
-    private String mActivityDefaultTitle;
     private boolean mRefundEnabled;
 
-    public static SummaryFragment newInstance(boolean retryEnabled, boolean refundEnabled, String title, Transaction transaction, Receipt merchantReceipt, MposError error) {
+    public static SummaryFragment newInstance(boolean retryEnabled, boolean refundEnabled, TransactionDataHolder transactionDataHolder, MposError error) {
         SummaryFragment fragment = new SummaryFragment();
-        fragment.setTransaction(transaction);
-        fragment.setMerchantReceipt(merchantReceipt);
+        fragment.setTransactionDataHolder(transactionDataHolder);
         fragment.setError(error);
-        fragment.setActivityDefaultTitle(title);
         fragment.setRetryEnabled(retryEnabled);
         fragment.setRefundEnabled(refundEnabled);
         return fragment;
@@ -97,9 +94,12 @@ public class SummaryFragment extends Fragment {
     private TextView mAccountNumberView;
     private TextView mSchemeView;
     private TextView mDateTimeView;
-    private Button mActionButton;
+    private Button mRetryButton;
+    private Button mSendReceiptButton;
     private Button mRefundButton;
     private Button mCloseButton;
+    private Button mPrintReceiptButton;
+
 
     //Dividers
     private View mSubjectViewDivider;
@@ -122,9 +122,11 @@ public class SummaryFragment extends Fragment {
         mAccountNumberView = (TextView) view.findViewById(R.id.summary_account_number_view);
         mSchemeView = (TextView) view.findViewById(R.id.summary_scheme_view);
         mDateTimeView = (TextView) view.findViewById(R.id.summary_datetime_view);
-        mActionButton = (Button) view.findViewById(R.id.summary_action_button);
+        mRetryButton = (Button) view.findViewById(R.id.summary_retry_button);
+        mSendReceiptButton = (Button) view.findViewById(R.id.summary_send_receipt_button);
         mRefundButton = (Button) view.findViewById(R.id.summary_refund_button);
         mCloseButton = (Button) view.findViewById(R.id.summary_close_button);
+        mPrintReceiptButton = (Button) view.findViewById(R.id.summary_print_receipt_button);
 
         mSubjectViewDivider = view.findViewById(R.id.summary_divider_subject_view);
         mSchemeAccNoViewDivider = view.findViewById(R.id.summary_divider_scheme_accno_view);
@@ -151,7 +153,6 @@ public class SummaryFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        getActivity().setTitle(mActivityDefaultTitle);
         mInteractionActivity = null;
     }
 
@@ -165,86 +166,124 @@ public class SummaryFragment extends Fragment {
         showSubject();
         showTransactionDateTime();
 
+        setupButtons();
+
+        TransactionStatus transactionStatus = TransactionStatus.valueOf(mTransactionDataHolder.getTransactionStatus());
+
+        if (TransactionStatus.APPROVED == transactionStatus) {
+            mRetryButton.setVisibility(View.GONE);
+
+            if (showRefundButton()) {
+                mRefundButton.setVisibility(View.VISIBLE);
+            } else {
+                mRefundButton.setVisibility(View.GONE);
+            }
+
+            if (showSendReceiptButton()) {
+                mSendReceiptButton.setVisibility(View.VISIBLE);
+            } else {
+                mSendReceiptButton.setVisibility(View.GONE);
+            }
+
+            if (showPrintReceiptButton()) {
+                mPrintReceiptButton.setVisibility(View.VISIBLE);
+            } else {
+                mPrintReceiptButton.setVisibility(View.GONE);
+            }
+
+        } else if (TransactionStatus.DECLINED == transactionStatus || TransactionStatus.ABORTED == transactionStatus) {
+            mRefundButton.setVisibility(View.GONE);
+
+            if (mRetryEnabled) {
+                mRetryButton.setVisibility(View.VISIBLE);
+            } else {
+                mRetryButton.setVisibility(View.GONE);
+            }
+
+            if (showSendReceiptButton()) {
+                mSendReceiptButton.setVisibility(View.VISIBLE);
+            } else {
+                mSendReceiptButton.setVisibility(View.GONE);
+            }
+
+            if (showPrintReceiptButton()) {
+                mPrintReceiptButton.setVisibility(View.VISIBLE);
+            } else {
+                mPrintReceiptButton.setVisibility(View.GONE);
+            }
+
+        } else {
+            if (mRetryEnabled) {
+                mRetryButton.setVisibility(View.VISIBLE);
+            }
+            mRefundButton.setVisibility(View.GONE);
+            mSendReceiptButton.setVisibility(View.GONE);
+            mPrintReceiptButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupButtons() {
         mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mInteractionActivity.onSummaryClosed(mTransaction, mError);
+                mInteractionActivity.onSummaryClosed(mTransactionDataHolder, mError);
             }
         });
 
-        mActionButton.setOnClickListener(new View.OnClickListener() {
+        mSendReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TransactionStatus status = mTransaction.getStatus();
-                switch (status) {
-                    case APPROVED:
-                        mInteractionActivity.onSendReceiptButtonClicked(mTransaction);
-                        break;
-                    case DECLINED:
-                        mInteractionActivity.onSummaryRetryButtonClicked();
-                        break;
-                    case ABORTED:
-                        mInteractionActivity.onSummaryRetryButtonClicked();
-                        break;
-                    default:
-                        mInteractionActivity.onSummaryRetryButtonClicked();
-                        break;
-                }
+                mInteractionActivity.onSendReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
             }
         });
 
-        if (showRefundButton()) {
-            mRefundButton.setVisibility(View.VISIBLE);
-            mRefundButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.MPURefundPayment)
-                            .setMessage(R.string.MPURefundPrompt)
-                            .setPositiveButton(R.string.MPURefund, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mInteractionActivity.onSummaryRefundButtonClicked(mTransaction);
-                                }
-                            })
-                            .setNegativeButton(R.string.MPUAbort, null)
-                            .show();
-                }
-            });
-        } else {
-            mRefundButton.setVisibility(View.GONE);
-        }
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mInteractionActivity.onSummaryRetryButtonClicked();
+            }
+        });
 
-        boolean hideReceiptButton = (MposUi.getInitializedInstance().getConfiguration().getReceiptMethod() == MposUiConfiguration.ReceiptMethod.OWN_IMPLEMENTATION);
-        if(TransactionStatus.APPROVED == mTransaction.getStatus()) {
-            if(hideReceiptButton) {
-                mActionButton.setVisibility(View.GONE);
-            } else {
-                mActionButton.setVisibility(View.VISIBLE);
+        mRefundButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.MPURefundPayment)
+                        .setMessage(R.string.MPURefundPrompt)
+                        .setPositiveButton(R.string.MPURefund, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mInteractionActivity.onSummaryRefundButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
+                            }
+                        })
+                        .setNegativeButton(R.string.MPUAbort, null)
+                        .show();
             }
-        } else if(TransactionStatus.DECLINED == mTransaction.getStatus() || TransactionStatus.ABORTED == mTransaction.getStatus()) {
-            if(mRetryEnabled) {
-                mActionButton.setVisibility(View.VISIBLE);
-            } else {
-                mActionButton.setVisibility(View.GONE);
+        });
+
+        mPrintReceiptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TransactionStatus status = TransactionStatus.valueOf(mTransactionDataHolder.getTransactionStatus());
+                switch (status) {
+                    case APPROVED:
+                        mInteractionActivity.onSummaryPrintReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
+                }
             }
-        } else {
-            mActionButton.setVisibility(View.VISIBLE);
-        }
+        });
     }
 
     private void showTransactionStatus() {
-        mTransactionStatusView.setTextColor(getResources().getColor(getTransactionStatusColor(mTransaction)));
-        mTransactionStatusView.setText(getTransactionStatusText(mTransaction));
-        mActionButton.setText(getActionButtonText(mTransaction));
+        mTransactionStatusView.setTextColor(getResources().getColor(getTransactionStatusColor()));
+        mTransactionStatusView.setText(getTransactionStatusText());
     }
 
     private void showTransactionAmountAndType() {
-        mAmountView.setText(UiHelper.formatAmountWithSymbol(mTransaction.getCurrency(), mTransaction.getAmount()));
-
-        if (mTransaction.getType() == TransactionType.CHARGE) {
+        mAmountView.setText(UiHelper.formatAmountWithSymbol(Currency.valueOf(mTransactionDataHolder.getCurrency()), new BigDecimal(mTransactionDataHolder.getAmount())));
+        TransactionType transactionType = TransactionType.valueOf(mTransactionDataHolder.getTransactionType());
+        if (transactionType == TransactionType.CHARGE) {
             mTransactionTypeView.setText(R.string.MPUSale);
-        } else if (mTransaction.getType() == TransactionType.REFUND) {
+        } else if (transactionType == TransactionType.REFUND) {
             mTransactionTypeView.setText(R.string.MPURefund);
         } else {
             mTransactionTypeView.setText(R.string.MPUUnknown);
@@ -254,33 +293,46 @@ public class SummaryFragment extends Fragment {
     private void showSchemeAndAccountNumber() {
         //Set scheme and masked account number
 
-        if (mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.PAYMENT_DETAILS_MASKED_ACCOUNT) == null) {
+        if (mTransactionDataHolder.getMaskedAccountNumber() == null) {
             mAccountNumberView.setVisibility(View.GONE);
             mSchemeAccNoViewDivider.setVisibility(View.GONE);
             mSchemeView.setVisibility(View.GONE);
         } else {
-            String maskedAccountNumber = mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.PAYMENT_DETAILS_MASKED_ACCOUNT).getValue();
-            maskedAccountNumber = maskedAccountNumber.replaceAll("[^0-9]", "*");
-            mAccountNumberView.setText(maskedAccountNumber);
+            String maskedAccountNumber = mTransactionDataHolder.getMaskedAccountNumber();
+            if (maskedAccountNumber != null) {
+                maskedAccountNumber = maskedAccountNumber.replaceAll("[^0-9]", "*");
+                mAccountNumberView.setText(maskedAccountNumber);
+            } else { //account number is null! WHAT!
+                mAccountNumberView.setVisibility(View.GONE);
+                mSchemeAccNoViewDivider.setVisibility(View.GONE);
+                mSchemeView.setVisibility(View.GONE);
+                return;
+            }
 
-            PaymentDetailsScheme scheme = mTransaction.getPaymentDetails().getScheme();
+            PaymentDetailsScheme scheme = PaymentDetailsScheme.UNKNOWN;
+            if(mTransactionDataHolder.getPaymentDetailsScheme()!=null)
+                scheme = PaymentDetailsScheme.valueOf(mTransactionDataHolder.getPaymentDetailsScheme());
             if (UiHelper.getDrawableIdImageForCreditCard(scheme) != -1) {
                 mSchemeView.setCompoundDrawablesWithIntrinsicBounds(UiHelper.getDrawableIdImageForCreditCard(scheme), 0, 0, 0);
-            } else {
+            } else if (scheme != null) {
                 mSchemeView.setText(scheme.toString());
                 //The compound drawable padding is 8dp(in the image) + padding from layout is 8dp = 16dp
                 //We change padding from 8dp tp 16dp because we dont set the drawable. Only text is visible.
                 mSchemeView.setPadding(getResources().getDimensionPixelSize(R.dimen.content_padding), 0, 0, 0);
+            } else { //scheme is null! WHAAT!
+                mAccountNumberView.setVisibility(View.GONE);
+                mSchemeAccNoViewDivider.setVisibility(View.GONE);
+                mSchemeView.setVisibility(View.GONE);
+                return;
             }
         }
-
 
     }
 
     private void showSubject() {
         //Set the subject
-        if (mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.SUBJECT) != null) {
-            String subject = mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.SUBJECT).getValue();
+        if (mTransactionDataHolder.getSubject() != null) {
+            String subject = mTransactionDataHolder.getSubject();
             if (!TextUtils.isEmpty(subject)) {
                 mSubjectView.setText(subject);
             } else {
@@ -295,32 +347,20 @@ public class SummaryFragment extends Fragment {
 
     private void showTransactionDateTime() {
         //Set the date and time
-        if (mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.DATE) == null && mMerchantReceipt.getReceiptLineItem(ReceiptLineItemKey.TIME) == null) {
+        if (mTransactionDataHolder.getCreatedTimestamp() == 0) {
             mDateTimeView.setVisibility(View.GONE);
         } else {
-            mDateTimeView.setText(DateUtils.formatDateTime(this.getActivity().getApplicationContext(), mTransaction.getCreatedTimestamp(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
+            mDateTimeView.setText(DateUtils.formatDateTime(this.getActivity().getApplicationContext(), mTransactionDataHolder.getCreatedTimestamp(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
         }
+
     }
 
-
-    public void setMerchantReceipt(Receipt merchantReceipt) {
-        mMerchantReceipt = merchantReceipt;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        mTransaction = transaction;
+    public void setTransactionDataHolder(TransactionDataHolder transactionDataHolder) {
+        mTransactionDataHolder = transactionDataHolder;
     }
 
     public void setError(MposError error) {
         mError = error;
-    }
-
-    public void setActivityDefaultTitle(String activityDefaultTitle) {
-        mActivityDefaultTitle = activityDefaultTitle;
-    }
-
-    public String getActivityDefaultTitle() {
-        return mActivityDefaultTitle;
     }
 
     public void setRetryEnabled(boolean retryEnabled) {
@@ -336,14 +376,39 @@ public class SummaryFragment extends Fragment {
     }
 
     private boolean showRefundButton() {
-        return mRefundEnabled && (mTransaction.getStatus() == TransactionStatus.APPROVED) && (mTransaction.getRefundDetails().getStatus() != RefundDetailsStatus.REFUNDED);
+        return mRefundEnabled &&
+                MposUi.getInitializedInstance().getConfiguration().getSummaryFeatures().contains(MposUiConfiguration.SummaryFeature.REFUND_TRANSACTION) &&
+                mTransactionDataHolder.getTransactionStatus().equals(TransactionStatus.APPROVED.name()) &&
+                !mTransactionDataHolder.getRefundDetailsStatus().equals(RefundDetailsStatus.REFUNDED.name()) &&
+                isTransactionRefundable();
     }
 
-    private int getTransactionStatusText(Transaction transaction) {
-        switch (transaction.getStatus()) {
+    private boolean isTransactionRefundable() {
+        if (mTransactionDataHolder.getRefundDetailsStatus() == null) {
+            return false;
+        }
+        RefundDetailsStatus status = RefundDetailsStatus.valueOf(mTransactionDataHolder.getRefundDetailsStatus());
+        if (status == null) {
+            return false;
+        } else {
+            return (status == RefundDetailsStatus.REFUNDABLE_PARTIAL_AND_FULL || status == RefundDetailsStatus.REFUNDABLE_FULL_ONLY);
+        }
+    }
+
+    private boolean showPrintReceiptButton() {
+        return MposUi.getInitializedInstance().getConfiguration().getSummaryFeatures().contains(MposUiConfiguration.SummaryFeature.PRINT_RECEIPT);
+    }
+
+    private boolean showSendReceiptButton() {
+        return MposUi.getInitializedInstance().getConfiguration().getSummaryFeatures().contains(MposUiConfiguration.SummaryFeature.SEND_RECEIPT_VIA_EMAIL);
+    }
+
+    private int getTransactionStatusText() {
+        switch (TransactionStatus.valueOf(mTransactionDataHolder.getTransactionStatus())) {
             case APPROVED:
-                if (transaction.getType() == TransactionType.CHARGE) {
-                    if (transaction.getRefundDetails().getStatus() == RefundDetailsStatus.REFUNDED) {
+                if (mTransactionDataHolder.getTransactionType().equals(TransactionType.CHARGE.name())) {
+
+                    if (mTransactionDataHolder.getTransactionStatus() != null && mTransactionDataHolder.getRefundDetailsStatus().equals(RefundDetailsStatus.REFUNDED.name())) {
                         return R.string.MPUPaymentRefunded;
                     } else {
                         return R.string.MPUPaymentSuccessful;
@@ -353,14 +418,14 @@ public class SummaryFragment extends Fragment {
                 }
 
             case DECLINED:
-                if (transaction.getType() == TransactionType.CHARGE) {
+                if (mTransactionDataHolder.getTransactionType().equals(TransactionType.CHARGE.name())) {
                     return R.string.MPUPaymentDeclined;
                 } else {
                     return R.string.MPURefundDeclined;
                 }
 
             case ABORTED:
-                if (transaction.getType() == TransactionType.CHARGE) {
+                if (mTransactionDataHolder.getTransactionType().equals(TransactionType.CHARGE.name())) {
                     return R.string.MPUPaymentAborted;
                 } else {
                     return R.string.MPURefundAborted;
@@ -369,19 +434,11 @@ public class SummaryFragment extends Fragment {
         return R.string.MPUUnknown;
     }
 
-    private int getTransactionStatusColor(Transaction transaction) {
-        if (transaction.getStatus() == TransactionStatus.APPROVED) {
+    private int getTransactionStatusColor() {
+        if (mTransactionDataHolder.getTransactionStatus().equals(TransactionStatus.APPROVED.name())) {
             return R.color.transaction_state_approved;
         } else {
             return R.color.transaction_state_declined_aborted;
-        }
-    }
-
-    private int getActionButtonText(Transaction transaction) {
-        if (transaction.getStatus() == TransactionStatus.APPROVED) {
-            return R.string.MPUSendReceipt;
-        } else {
-            return R.string.MPURetry;
         }
     }
 }

@@ -25,34 +25,65 @@ package io.mpos.ui.shared.model;
 
 import android.graphics.Color;
 
+/**
+ * Configuration holder for setting theme colors for MposUi.
+ * Base theme used is {@code @android:style/Theme.Material.Light}
+ */
 public class MposUiAppearance {
 
     private int mColorPrimary = Color.parseColor("#03a9f4");
     private int mColorPrimaryDark = Color.parseColor("#039be5");
     private int mTextColorPrimary = Color.WHITE;
 
+    /**
+     * Get the primary color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
+     * @return The primary color
+     */
     public int getColorPrimary() {
         return mColorPrimary;
     }
 
+    /**
+     * Set the primary color used by MposUi.
+     * @param colorPrimary The color to be set.
+     * @return Self, to allow chaining of calls.
+     */
     public MposUiAppearance setColorPrimary(int colorPrimary) {
         mColorPrimary = colorPrimary;
         return this;
     }
 
+    /**
+     * Get the primary dark color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
+     * @return The primary dark color.
+     */
     public int getColorPrimaryDark() {
         return mColorPrimaryDark;
     }
 
+    /**
+     * Set the primary dark color used by MposUi.
+     * @param colorPrimaryDark The color to be set.
+     * @return Self, to allow chaining of calls.
+     */
     public MposUiAppearance setColorPrimaryDark(int colorPrimaryDark) {
         mColorPrimaryDark = colorPrimaryDark;
         return this;
     }
 
+    /**
+     * Get the primary text color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
+     * @return The primary text color.
+     */
     public int getTextColorPrimary() {
         return mTextColorPrimary;
     }
 
+    /**
+     * Set the primary text color used by MposUi.
+     * @param textColorPrimary The color to be set.
+     * @return Self, to allow chaining of calls.
+     */
     public MposUiAppearance setTextColorPrimary(int textColorPrimary) {
         mTextColorPrimary = textColorPrimary;
         return this;

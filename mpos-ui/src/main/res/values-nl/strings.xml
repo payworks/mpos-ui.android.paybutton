@@ -30,4 +30,28 @@
 <string name="MPUSignatureStatusLine">"Hiermee machtig ik de betaling van %1$s."</string>
 <string name="MPUError">"Fout"</string>
 <string name="MPUReceiptSent">"Betalingsbewijs verzonden."</string>
+<string name="MPUFetching">"Laden van de transactie"</string>
+<string name="MPULoading">"Laden..."</string>
+<string name="MPUVersion">"Versie"</string>
+<string name="MPULoggedInAs">"Aangemeld als"</string>
+<string name="MPULogout">"Afmelden"</string>
+<string name="MPUHelp">"Help"</string>
+<string name="MPUForgot">"Wachtwoord vergeten?"</string>
+<string name="MPULogin">"Aanmelden"</string>
+<string name="MPUEmail">"E-mail"</string>
+<string name="MPUEmailAddress">"E-mailadres"</string>
+<string name="MPUPassword">"Wachtwoord"</string>
+<string name="MPURequired">"vereist"</string>
+<string name="MPUWrongCredentials">"Het ingevoerde wachtwoord is fout of er bestaat nog geen account voor uw e-mailadres."</string>
+<string name="MPUUnknownUsername">"Voor dit e-mailadres bestaat geen account."</string>
+<string name="MPUBack">"Terug"</string>
+<string name="MPUPasswordReset">"Wij hebben u een e-mail gestuurd. Controleer uw inbox voor de volgende stappen."</string>
+<string name="MPURequestPassword">"Wachtwoord opnieuw instellen"</string>
+<string name="MPUActions">"Acties"</string>
+<string name="MPUSettings">"Instellingen"</string>
+<string name="MPUInfo">"Info"</string>
+<string name="MPUPrintReceipt">"Betalingsbewijs afdrukken"</string>
+<string name="MPUReprintReceipt">"Betalingsbewijs opnieuw afdrukken"</string>
+<string name="MPUPrinting">"Afdrukken...
+"</string>
 </resources>

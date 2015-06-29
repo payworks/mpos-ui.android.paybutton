@@ -30,4 +30,28 @@
 <string name="MPUSignatureStatusLine">"I agree to pay the amount of %1$s."</string>
 <string name="MPUError">"Error"</string>
 <string name="MPUReceiptSent">"Receipt sent."</string>
+<string name="MPUFetching">"Fetching Transaction"</string>
+<string name="MPULoading">"Loading..."</string>
+<string name="MPUVersion">"Version"</string>
+<string name="MPULoggedInAs">"Logged in as"</string>
+<string name="MPULogout">"Logout"</string>
+<string name="MPUHelp">"Help"</string>
+<string name="MPUForgot">"Forgot password?"</string>
+<string name="MPULogin">"Sign In"</string>
+<string name="MPUEmail">"Email"</string>
+<string name="MPUEmailAddress">"Email Address"</string>
+<string name="MPUPassword">"Password"</string>
+<string name="MPURequired">"required"</string>
+<string name="MPUWrongCredentials">"You entered a wrong password or no account exists for your email address."</string>
+<string name="MPUUnknownUsername">"No account exists for this email address."</string>
+<string name="MPUBack">"Back"</string>
+<string name="MPUPasswordReset">"We\'ve sent you an email. Please check it for further instructions."</string>
+<string name="MPURequestPassword">"Reset Password"</string>
+<string name="MPUActions">"Actions"</string>
+<string name="MPUSettings">"Settings"</string>
+<string name="MPUInfo">"Info"</string>
+<string name="MPUPrintReceipt">"Print Receipt"</string>
+<string name="MPUReprintReceipt">"Reprint Receipt"</string>
+<string name="MPUPrinting">"Printing...
+"</string>
 </resources>

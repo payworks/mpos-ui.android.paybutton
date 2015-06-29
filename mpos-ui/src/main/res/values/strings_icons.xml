@@ -32,5 +32,6 @@
     <string name="fa_close" translatable="false">&#xf00d;</string>
     <string name="fa_email" translatable="false">&#xf0e0;</string>
     <string name="fa_history" translatable="false">&#xf1da;</string>
+    <string name="fa_print" translatable="false">&#xf02f;</string>
     <string name="MPUUnknown" translatable="false">Unknown</string>
 </resources>

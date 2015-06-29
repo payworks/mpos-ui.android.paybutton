@@ -30,4 +30,28 @@
 <string name="MPUSignatureStatusLine">"Concordo pagar o montante de %1$s."</string>
 <string name="MPUError">"Erro"</string>
 <string name="MPUReceiptSent">"Recibo enviado."</string>
+<string name="MPUFetching">"A obter a transação"</string>
+<string name="MPULoading">"A carregar..."</string>
+<string name="MPUVersion">"Versão"</string>
+<string name="MPULoggedInAs">"E-mail"</string>
+<string name="MPULogout">"Sair"</string>
+<string name="MPUHelp">"Ajuda"</string>
+<string name="MPUForgot">"Esqueceu-se da palavra-passe?"</string>
+<string name="MPULogin">"Iniciar sessão"</string>
+<string name="MPUEmail">"E-mail"</string>
+<string name="MPUEmailAddress">"Endereço de e-mail"</string>
+<string name="MPUPassword">"Palavra-passe"</string>
+<string name="MPURequired">"obrigatório"</string>
+<string name="MPUWrongCredentials">"Inseriu uma palavra-passe incorrecta ou não existe uma conta para o seu endereço de e-mail."</string>
+<string name="MPUUnknownUsername">"Não existe uma conta para este endereço de e-mail."</string>
+<string name="MPUBack">"Voltar"</string>
+<string name="MPUPasswordReset">"Enviámos-lhe um email. Por favor consulte-o para obter instruções adicionais."</string>
+<string name="MPURequestPassword">"Redefinir a palavra-passe"</string>
+<string name="MPUActions">"Ações"</string>
+<string name="MPUSettings">"Definições"</string>
+<string name="MPUInfo">"Info"</string>
+<string name="MPUPrintReceipt">"Imprimir Recibo"</string>
+<string name="MPUReprintReceipt">"Reimprimir Recibo"</string>
+<string name="MPUPrinting">"A imprimir...
+"</string>
 </resources>

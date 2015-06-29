@@ -24,16 +24,18 @@
 package io.mpos.ui.shared.view;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
+import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.util.UiHelper;
@@ -52,16 +54,19 @@ public class ErrorFragment extends Fragment {
 
     private Interaction mInteractionActivity;
     private MposError mError;
+    private TransactionProcessDetails mTransactionProcessDetails;
     boolean mRetryEnabled;
 
-    public static ErrorFragment newInstance(boolean retryEnabled, MposError error) {
+    public static ErrorFragment newInstance(boolean retryEnabled, MposError error, TransactionProcessDetails details) {
         ErrorFragment fragment = new ErrorFragment();
         fragment.setError(error);
         fragment.setRetryEnabled(retryEnabled);
+        fragment.setTransactionProcessDetails(details);
         return fragment;
     }
 
-    public ErrorFragment() {  }
+    public ErrorFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,10 +85,14 @@ public class ErrorFragment extends Fragment {
                 mInteractionActivity.onErrorRetryButtonClicked();
             }
         });
-        if(mRetryEnabled) {
+        if (mRetryEnabled) {
             retryButton.setVisibility(View.VISIBLE);
         } else {
-            retryButton.setVisibility(View.INVISIBLE);
+            retryButton.setVisibility(View.GONE);
+        }
+
+        if (mError.getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
+            retryButton.setVisibility(View.GONE);
         }
 
         view.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
@@ -98,8 +107,13 @@ public class ErrorFragment extends Fragment {
         iconView.setTextColor(MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary());
 
         TextView errorView = (TextView) view.findViewById(R.id.status_view);
-        errorView.setText(mError.getInfo().trim());
 
+        if (mTransactionProcessDetails != null && mTransactionProcessDetails.getInformation() != null && mTransactionProcessDetails.getInformation().length == 2) {
+            String message = UiHelper.joinAndTrimStatusInformation(mTransactionProcessDetails.getInformation());
+            errorView.setText(message);
+        } else {
+            errorView.setText(mError.getInfo().trim());
+        }
         return view;
     }
 
@@ -126,4 +140,9 @@ public class ErrorFragment extends Fragment {
     public void setRetryEnabled(boolean retryEnabled) {
         mRetryEnabled = retryEnabled;
     }
+
+    public void setTransactionProcessDetails(TransactionProcessDetails transactionProcessDetails) {
+        mTransactionProcessDetails = transactionProcessDetails;
+    }
+
 }

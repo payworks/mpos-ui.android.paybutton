@@ -25,12 +25,11 @@ package io.mpos.ui.shared.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +46,6 @@ import android.widget.Toast;
 import io.mpos.errors.MposError;
 import io.mpos.transactionprovider.SendReceiptListener;
 import io.mpos.transactionprovider.TransactionProvider;
-import io.mpos.transactions.Transaction;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.util.UiHelper;
@@ -55,8 +53,7 @@ import io.mpos.ui.shared.util.UiHelper;
 public class SendReceiptFragment extends Fragment {
 
     public interface Interaction {
-        void onReceiptSent(Transaction transaction);
-
+        void onReceiptSent();
         TransactionProvider getTransactionProvider();
     }
 
@@ -66,15 +63,12 @@ public class SendReceiptFragment extends Fragment {
     private ImageView mProgressView;
     private Button mSendButton;
     private EditText mEmailView;
-
-    private String mActivityDefaultTitle;
-    private Transaction mTransaction;
+    private String mTransactionIdentifier;
 
 
-    public static SendReceiptFragment newInstance(Transaction transaction, String activityDefaultTitle) {
+    public static SendReceiptFragment newInstance(String transactionIdentifier) {
         SendReceiptFragment fragment = new SendReceiptFragment();
-        fragment.setTransaction(transaction);
-        fragment.setActivityDefaultTitle(activityDefaultTitle);
+        fragment.setTransactionIdentifier(transactionIdentifier);
         return fragment;
     }
 
@@ -87,7 +81,7 @@ public class SendReceiptFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_send_receipt, container, false);
-        mProgressView = (ImageView)view.findViewById(R.id.progress_view);
+        mProgressView = (ImageView) view.findViewById(R.id.progress_view);
 
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
 
@@ -105,7 +99,7 @@ public class SendReceiptFragment extends Fragment {
                     hideSoftKeyboard();
                     mSendButton.setEnabled(false);
 
-                    sendReceipt(mTransaction.getIdentifier(), email);
+                    sendReceipt(mTransactionIdentifier, email);
                 } else {
                     showErrorDialog(getString(R.string.MPUInvalidEmailAddress), getString(R.string.MPUEnterValidEmailAddress));
                 }
@@ -133,7 +127,7 @@ public class SendReceiptFragment extends Fragment {
         try {
             mInteractionActivity = (Interaction) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement SendReceiptInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement SendReceipt.Interaction");
         }
     }
 
@@ -145,16 +139,11 @@ public class SendReceiptFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        getActivity().setTitle(mActivityDefaultTitle);
         mInteractionActivity = null;
     }
 
-    private void setTransaction(Transaction transaction) {
-        mTransaction = transaction;
-    }
-
-    private void setActivityDefaultTitle(String activityDefaultTitle) {
-        mActivityDefaultTitle = activityDefaultTitle;
+    private void setTransactionIdentifier(String transactionIdentifier) {
+        mTransactionIdentifier = transactionIdentifier;
     }
 
     private void sendReceipt(String transactionIdentifier, String email) {
@@ -177,7 +166,7 @@ public class SendReceiptFragment extends Fragment {
 
         if (error == null) {
             Toast.makeText(getActivity(), R.string.MPUReceiptSent, Toast.LENGTH_LONG).show();
-            mInteractionActivity.onReceiptSent(mTransaction);
+            mInteractionActivity.onReceiptSent();
         } else {
             showErrorDialog(error);
         }

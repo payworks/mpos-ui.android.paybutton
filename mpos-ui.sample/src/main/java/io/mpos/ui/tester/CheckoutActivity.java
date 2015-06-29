@@ -41,12 +41,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 
 import io.mpos.Mpos;
 import io.mpos.accessories.AccessoryFamily;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactions.Currency;
 import io.mpos.ui.shared.MposUi;
+import io.mpos.ui.shared.model.MposUiConfiguration;
 
 import static android.view.View.OnClickListener;
 
@@ -115,9 +117,10 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.transaction_e105_charge).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                MposUi.initializeController(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
                 MposUi mposUi = MposUi.getInitializedInstance();
                 mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.VERIFONE_E105);
+                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 startPayment(13.37);
             }
         });
@@ -125,9 +128,10 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.transaction_miura_charge).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                MposUi.initializeController(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
                 MposUi mposUi = MposUi.getInitializedInstance();
                 mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MIURA_MPI);
+                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 startPayment(13.37);
             }
         });
@@ -148,13 +152,21 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.print_last).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                printReceipt(mLastTransactionIdentifier);
+            }
+        });
+
         updateViews();
     }
 
     void initMockPaymentController() {
-        MposUi.initializeController(this, ProviderMode.MOCK, "mock", "mock");
+        MposUi.initialize(this, ProviderMode.MOCK, "mock", "mock");
         MposUi mposUi = MposUi.getInitializedInstance();
         mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MOCK);
+        mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
     }
 
     void startPayment(double amount) {
@@ -162,9 +174,15 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
     }
 
+    void printReceipt(String transctionIdentifier) {
+        Intent intent = MposUi.getInitializedInstance().createPrintReceiptIntent(transctionIdentifier);
+        startActivityForResult(intent, MposUi.REQUEST_CODE_PRINT_RECEIPT);
+    }
+
     void updateViews() {
         findViewById(R.id.summary_last).setVisibility(mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE);
         findViewById(R.id.refund_last).setVisibility(mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE);
+        findViewById(R.id.print_last).setVisibility(mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -178,6 +196,12 @@ public class CheckoutActivity extends AppCompatActivity {
 
             mLastTransactionIdentifier = data.getStringExtra(MposUi.RESULT_EXTRA_TRANSACTION_IDENTIFIER);
             updateViews();
+        } else if (requestCode == MposUi.REQUEST_CODE_PRINT_RECEIPT) {
+            if (resultCode == MposUi.RESULT_CODE_PRINT_SUCCESS) {
+                Toast.makeText(this, "Printing Receipt Success", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Printing Receipt Failed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -193,7 +217,7 @@ public class CheckoutActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_info) {
-            new InfoDialog().show(getSupportFragmentManager(),"INFO");
+            new InfoDialog().show(getSupportFragmentManager(), "INFO");
             return true;
         }
 
@@ -211,7 +235,7 @@ public class CheckoutActivity extends AppCompatActivity {
             ((TextView) rootView.findViewById(R.id.info_body)).setText(Html.fromHtml(getString(R.string.info_body)));
             ((TextView) rootView.findViewById(R.id.info_body)).setMovementMethod(LinkMovementMethod.getInstance());
 
-            return new AlertDialog.Builder(getActivity(),getTheme())
+            return new AlertDialog.Builder(getActivity(), getTheme())
                     .setView(rootView)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override

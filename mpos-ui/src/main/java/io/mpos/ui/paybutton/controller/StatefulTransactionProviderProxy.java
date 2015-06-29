@@ -47,7 +47,6 @@ import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.TransactionTemplate;
-import io.mpos.transactions.receipts.Receipt;
 
 /**
  * StatefulTransactionProviderProxy keeps the state of the ongoing transaction independent of the Fragment/Activity's lifecycle.
@@ -79,8 +78,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     private boolean mAwaitingApplicationSelection;
     private boolean mTransactionSessionLookup;
 
-    private Context mContext;
-
     private boolean mTransactionIsOnGoing;
     private TransactionProcessDetails mLastTransactionProcessDetails;
     private TransactionProvider mTransactionProvider;
@@ -101,7 +98,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     public void startChargeTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, BigDecimal amount, Currency currency, String subject, String customIdentifier) {
         clearForNewTransaction();
-        mContext = context;
 
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
 
@@ -112,7 +108,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     public void startRefundTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, String transactionIdentifier, String subject, String customIdentifier) {
         clearForNewTransaction();
-        mContext = context;
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
 
         TransactionTemplate template = mTransactionProvider.createRefundTransactionTemplate(transactionIdentifier, subject, customIdentifier);
@@ -122,7 +117,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, String sessionIdentifier) {
         clearForNewTransaction();
-        mContext = context;
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
 
         mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryFamily, this);
@@ -144,7 +138,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mAwaitingApplicationSelection = false;
         mAwaitingSignature = false;
 
-        if(mCallback != null) {
+        if (mCallback != null) {
             mCallback.onCompleted(transaction, paymentProcessDetails.getError());
         }
     }
@@ -153,14 +147,14 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     public void onStatusChanged(TransactionProcess paymentProcess, @Nullable Transaction transaction, TransactionProcessDetails paymentProcessDetails) {
         Log.d(TAG, "onStatusChanged details=" + paymentProcessDetails);
         mLastTransactionProcessDetails = paymentProcessDetails;
-        if(mCurrentTransaction == null && transaction != null) {
+        if (mCurrentTransaction == null && transaction != null) {
             mCurrentTransaction = transaction;
         }
 
-        if(mCallback != null) {
+        if (mCallback != null) {
 
             //signature required callback
-            if(!mAwaitingSignature && !mAwaitingApplicationSelection) {
+            if (!mAwaitingSignature && !mAwaitingApplicationSelection) {
                 mCallback.onStatusChanged(paymentProcessDetails, transaction);
             }
         }
@@ -169,7 +163,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     @Override
     public void onCustomerSignatureRequired(TransactionProcess paymentProcess, Transaction transaction) {
         mAwaitingSignature = true;
-        if(mCallback != null) {
+        if (mCallback != null) {
             mCallback.onCustomerSignatureRequired();
         }
     }
@@ -183,7 +177,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     public void onApplicationSelectionRequired(TransactionProcess paymentProcess, Transaction transaction, List<ApplicationInformation> applicationInformations) {
         mAwaitingApplicationSelection = true;
         mApplicationInformationList = applicationInformations;
-        if(mCallback != null) {
+        if (mCallback != null) {
             mCallback.onApplicationSelectionRequired(applicationInformations);
         }
     }
@@ -200,25 +194,21 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     public void attachCallback(Callback callback) {
         mCallback = callback;
+        if (callback != null && mLastTransactionProcessDetails != null) {
 
-        if(callback != null && mLastTransactionProcessDetails != null && mTransactionIsOnGoing) {
-            if(mAwaitingSignature) {
-                callback.onCustomerSignatureRequired();
-            } else if(mAwaitingApplicationSelection) {
-                callback.onApplicationSelectionRequired(mApplicationInformationList);
+            if (mTransactionIsOnGoing) {
+                if (mAwaitingSignature) {
+                    callback.onCustomerSignatureRequired();
+                } else if (mAwaitingApplicationSelection) {
+                    callback.onApplicationSelectionRequired(mApplicationInformationList);
+                } else {
+                    callback.onStatusChanged(mLastTransactionProcessDetails, mCurrentTransaction);
+                }
             } else {
-                callback.onStatusChanged(mLastTransactionProcessDetails, mCurrentTransaction);
+                callback.onCompleted(mCurrentTransaction, mLastTransactionProcessDetails.getError());
             }
         }
     }
-
-    public Receipt getMerchantReceipt() {
-        if(mCurrentTransaction == null)
-            return null;
-
-        return mCurrentTransactionProcess.getReceiptFactory().createMerchantReceipt(mCurrentTransaction);
-    }
-
 
     public boolean isTransactionOnGoing() {
         return mTransactionIsOnGoing;
@@ -231,14 +221,14 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     public boolean paymentCanBeAborted() {
         boolean stateIsAbortable = (mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.CONNECTING_TO_ACCESSORY);
         boolean accessoryConnected = true;
-        if(mCurrentTransactionProcess != null && mCurrentTransactionProcess.getAccessory() != null) {
+        if (mCurrentTransactionProcess != null && mCurrentTransactionProcess.getAccessory() != null) {
             Accessory accessory = mCurrentTransactionProcess.getAccessory();
-            if(accessory.getConnectionState().equals(AccessoryConnectionState.UNKNOWN) || accessory.getConnectionState().equals(AccessoryConnectionState.DISCONNECTED)) {
+            if (accessory.getConnectionState().equals(AccessoryConnectionState.UNKNOWN) || accessory.getConnectionState().equals(AccessoryConnectionState.DISCONNECTED)) {
                 accessoryConnected = false;
             }
         }
 
-        if(stateIsAbortable && !accessoryConnected) {
+        if (stateIsAbortable && !accessoryConnected) {
             return true;
         }
 
@@ -252,9 +242,8 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
                 mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.ABORTED ||
                 mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.FAILED);
 
-        if(completed) {
+        if (completed) {
             mCurrentTransactionProcess = null;
-            mLastTransactionProcessDetails = null;
             mTransactionIsOnGoing = false;
             mApplicationInformationList = null;
             mAwaitingSignature = false;

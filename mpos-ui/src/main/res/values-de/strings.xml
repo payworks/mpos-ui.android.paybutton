@@ -30,4 +30,28 @@
 <string name="MPUSignatureStatusLine">"Hiermit autorisiere ich die Zahlung in Höhe von %1$s."</string>
 <string name="MPUError">"Fehler"</string>
 <string name="MPUReceiptSent">"Beleg versendet."</string>
+<string name="MPUFetching">"Transaktion laden"</string>
+<string name="MPULoading">"Laden..."</string>
+<string name="MPUVersion">"Version"</string>
+<string name="MPULoggedInAs">"Eingeloggt als"</string>
+<string name="MPULogout">"Ausloggen"</string>
+<string name="MPUHelp">"Hilfe"</string>
+<string name="MPUForgot">"Passwort vergessen?"</string>
+<string name="MPULogin">"Anmelden"</string>
+<string name="MPUEmail">"E-Mail"</string>
+<string name="MPUEmailAddress">"E-Mail Adresse"</string>
+<string name="MPUPassword">"Passwort"</string>
+<string name="MPURequired">"erforderlich"</string>
+<string name="MPUWrongCredentials">"Das eingegebene Passwort ist falsch oder es existiert noch kein Account für Ihre E-Mail-Adresse."</string>
+<string name="MPUUnknownUsername">"Für diese Email-Adresse existiert kein Account."</string>
+<string name="MPUBack">"Zurück"</string>
+<string name="MPUPasswordReset">"Wir haben Ihnen eine Email geschickt. Bitte überprüfen Sie Ihren Posteingang für weitere Schritte."</string>
+<string name="MPURequestPassword">"Passwort zurücksetzen"</string>
+<string name="MPUActions">"Aktionen"</string>
+<string name="MPUSettings">"Einstellungen"</string>
+<string name="MPUInfo">"Info"</string>
+<string name="MPUPrintReceipt">"Beleg drucken"</string>
+<string name="MPUReprintReceipt">"Beleg nochmals drucken"</string>
+<string name="MPUPrinting">"Drucken...
+"</string>
 </resources>

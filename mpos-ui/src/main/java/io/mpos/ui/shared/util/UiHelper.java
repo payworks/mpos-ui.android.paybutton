@@ -24,7 +24,9 @@
 package io.mpos.ui.shared.util;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -81,6 +83,12 @@ public class UiHelper {
 
             int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getTextColorPrimary();
             toolbar.setTitleTextColor(color);
+
+            final Drawable navigationDrawable = toolbar.getNavigationIcon();
+            if(navigationDrawable!=null){
+                navigationDrawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                toolbar.setNavigationIcon(navigationDrawable);
+            }
 
             color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
             toolbar.setBackgroundColor(color);

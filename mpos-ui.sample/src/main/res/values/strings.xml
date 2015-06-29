@@ -35,6 +35,7 @@
     <string name="header_last_transaction">Last transaction</string>
     <string name="option_last_summary">Show summary of last transaction</string>
     <string name="option_last_refund">Refund last transaction</string>
+    <string name="option_last_print">Print last transaction</string>
     <string name="info">Info</string>
     <string name="info_pw_paybutton">payworks Pay Button (BETA)</string>
     <string name="info_body"><![CDATA[

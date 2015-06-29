@@ -23,59 +23,145 @@
  */
 package io.mpos.ui.shared.model;
 
+import java.util.EnumSet;
+
 import io.mpos.accessories.AccessoryFamily;
 
+/**
+ * Configuration class used for tweaking appearance and features.
+ */
 public class MposUiConfiguration {
 
-    public enum ReceiptMethod {
-        READY_MADE,
-        OWN_IMPLEMENTATION
-    }
-
-    public enum SignatureMethod {
+    /**
+     * Methods of capturing a signature from the customer (if needed).
+     */
+    public enum SignatureCapture {
+        /**
+         * Have customer sign on the screen of the device.
+         */
         ON_SCREEN,
+
+        /**
+         * Have customer sign elsewhere, e.g. on printed receipt.
+         */
         ON_RECEIPT
     }
 
+    /**
+     * Features which can be enabled or disabled on the transaction summary screen.
+     */
+    public enum SummaryFeature {
+        /**
+         * Send receipt to the customer via email.
+         */
+        SEND_RECEIPT_VIA_EMAIL,
+
+        /**
+         * Print receipt using a hardware printer.
+         */
+        PRINT_RECEIPT,
+
+        /**
+         * Refund transaction right away.
+         */
+        REFUND_TRANSACTION
+    }
+
+
     private MposUiAppearance mAppearance = new MposUiAppearance();
-    private ReceiptMethod mReceiptMethod = ReceiptMethod.READY_MADE;
-    private SignatureMethod mSignatureMethod = SignatureMethod.ON_SCREEN;
+    private EnumSet<SummaryFeature> mSummaryFeatures = EnumSet.noneOf(SummaryFeature.class);
+    private SignatureCapture mSignatureCapture = SignatureCapture.ON_SCREEN;
 
     private AccessoryFamily mAccessoryFamily = AccessoryFamily.MOCK;
+    private AccessoryFamily mPrinterAccessoryFamily = AccessoryFamily.MOCK;
 
+    /**
+     * Set appearance of the MposUi.
+     * @param appearance Object carrying appearance details.
+     * @return Self, to allow chaining of calls.
+     */
     public MposUiConfiguration setAppearance(MposUiAppearance appearance) {
         mAppearance = appearance;
         return this;
     }
 
+    /**
+     * Get the appearance of the MposUi.
+     * @return Object carrying appearance details
+     */
     public MposUiAppearance getAppearance(){
         return mAppearance;
     }
 
-    public MposUiConfiguration setSignatureMethod(SignatureMethod signatureMethod) {
-        mSignatureMethod = signatureMethod;
+    /**
+     * Set signature capture method used in the MposUi
+     * @param signatureCapture Enum value representing the capture method.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiConfiguration setSignatureCapture(SignatureCapture signatureCapture) {
+        mSignatureCapture = signatureCapture;
         return this;
     }
 
-    public SignatureMethod getSignatureMethod(){
-        return mSignatureMethod;
+    /**
+     * Get the signature capture method used in the MposUi.
+     * @return Enum value representing the capture method.
+     */
+    public SignatureCapture getSignatureCapture() {
+        return mSignatureCapture;
     }
 
-    public MposUiConfiguration setReceiptMethod(ReceiptMethod receiptMethod) {
-        mReceiptMethod = receiptMethod;
+    /**
+     * Set the features which will be enabled on the summary screen.
+     * @param summaryFeatures Enum set of values representing enabled features.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiConfiguration setSummaryFeatures(EnumSet<SummaryFeature> summaryFeatures) {
+        mSummaryFeatures = summaryFeatures;
         return this;
     }
 
-    public ReceiptMethod getReceiptMethod() {
-        return mReceiptMethod;
+    /**
+     * Get the features which will be enabled on the summary screen.
+     * @return Enum set of values representing Enum set of values representing wanted features features
+     */
+    public EnumSet<SummaryFeature> getSummaryFeatures() {
+        return mSummaryFeatures;
     }
 
+    /**
+     * Set the accessory family which will be used for transactions.
+     * @param accessoryFamily Enum value representing the accessory family.
+     * @return Self, to allow chaining of calls.
+     */
     public MposUiConfiguration setAccessoryFamily(AccessoryFamily accessoryFamily) {
         mAccessoryFamily = accessoryFamily;
         return this;
     }
 
+    /**
+     * Get the accessory family which will be used for transactions.
+     * @return Enum value representing the accessory family.
+     */
     public AccessoryFamily getAccessoryFamily() {
         return mAccessoryFamily;
+    }
+
+    /**
+     * Set the accessory family which will be used for printing.
+     * @param printerAccessoryFamily Enum value representing the accessory family.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiConfiguration setPrinterAccessoryFamily(AccessoryFamily printerAccessoryFamily) {
+        mPrinterAccessoryFamily = printerAccessoryFamily;
+        return this;
+    }
+
+    /**
+     * Get the accessory family which will be used for printing.
+     * @return Enum value representing the accessory family.
+     */
+    public AccessoryFamily getPrinterAccessoryFamily() {
+        return mPrinterAccessoryFamily;
     }
 }

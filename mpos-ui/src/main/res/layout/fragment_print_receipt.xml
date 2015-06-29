@@ -24,7 +24,6 @@
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/payment_fragment_error"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -43,18 +42,15 @@
         <ImageView
             android:src="@drawable/transaction_progress_drawable"
             android:id="@+id/progress_view"
-            android:visibility="invisible"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-        />
+            />
 
         <TextView
             style="@style/TransactionStatusIconView"
             android:id="@+id/status_icon_view"
-            android:text="@string/fa_times_circle"
+            android:text="@string/fa_print"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:singleLine="true"
             />
     </FrameLayout>
 
@@ -67,22 +63,12 @@
 
     <Button
         style="@style/mPOS.UI.Button"
-        android:id="@+id/retry_button"
+        android:id="@+id/abort_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/MPURetry"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        />
-
-    <Button
-        style="@style/mPOS.UI.Button"
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/MPUClose"
+        android:text="@string/MPUAbort"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-    />
+        />
 
 </RelativeLayout>

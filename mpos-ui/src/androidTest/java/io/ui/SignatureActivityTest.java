@@ -52,7 +52,7 @@ public class SignatureActivityTest extends ActivityInstrumentationTestCase2<Sign
     protected void setUp() throws Exception {
         super.setUp();
 
-        MposUi controller = MposUi.initializeController(getInstrumentation().getContext(), ProviderMode.MOCK, "mock", "mock");
+        MposUi controller = MposUi.initialize(getInstrumentation().getContext(), ProviderMode.MOCK, "mock", "mock");
         MposUiConfiguration config = controller.getConfiguration();
         config.setAccessoryFamily(AccessoryFamily.MOCK);
 

@@ -40,6 +40,7 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 import java.util.List;
 
 import io.mpos.accessories.AccessoryFamily;
@@ -101,17 +102,17 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         initWithAmount(106);
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+        Espresso.onView(ViewMatchers.withId(R.id.summary_send_receipt_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
     }
 
-    public void testNoReceiptButtonOnSummaryPageWithOwnImplementation() {
+    public void testNoReceiptButtonOnSummaryPageWithoutFeature() {
         initWithAmount(106);
-        MposUi.getInitializedInstance().getConfiguration().setReceiptMethod(MposUiConfiguration.ReceiptMethod.OWN_IMPLEMENTATION);
+        MposUi.getInitializedInstance().getConfiguration().setSummaryFeatures(EnumSet.of(MposUiConfiguration.SummaryFeature.REFUND_TRANSACTION));
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+        Espresso.onView(ViewMatchers.withId(R.id.summary_send_receipt_button))
                 .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())));
         Espresso.unregisterIdlingResources(idlingResource);
     }
@@ -120,13 +121,13 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         initWithAmount(106);
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+        Espresso.onView(ViewMatchers.withId(R.id.summary_send_receipt_button))
                 .perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.email_address_view))
                 .perform(ViewActions.typeText("a@example.com"));
         Espresso.onView(ViewMatchers.withId(R.id.send_button))
                 .perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+        Espresso.onView(ViewMatchers.withId(R.id.summary_send_receipt_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withText(R.string.MPUReceiptSent)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
@@ -136,7 +137,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         initWithAmount(106);
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.summary_action_button))
+        Espresso.onView(ViewMatchers.withId(R.id.summary_send_receipt_button))
                 .perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.email_address_view))
                 .perform(ViewActions.typeText("aexample.com"));
@@ -190,9 +191,10 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
 
 
     private void initWithAmount(double amount) {
-        MposUi controller = MposUi.initializeController(getInstrumentation().getContext(), ProviderMode.MOCK, "mock", "mock");
+        MposUi controller = MposUi.initialize(getInstrumentation().getContext(), ProviderMode.MOCK, "mock", "mock");
         MposUiConfiguration config = controller.getConfiguration();
         config.setAccessoryFamily(AccessoryFamily.MOCK);
+        config.setSummaryFeatures(EnumSet.of(MposUiConfiguration.SummaryFeature.SEND_RECEIPT_VIA_EMAIL));
         Intent transactionIntent = controller.createChargeTransactionIntent(BigDecimal.valueOf(amount), Currency.EUR, "subject", null);
         setActivityIntent(transactionIntent);
         //Espresso.registerIdlingResources(new TransactionProviderControllerIdlingResource());

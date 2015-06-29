@@ -42,7 +42,8 @@
             android:layout_width="fill_parent"
             card_view:cardUseCompatPadding="true"
             card_view:cardCornerRadius="@dimen/card_radius"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/content_padding">
 
             <LinearLayout
                 xmlns:tools="http://schemas.android.com/tools"
@@ -156,19 +157,32 @@
                     android:textSize="@dimen/card_body"
                     android:gravity="center"
                     tools:text="9:05 am / Today"/>
-
-
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <Button
             style="@style/mPOS.UI.Button"
-            android:layout_marginTop="@dimen/content_padding"
-            android:id="@+id/summary_action_button"
+            android:id="@+id/summary_retry_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            tools:text="@string/MPUSendReceipt"/>
+            android:text="@string/MPURetry"/>
+
+        <Button
+            style="@style/mPOS.UI.Button"
+            android:id="@+id/summary_send_receipt_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/MPUSendReceipt"/>
+
+        <Button
+            style="@style/mPOS.UI.Button"
+            android:id="@+id/summary_print_receipt_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/MPUPrintReceipt"/>
 
         <Button
             style="@style/mPOS.UI.Button"

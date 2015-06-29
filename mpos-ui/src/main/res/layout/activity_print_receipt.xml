@@ -22,29 +22,27 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.mpos.ui">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    >
 
-    <application>
-        <activity
-            android:name=".paybutton.view.TransactionActivity"
-            android:theme="@style/Theme.mPOS.UI">
-        </activity>
-        <activity
-            android:name=".paybutton.view.SignatureActivity"
-            android:theme="@style/Theme.mPOS.UI"
-            android:screenOrientation="sensorLandscape">
-        </activity>
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:id="@+id/toolbar">
 
-        <activity
-            android:name=".summarybutton.view.TransactionSummaryActivity"
-            android:theme="@style/Theme.mPOS.UI">
-        </activity>
+    </android.support.v7.widget.Toolbar>
 
-        <activity
-            android:name=".printbutton.view.PrintReceiptActivity"
-            android:theme="@style/Theme.mPOS.UI">
-        </activity>
-    </application>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:tools="http://schemas.android.com/tools"
+                 android:id="@+id/container"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 tools:ignore="MergeRootFrame"/>
 
-</manifest>
+
+</LinearLayout>
