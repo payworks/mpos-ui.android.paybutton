@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,12 +25,14 @@
  */
 package io.mpos.ui.paybutton.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
@@ -50,6 +54,7 @@ import io.mpos.transactions.TransactionStatus;
 import io.mpos.transactions.TransactionType;
 import io.mpos.ui.R;
 import io.mpos.ui.paybutton.controller.StatefulTransactionProviderProxy;
+import io.mpos.ui.shared.util.ErrorHolder;
 import io.mpos.ui.shared.view.PrintReceiptFragment;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
@@ -66,42 +71,43 @@ public class TransactionActivity extends AbstractTransactionActivity
 
     private final static String TAG = "TransactionActivity";
 
-    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.paybutton.TransactionActivity.MERCHANT_ID";
-    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.paybuttonTransactionActivity.MERCHANT_SECRET";
-    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.TransactionActivity.PROVIDER_MODE";
-    public final static String BUNDLE_EXTRA_ACCESSORY_FAMILY = "io.mpos.ui.paybutton.TransactionActivity.ACCESSORY_FAMILY";
-    public final static String BUNDLE_EXTRA_AMOUNT = "io.mpos.ui.paybutton.TransactionActivity.AMOUNT";
-    public final static String BUNDLE_EXTRA_CURRENCY = "io.mpos.ui.paybutton.TransactionActivity.CURRENCY";
-    public final static String BUNDLE_EXTRA_SUBJECT = "io.mpos.ui.paybutton.TransactionActivity.SUBJECT";
-    public final static String BUNDLE_EXTRA_TRANSACTION_TYPE = "io.mpos.ui.paybutton.TransactionActivity.TRANSACTION_TYPE";
-    public final static String BUNDLE_EXTRA_CUSTOM_IDENTIFIER = "io.mpos.ui.paybutton.TransactionActivity.CUSTOM_IDENTIFIER";
-    public final static String BUNDLE_EXTRA_SESSION_IDENTIFIER = "io.mpos.ui.paybutton.TransactionActivity.SESSION_IDENTIFIER";
-    public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.paybutton.TransactionActivity.TRANSACTION_IDENTIFIER";
-    public final static String BUNDLE_EXTRA_IS_REFUND = "io.mpos.ui.paybutton.TransactionActivity.IS_REFUND";
+    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.paybutton.view.TransactionActivity.MERCHANT_ID";
+    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.paybutton.view.TransactionActivity.MERCHANT_SECRET";
+    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.paybutton.view.TransactionActivity.PROVIDER_MODE";
+    public final static String BUNDLE_EXTRA_ACCESSORY_FAMILY = "io.mpos.ui.paybutton.view.TransactionActivity.ACCESSORY_FAMILY";
+    public final static String BUNDLE_EXTRA_AMOUNT = "io.mpos.ui.paybutton.view.TransactionActivity.AMOUNT";
+    public final static String BUNDLE_EXTRA_CURRENCY = "io.mpos.ui.paybutton.view.TransactionActivity.CURRENCY";
+    public final static String BUNDLE_EXTRA_SUBJECT = "io.mpos.ui.paybutton.view.TransactionActivity.SUBJECT";
+    public final static String BUNDLE_EXTRA_TRANSACTION_TYPE = "io.mpos.ui.paybutton.view.TransactionActivity.TRANSACTION_TYPE";
+    public final static String BUNDLE_EXTRA_CUSTOM_IDENTIFIER = "io.mpos.ui.paybutton.view.TransactionActivity.CUSTOM_IDENTIFIER";
+    public final static String BUNDLE_EXTRA_SESSION_IDENTIFIER = "io.mpos.ui.paybutton.view.TransactionActivity.SESSION_IDENTIFIER";
+    public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.paybutton.view.TransactionActivity.TRANSACTION_IDENTIFIER";
+    public final static String BUNDLE_EXTRA_IS_REFUND = "io.mpos.ui.paybutton.view.TransactionActivity.IS_REFUND";
 
     private static final int REQUEST_CODE_SIGNATURE = 1;
-    private static final String BUNDLE_FORMATTED_AMOUNT = "io.mpos.ui.paybutton.TransactionActivity.FORMATTED_AMOUNT";
-    private static final String BUNDLE_TITLE_TRANSACTION_TYPE = "io.mpos.ui.paybutton.TransactionActivity.TITLE_TRANSACTION_TYPE";
+    private static final String BUNDLE_FORMATTED_AMOUNT = "io.mpos.ui.paybutton.view.TransactionActivity.FORMATTED_AMOUNT";
+    private static final String BUNDLE_TITLE_TRANSACTION_TYPE = "io.mpos.ui.paybutton.view.TransactionActivity.TITLE_TRANSACTION_TYPE";
 
-    public final static String SAVED_INSTANCE_STATE_UI_STATE = "io.mpos.ui.io.UI_STATE";
+    public final static String SAVED_INSTANCE_STATE_UI_STATE = "io.mpos.ui.paybutton.view.TransactionActivity.UI_STATE";
 
     private String mFormattedAmount;
     private String mTitleTransactionType;
 
     private StatefulTransactionProviderProxy mStatefulTransactionProviderProxy = StatefulTransactionProviderProxy.getInstance();
-    private UiState mUiState = UiState.IDLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.mpu_activity_payment);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         if (getCallingActivity() == null) {
             Log.w(TAG, "The transaction activity was started without startActivityForResult() and will not return a result code.");
         }
 
-        UiHelper.setActionbarWithCustomColors(this, (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar), false);
+        UiHelper.setActionbarWithCustomColors(this, (android.support.v7.widget.Toolbar) findViewById(R.id.mpu_toolbar));
+
+        ErrorHolder.getInstance().clear();
 
         if (getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER)) {
             if (savedInstanceState == null) {
@@ -151,7 +157,7 @@ public class TransactionActivity extends AbstractTransactionActivity
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(BUNDLE_FORMATTED_AMOUNT, mFormattedAmount);
         outState.putString(BUNDLE_TITLE_TRANSACTION_TYPE, mTitleTransactionType);
-        outState.putSerializable(SAVED_INSTANCE_STATE_UI_STATE, mUiState);
+        outState.putSerializable(SAVED_INSTANCE_STATE_UI_STATE, getUiState());
         super.onSaveInstanceState(outState);
     }
 
@@ -170,23 +176,26 @@ public class TransactionActivity extends AbstractTransactionActivity
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().findFragmentByTag(SendReceiptFragment.TAG) != null) {
-            showSummaryFragment(mStatefulTransactionProviderProxy.getCurrentTransaction(), null);
-        } else {
-            super.onBackPressed();
-        }
+        navigateBack();
     }
 
+    @Override
+    public void navigateBack() {
+        hideSoftKeyboard();
+
+        if (getUiState() == UiState.RECEIPT_SENDING || getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
+            showSummaryFragment(mStatefulTransactionProviderProxy.getCurrentTransaction(), null);
+        } else if (getUiState() == UiState.SUMMARY_DISPLAYING || getUiState() == UiState.TRANSACTION_ERROR) {
+            finishWithResult();
+        } else {
+            super.navigateBack();
+        }
+    }
 
     @Override
     public void onApplicationSelectionRequired(List<ApplicationInformation> applicationInformations) {
         Log.d(TAG, "onApplicationSelectionRequired");
-        mUiState = UiState.TRANSACTION_WAITING_APPLICATION_SELECTION;
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.container, ApplicationSelectionFragment.newInstance(applicationInformations), ApplicationSelectionFragment.TAG)
-                .commit();
+        showApplicationSelectionFragment(applicationInformations);
     }
 
     @Override
@@ -213,36 +222,30 @@ public class TransactionActivity extends AbstractTransactionActivity
         TransactionFragment paymentFragment = (TransactionFragment) getFragmentManager().findFragmentByTag(TransactionFragment.TAG);
         if (paymentFragment == null) {
             paymentFragment = TransactionFragment.newInstance();
-            getFragmentManager().beginTransaction().replace(R.id.container, paymentFragment, TransactionFragment.TAG).commit();
+            getFragmentManager().beginTransaction().replace(R.id.mpu_fragment_container, paymentFragment, TransactionFragment.TAG).commit();
         }
-
+        showFragment(paymentFragment, TransactionFragment.TAG, UiState.TRANSACTION_ONGOING, false);
         paymentFragment.updateStatus(details, transaction);
-
     }
 
     @Override
     public void onCompleted(Transaction transaction, MposError error) {
+        TransactionProcessDetails details = mStatefulTransactionProviderProxy.getLastTransactionProcessDetails();
+
         if (transaction == null && error == null) {
-            mUiState = UiState.TRANSACTION_ERROR;
             MposError e = new DefaultMposError(ErrorType.TRANSACTION_ABORTED);
-            showErrorFragment(false, e);
+            showErrorFragment(UiState.TRANSACTION_ERROR, false, e, details);
         } else if (error == null) {
             showSummaryFragment(transaction, null);
         } else {
-            mUiState = UiState.TRANSACTION_ERROR;
+            ErrorHolder.getInstance().setError(error);
+
             if(mStatefulTransactionProviderProxy.getLastTransactionProcessDetails().getState() == TransactionProcessDetailsState.NOT_REFUNDABLE) {
-                showErrorFragment(false, error);
+                showErrorFragment(UiState.TRANSACTION_ERROR, false, error, details);
             } else {
-                showErrorFragment(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), error);
+                showErrorFragment(UiState.TRANSACTION_ERROR, !getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), error, details);
             }
         }
-    }
-
-    @Override
-    public void onSummaryClosed(TransactionDataHolder transaction, MposError error) {
-        boolean approved = (transaction != null && transaction.getTransactionStatus().equals(TransactionStatus.APPROVED.name()));
-        String identifier = (transaction != null ? transaction.getTransactionIdentifier() : null);
-        finish(approved, identifier);
     }
 
     @Override
@@ -275,18 +278,11 @@ public class TransactionActivity extends AbstractTransactionActivity
 
     @Override
     public void onErrorRetryButtonClicked() {
-        if (mUiState == UiState.TRANSACTION_ERROR) {
+        if (getUiState() == UiState.TRANSACTION_ERROR) {
             startTransaction();
-        } else if (mUiState == UiState.RECEIPT_PRINTING_ERROR) {
+        } else if (getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
             showPrintReceiptFragment(mStatefulTransactionProviderProxy.getCurrentTransaction().getIdentifier());
         }
-    }
-
-    @Override
-    public void onErrorCancelButtonClicked() {
-        Transaction transaction = mStatefulTransactionProviderProxy.getCurrentTransaction();
-        String identifier = (transaction != null ? transaction.getIdentifier() : null);
-        finish(false, identifier);
     }
 
     @Override
@@ -303,8 +299,8 @@ public class TransactionActivity extends AbstractTransactionActivity
     public void onReceiptPrintCompleted(MposError error) {
         StatefulPrintingProcessProxy.getInstance().teardown();
         if (error != null) {
-            mUiState = UiState.RECEIPT_PRINTING_ERROR;
-            showErrorFragment(true, error);
+            ErrorHolder.getInstance().setError(error);
+            showErrorFragment(UiState.RECEIPT_PRINTING_ERROR, true, error, null);
         } else {
             showSummaryFragment(mStatefulTransactionProviderProxy.getCurrentTransaction(), null);
         }
@@ -349,10 +345,21 @@ public class TransactionActivity extends AbstractTransactionActivity
         }
     }
 
-    private void finish(boolean approved, String transactionIdentifier) {
-        mStatefulTransactionProviderProxy.teardown();
+    private void finishWithResult() {
+        Transaction transaction = mStatefulTransactionProviderProxy.getCurrentTransaction();
 
-        int resultCode = (approved) ? MposUi.RESULT_CODE_APPROVED : MposUi.RESULT_CODE_FAILED;
+        int resultCode;
+        String transactionIdentifier = null;
+
+        if (transaction != null) {
+            boolean approved = (transaction.getStatus() == TransactionStatus.APPROVED);
+            resultCode = approved ? MposUi.RESULT_CODE_APPROVED : MposUi.RESULT_CODE_FAILED;
+            transactionIdentifier = transaction.getIdentifier();
+        } else {
+            resultCode = MposUi.RESULT_CODE_FAILED;
+        }
+
+        mStatefulTransactionProviderProxy.teardown();
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(MposUi.RESULT_EXTRA_TRANSACTION_IDENTIFIER, transactionIdentifier);
@@ -361,7 +368,13 @@ public class TransactionActivity extends AbstractTransactionActivity
         finish();
     }
 
+    private void showApplicationSelectionFragment(List<ApplicationInformation> applicationInformations) {
+        ApplicationSelectionFragment fragment = ApplicationSelectionFragment.newInstance(applicationInformations);
+        showFragment(fragment, ApplicationSelectionFragment.TAG, UiState.TRANSACTION_WAITING_APPLICATION_SELECTION, false);
+    }
+
     private void showSignatureActivity() {
+        setUiState(UiState.TRANSACTION_WAITING_SIGNATURE);
         Intent intent = new Intent(this, SignatureActivity.class);
         intent.putExtra(SignatureActivity.BUNDLE_KEY_AMOUNT, mFormattedAmount);
         PaymentDetailsScheme scheme = mStatefulTransactionProviderProxy.getCurrentTransaction().getPaymentDetails().getScheme();
@@ -374,42 +387,24 @@ public class TransactionActivity extends AbstractTransactionActivity
 
     private void showSendReceiptFragment(String transactionIdentifier) {
         SendReceiptFragment fragment = SendReceiptFragment.newInstance(transactionIdentifier);
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.container, fragment, SendReceiptFragment.TAG)
-                .commit();
+        showFragment(fragment, SendReceiptFragment.TAG, UiState.RECEIPT_SENDING, true);
     }
 
     private void showSummaryFragment(Transaction transaction, MposError error) {
-        mUiState = UiState.SUMMARY_DISPLAYING;
         TransactionDataHolder dataHolder = TransactionDataHolder.createTransactionDataHolder(transaction);
         SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), false, dataHolder, error);
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.container, summaryFragment, SummaryFragment.TAG)
-                .commit();
+
+        showFragment(summaryFragment, SummaryFragment.TAG, UiState.SUMMARY_DISPLAYING, true);
     }
 
-    private void showErrorFragment(boolean retryEnabled, MposError error) {
-        ErrorFragment fragment = ErrorFragment.newInstance(retryEnabled, error, mStatefulTransactionProviderProxy.getLastTransactionProcessDetails());
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.container, fragment, ErrorFragment.TAG)
-                .commit();
-
+    private void showErrorFragment(UiState uiState, boolean retryEnabled, MposError error, TransactionProcessDetails transactionProcessDetails) {
+        ErrorFragment fragment = ErrorFragment.newInstance(retryEnabled, error, transactionProcessDetails);
+        showFragment(fragment, ErrorFragment.TAG, uiState, true);
     }
 
     private void showPrintReceiptFragment(String transactionIdentifier) {
-        mUiState = UiState.RECEIPT_PRINTING;
         PrintReceiptFragment fragment = PrintReceiptFragment.newInstance(transactionIdentifier);
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.container, fragment, PrintReceiptFragment.TAG)
-                .commit();
+        showFragment(fragment, PrintReceiptFragment.TAG, UiState.RECEIPT_PRINTING, false);
     }
 
     private String constructTitle() {
@@ -418,5 +413,10 @@ public class TransactionActivity extends AbstractTransactionActivity
         } else {
             return mTitleTransactionType + ": " + mFormattedAmount;
         }
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(findViewById(R.id.mpu_fragment_container).getWindowToken(), 0);
     }
 }

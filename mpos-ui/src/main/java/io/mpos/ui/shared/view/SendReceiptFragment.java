@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -80,17 +82,17 @@ public class SendReceiptFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_send_receipt, container, false);
-        mProgressView = (ImageView) view.findViewById(R.id.progress_view);
+        View view = inflater.inflate(R.layout.mpu_fragment_send_receipt, container, false);
+        mProgressView = (ImageView) view.findViewById(R.id.mpu_progress_view);
 
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
 
-        TextView iconView = (TextView) view.findViewById(R.id.status_icon_view);
+        TextView iconView = (TextView) view.findViewById(R.id.mpu_status_icon_view);
         iconView.setTypeface(UiHelper.createAwesomeFontTypeface(view.getContext()));
         iconView.setTextColor(color);
-        iconView.setText(getString(R.string.fa_email));
+        iconView.setText(getString(R.string.mpu_fa_email));
 
-        mSendButton = (Button) view.findViewById(R.id.send_button);
+        mSendButton = (Button) view.findViewById(R.id.mpu_send_button);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +111,7 @@ public class SendReceiptFragment extends Fragment {
         mProgressView.setAnimation(null);
         mProgressView.setVisibility(View.INVISIBLE);
 
-        mEmailView = (EditText) view.findViewById(R.id.email_address_view);
+        mEmailView = (EditText) view.findViewById(R.id.mpu_email_address_view);
         mEmailView.requestFocus();
         int primaryDarkColor = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
         mEmailView.getBackground().setColorFilter(primaryDarkColor, PorterDuff.Mode.SRC_ATOP);
@@ -147,7 +149,7 @@ public class SendReceiptFragment extends Fragment {
     }
 
     private void sendReceipt(String transactionIdentifier, String email) {
-        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.mpu_rotation);
         mProgressView.setAnimation(animation);
         mProgressView.setVisibility(View.VISIBLE);
 

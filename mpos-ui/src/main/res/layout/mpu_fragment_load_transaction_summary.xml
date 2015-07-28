@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
   ~ The MIT License (MIT)
@@ -24,15 +23,24 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<resources>
-    <color name="mpu_transaction_state_approved">#4caf50</color>
-    <color name="mpu_transaction_state_declined_aborted">#f44336</color>
-    <color name="mpu_divider">#1A000000</color>
-    <color name="mpu_payment_progress_bar_default_color">#616161</color>
-    <color name="mpu_payment_button_pressed_state">#12000000</color>
-    <color name="mpu_payment_button_focused_state">#12000000</color>
-    <color name="mpu_payment_button_normal_state">@android:color/transparent</color>
-    <color name="mpu_payment_button_textcolor_disabled">#33000000</color>
-    <color name="mpu_payment_button_textcolor">#000</color>
-    <color name="mpu_payment_button_negative_textcolor">#424242</color>
-</resources>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mpu_status_icon_view_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:src="@drawable/mpu_transaction_progress_drawable"
+        android:id="@+id/mpu_progress_view"
+        android:layout_width="@dimen/mpu_payment_status_icon_container"
+        android:layout_height="@dimen/mpu_payment_status_icon_container"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        style="@style/MpuTransactionStatusIconView"
+        android:id="@+id/mpu_status_icon_view"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,19 +25,19 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <style name="TransactionStatusIconView">
+    <style name="MpuTransactionStatusIconView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">60sp</item>
         <item name="android:singleLine">true</item>
     </style>
-    <style name="TransactionStatusTextView" parent="TextAppearance.AppCompat.Medium">
+    <style name="MpuTransactionStatusTextView" parent="TextAppearance.AppCompat.Medium">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:lines">2</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:layout_marginTop">@dimen/activity_vertical_margin_half</item>
+        <item name="android:layout_marginTop">@dimen/mpu_activity_vertical_margin_half</item>
     </style>
 </resources>

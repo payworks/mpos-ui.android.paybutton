@@ -24,42 +24,34 @@
  * THE SOFTWARE.
  */
 
-package io.mpos.ui.paybutton.view;
+package io.mpos.ui.shared.util;
 
-import android.app.Activity;
-import android.app.Fragment;
+import io.mpos.errors.MposError;
 
-import io.mpos.paymentdetails.ApplicationInformation;
+/**
+ * Created by jakub on 27/07/15.
+ */
+public class ErrorHolder {
 
-public class AbstractTransactionFragment extends Fragment {
+    private static final ErrorHolder INSTANCE = new ErrorHolder();
 
-    public interface Interaction {
-
-        void onAbortTransactionButtonClicked();
-
-        void onApplicationSelected(ApplicationInformation applicationInformation);
-
+    public static ErrorHolder getInstance() {
+        return INSTANCE;
     }
 
-    private Interaction mInteractionActivity;
+    private ErrorHolder() { }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mInteractionActivity = (Interaction) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement AbstractTransactionFragment.Interaction");
-        }
+    private MposError mError;
+
+    public void clear() {
+        mError = null;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mInteractionActivity = null;
+    public MposError getError() {
+        return mError;
     }
 
-    public Interaction getInteractionActivity() {
-        return mInteractionActivity;
+    public void setError(MposError error) {
+        mError = error;
     }
 }

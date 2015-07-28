@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -76,10 +78,10 @@ public class UiHelper {
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    public static void setActionbarWithCustomColors(AppCompatActivity activity, Toolbar toolbar, boolean backEnabled) {
+    public static void setActionbarWithCustomColors(AppCompatActivity activity, Toolbar toolbar) {
         if(toolbar != null) {
             activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(backEnabled);
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getTextColorPrimary();
             toolbar.setTitleTextColor(color);
@@ -105,14 +107,14 @@ public class UiHelper {
         try {
             switch (cardScheme) {
                 case MASTERCARD:
-                    return R.drawable.mastercard_image;
+                    return R.drawable.mpu_mastercard_image;
                 case MAESTRO:
-                    return R.drawable.maestro_image;
+                    return R.drawable.mpu_maestro_image;
                 case VISA:
                 case VISA_ELECTRON:
-                    return R.drawable.visacard_image;
+                    return R.drawable.mpu_visacard_image;
                 case AMERICAN_EXPRESS:
-                    return R.drawable.american_express_image;
+                    return R.drawable.mpu_american_express_image;
                 default:
                     return -1;
             }

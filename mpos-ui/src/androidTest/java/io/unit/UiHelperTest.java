@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -44,11 +46,11 @@ public class UiHelperTest extends ActivityUnitTestCase<TransactionActivity> {
     }
 
     public void testGetDrawableIdImageForCreditCard() {
-        assertEquals(R.drawable.visacard_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.VISA));
-        assertEquals(R.drawable.visacard_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.VISA_ELECTRON));
-        assertEquals(R.drawable.maestro_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.MAESTRO));
-        assertEquals(R.drawable.mastercard_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.MASTERCARD));
-        assertEquals(R.drawable.american_express_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.AMERICAN_EXPRESS));
+        assertEquals(R.drawable.mpu_visacard_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.VISA));
+        assertEquals(R.drawable.mpu_visacard_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.VISA_ELECTRON));
+        assertEquals(R.drawable.mpu_maestro_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.MAESTRO));
+        assertEquals(R.drawable.mpu_mastercard_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.MASTERCARD));
+        assertEquals(R.drawable.mpu_american_express_image, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.AMERICAN_EXPRESS));
         assertEquals(-1, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.DINERS));
         assertEquals(-1, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.DISCOVER));
         assertEquals(-1, UiHelper.getDrawableIdImageForCreditCard(PaymentDetailsScheme.JCB));

@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -91,11 +93,11 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_print_receipt, container, false);
-        mProgressView = (ImageView) rootView.findViewById(R.id.progress_view);
-        mIconView = (TextView) rootView.findViewById(R.id.status_icon_view);
-        mStatusView = (TextView) rootView.findViewById(R.id.status_view);
-        mAbortButton = (Button) rootView.findViewById(R.id.abort_button);
+        View rootView = inflater.inflate(R.layout.mpu_fragment_print_receipt, container, false);
+        mProgressView = (ImageView) rootView.findViewById(R.id.mpu_progress_view);
+        mIconView = (TextView) rootView.findViewById(R.id.mpu_status_icon_view);
+        mStatusView = (TextView) rootView.findViewById(R.id.mpu_status_view);
+        mAbortButton = (Button) rootView.findViewById(R.id.mpu_abort_button);
 
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
         mIconView.setTypeface(UiHelper.createAwesomeFontTypeface(rootView.getContext()));
@@ -150,7 +152,7 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
 
         if (showProgressView(printingProcessDetails.getState())) {
             if (mProgressView.getAnimation() == null) {
-                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation);
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.mpu_rotation);
                 mProgressView.startAnimation(animation);
             }
             mProgressView.setVisibility(View.VISIBLE);

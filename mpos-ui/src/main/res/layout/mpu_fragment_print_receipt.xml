@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,65 +26,51 @@
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/payment_fragment_error"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
+                android:paddingRight="@dimen/mpu_activity_horizontal_margin"
+                android:paddingTop="@dimen/mpu_activity_vertical_margin"
+                android:paddingBottom="@dimen/mpu_activity_vertical_margin"
                 android:layout_gravity="center">
 
     <FrameLayout
-        android:id="@+id/status_icon_view_container"
-        android:layout_marginTop="@dimen/payment_status_icon_view_margin_top"
+        android:id="@+id/mpu_status_icon_view_container"
+        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top"
         android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/payment_status_icon_container"
-        android:layout_height="@dimen/payment_status_icon_container">
+        android:layout_width="@dimen/mpu_payment_status_icon_container"
+        android:layout_height="@dimen/mpu_payment_status_icon_container">
 
         <ImageView
-            android:src="@drawable/transaction_progress_drawable"
-            android:id="@+id/progress_view"
-            android:visibility="invisible"
+            android:src="@drawable/mpu_transaction_progress_drawable"
+            android:id="@+id/mpu_progress_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-        />
+            />
 
         <TextView
-            style="@style/TransactionStatusIconView"
-            android:id="@+id/status_icon_view"
-            android:text="@string/fa_times_circle"
+            style="@style/MpuTransactionStatusIconView"
+            android:id="@+id/mpu_status_icon_view"
+            android:text="@string/mpu_fa_print"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:singleLine="true"
             />
     </FrameLayout>
 
     <TextView
-        style="@style/TransactionStatusTextView"
-        android:id="@+id/status_view"
+        style="@style/MpuTransactionStatusTextView"
+        android:id="@+id/mpu_status_view"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/status_icon_view_container"
+        android:layout_below="@+id/mpu_status_icon_view_container"
         />
 
     <Button
-        style="@style/mPOS.UI.Button"
-        android:id="@+id/retry_button"
+        style="@style/mpos.ui.Button"
+        android:id="@+id/mpu_abort_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/MPURetry"
+        android:text="@string/MPUAbort"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         />
-
-    <Button
-        style="@style/mPOS.UI.Button"
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/MPUClose"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-    />
 
 </RelativeLayout>

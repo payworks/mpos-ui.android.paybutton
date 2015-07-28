@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,9 +25,9 @@
   ~ THE SOFTWARE.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     >
 
     <android.support.v7.widget.Toolbar
@@ -33,13 +35,13 @@
         android:layout_height="?attr/actionBarSize"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:id="@+id/toolbar">
+        android:id="@+id/mpu_toolbar">
 
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:tools="http://schemas.android.com/tools"
-                 android:id="@+id/container"
+                 android:id="@+id/mpu_fragment_container"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  tools:ignore="MergeRootFrame"/>

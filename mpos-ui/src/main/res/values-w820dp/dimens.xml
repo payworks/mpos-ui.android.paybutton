@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,5 +25,5 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <dimen name="payment_status_icon_view_margin_top">40dp</dimen>
+    <dimen name="mpu_payment_status_icon_view_margin_top">40dp</dimen>
 </resources>

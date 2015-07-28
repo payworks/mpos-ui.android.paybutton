@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -46,8 +48,6 @@ public class ErrorFragment extends Fragment {
 
         void onErrorRetryButtonClicked();
 
-        void onErrorCancelButtonClicked();
-
     }
 
     public static final String TAG = "ErrorFragment";
@@ -76,9 +76,9 @@ public class ErrorFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_error, container, false);
+        View view = inflater.inflate(R.layout.mpu_fragment_error, container, false);
 
-        Button retryButton = (Button) view.findViewById(R.id.retry_button);
+        Button retryButton = (Button) view.findViewById(R.id.mpu_retry_button);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,18 +95,11 @@ public class ErrorFragment extends Fragment {
             retryButton.setVisibility(View.GONE);
         }
 
-        view.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mInteractionActivity.onErrorCancelButtonClicked();
-            }
-        });
-
-        TextView iconView = (TextView) view.findViewById(R.id.status_icon_view);
+        TextView iconView = (TextView) view.findViewById(R.id.mpu_status_icon_view);
         iconView.setTypeface(UiHelper.createAwesomeFontTypeface(getActivity()));
         iconView.setTextColor(MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary());
 
-        TextView errorView = (TextView) view.findViewById(R.id.status_view);
+        TextView errorView = (TextView) view.findViewById(R.id.mpu_status_view);
 
         if (mTransactionProcessDetails != null && mTransactionProcessDetails.getInformation() != null && mTransactionProcessDetails.getInformation().length == 2) {
             String message = UiHelper.joinAndTrimStatusInformation(mTransactionProcessDetails.getInformation());

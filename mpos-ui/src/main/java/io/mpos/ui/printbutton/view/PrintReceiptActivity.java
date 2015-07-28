@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,39 +37,42 @@ import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
+import io.mpos.ui.shared.util.ErrorHolder;
 import io.mpos.ui.shared.util.UiHelper;
 import io.mpos.ui.shared.util.UiState;
+import io.mpos.ui.shared.view.AbstractBaseActivity;
 import io.mpos.ui.shared.view.ErrorFragment;
 import io.mpos.ui.shared.view.PrintReceiptFragment;
 
-public class PrintReceiptActivity extends AppCompatActivity implements PrintReceiptFragment.Interaction, ErrorFragment.Interaction {
+public class PrintReceiptActivity extends AbstractBaseActivity
+        implements PrintReceiptFragment.Interaction, ErrorFragment.Interaction {
 
     private final static String TAG = "PrintReceiptActivity";
 
-    public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.printbutton.PrintReceiptActivity.TRANSACTION_IDENTIFIER";
-    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.printbutton.PrintReceiptActivity.MERCHANT_ID";
-    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.printbutton.PrintReceiptActivity.MERCHANT_SECRET";
-    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.printbutton.PrintReceiptActivity.PROVIDER_MODE";
+    public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.printbutton.view.PrintReceiptActivity.TRANSACTION_IDENTIFIER";
+    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.printbutton.view.PrintReceiptActivity.MERCHANT_ID";
+    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.printbutton.view.PrintReceiptActivity.MERCHANT_SECRET";
+    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.printbutton.view.PrintReceiptActivity.PROVIDER_MODE";
 
     private TransactionProvider mTransactionProvider;
-    private String mTransactionIdentifer;
-    private UiState mUiState = UiState.IDLE;
+    private String mTransactionIdentifier;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_print_receipt);
+        setContentView(R.layout.mpu_activity_print_receipt);
 
         if (getCallingActivity() == null) {
             Log.w(TAG, "The printing activity was started without startActivityForResult() and will not return a result code.");
         }
 
-        UiHelper.setActionbarWithCustomColors(this, (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar), false);
+        UiHelper.setActionbarWithCustomColors(this, (android.support.v7.widget.Toolbar) findViewById(R.id.mpu_toolbar));
         setTitle(R.string.MPUPrinting);
 
+        ErrorHolder.getInstance().clear();
         createMposProvider();
 
-        mTransactionIdentifer = getIntent().getStringExtra(BUNDLE_EXTRA_TRANSACTION_IDENTIFIER);
+        mTransactionIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_TRANSACTION_IDENTIFIER);
 
         if (savedInstanceState == null) {
             showPrintReceiptFragment();
@@ -75,13 +80,8 @@ public class PrintReceiptActivity extends AppCompatActivity implements PrintRece
     }
 
     private void showPrintReceiptFragment() {
-        mUiState = UiState.RECEIPT_PRINTING;
-        PrintReceiptFragment fragment = PrintReceiptFragment.newInstance(mTransactionIdentifer);
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .replace(R.id.container, fragment, PrintReceiptFragment.TAG)
-                .commit();
+        PrintReceiptFragment fragment = PrintReceiptFragment.newInstance(mTransactionIdentifier);
+        showFragment(fragment, PrintReceiptFragment.TAG, UiState.RECEIPT_PRINTING, false);
     }
 
     private void createMposProvider() {
@@ -98,23 +98,18 @@ public class PrintReceiptActivity extends AppCompatActivity implements PrintRece
     }
 
     @Override
-    public void onErrorCancelButtonClicked() {
-        finish(false);
-    }
-
-    @Override
     public void onReceiptPrintCompleted(MposError error) {
         if (error != null) {
-            mUiState = UiState.RECEIPT_PRINTING_ERROR;
-            showErrorFragment(true, error);
+            ErrorHolder.getInstance().setError(error);
+            showErrorFragment(error);
         } else {
-            finish(true);
+            finishWithResult(true);
         }
     }
 
     @Override
     public void onAbortPrintingClicked() {
-        finish(false);
+        finishWithResult(false);
     }
 
     @Override
@@ -124,23 +119,27 @@ public class PrintReceiptActivity extends AppCompatActivity implements PrintRece
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, R.string.MPUBackButtonDisabled, Toast.LENGTH_LONG).show();
+        navigateBack();
     }
 
-    private void finish(boolean success) {
+    @Override
+    public void navigateBack() {
+        if (getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
+            finishWithResult(false);
+        } else {
+            Toast.makeText(this, R.string.MPUBackButtonDisabled, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void finishWithResult(boolean success) {
         StatefulPrintingProcessProxy.getInstance().teardown();
         int resultCode = success ? MposUi.RESULT_CODE_PRINT_SUCCESS : MposUi.RESULT_CODE_PRINT_FAILED;
         setResult(resultCode);
         finish();
     }
 
-    private void showErrorFragment(boolean retryEnabled, MposError error) {
-        ErrorFragment fragment = ErrorFragment.newInstance(retryEnabled, error, null);
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .replace(R.id.container, fragment, ErrorFragment.TAG)
-                .commit();
-
+    private void showErrorFragment(MposError error) {
+        ErrorFragment fragment = ErrorFragment.newInstance(true, error, null);
+        showFragment(fragment, ErrorFragment.TAG, UiState.RECEIPT_PRINTING_ERROR, true);
     }
 }

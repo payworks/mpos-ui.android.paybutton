@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,15 +25,15 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <style name="Theme.mPOS.UI" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.mpos.ui" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#bbdefb</item>
         <item name="colorPrimaryDark">#1565c0</item>
-        <item name="android:buttonStyle">@style/mPOS.UI.Button</item>
-        <item name="colorControlHighlight">@color/payment_button_pressed_state</item>
+        <item name="android:buttonStyle">@style/mpos.ui.Button</item>
+        <item name="colorControlHighlight">@color/mpu_payment_button_pressed_state</item>
     </style>
 
-    <style name="mPOS.UI.Button" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/payment_button</item>
-        <item name="android:textColor">@drawable/payment_button_textcolor</item>
+    <style name="mpos.ui.Button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/mpu_payment_button</item>
+        <item name="android:textColor">@drawable/mpu_payment_button_textcolor</item>
     </style>
 </resources>

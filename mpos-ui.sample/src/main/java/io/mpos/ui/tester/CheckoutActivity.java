@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package io.mpos.ui.tester;
 
 import android.app.Dialog;
@@ -45,6 +48,7 @@ import java.util.EnumSet;
 
 import io.mpos.Mpos;
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactions.Currency;
 import io.mpos.ui.shared.MposUi;
@@ -140,7 +144,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent summaryIntent = MposUi.getInitializedInstance().createTransactionSummaryIntent(mLastTransactionIdentifier);
-                startActivity(summaryIntent);
+                startActivityForResult(summaryIntent, MposUi.REQUEST_CODE_SHOW_SUMMARY);
             }
         });
 
@@ -174,8 +178,8 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
     }
 
-    void printReceipt(String transctionIdentifier) {
-        Intent intent = MposUi.getInitializedInstance().createPrintReceiptIntent(transctionIdentifier);
+    void printReceipt(String transactionIdentifier) {
+        Intent intent = MposUi.getInitializedInstance().createPrintReceiptIntent(transactionIdentifier);
         startActivityForResult(intent, MposUi.REQUEST_CODE_PRINT_RECEIPT);
     }
 
@@ -187,21 +191,37 @@ public class CheckoutActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (requestCode == MposUi.REQUEST_CODE_PAYMENT) {
+
             if (resultCode == MposUi.RESULT_CODE_APPROVED) {
-                Toast.makeText(this, "Transaction Approved", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Transaction Approved", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Transaction Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Transaction Failed", Toast.LENGTH_SHORT).show();
             }
 
             mLastTransactionIdentifier = data.getStringExtra(MposUi.RESULT_EXTRA_TRANSACTION_IDENTIFIER);
             updateViews();
+
         } else if (requestCode == MposUi.REQUEST_CODE_PRINT_RECEIPT) {
+
             if (resultCode == MposUi.RESULT_CODE_PRINT_SUCCESS) {
-                Toast.makeText(this, "Printing Receipt Success", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Printing Receipt Success", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Printing Receipt Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Printing Receipt Failed", Toast.LENGTH_SHORT).show();
             }
+
+        } else if (requestCode == MposUi.REQUEST_CODE_SHOW_SUMMARY) {
+            // resultCode is always MposUi.RESULT_CODE_SUMMARY_CLOSED
+
+            Toast.makeText(this, "Summary Closed", Toast.LENGTH_SHORT).show();
+        }
+
+        // an error could have occurred regardless of the main outcome
+        // e.g. a transaction was successful but there was an error when sending the receipt
+        MposError error = MposUi.getInitializedInstance().getError();
+        if (error != null) {
+            Toast.makeText(this, "An error occurred: " + error.getInfo(), Toast.LENGTH_SHORT).show();
         }
     }
 

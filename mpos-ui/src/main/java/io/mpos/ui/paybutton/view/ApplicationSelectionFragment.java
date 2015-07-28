@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -67,7 +69,7 @@ public class ApplicationSelectionFragment extends AbstractTransactionFragment {
             TextView tv = new TextView(getContext());
             tv.setText(applicationInformation.getApplicationName());
             tv.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
-            int padding = (int) getResources().getDimension(R.dimen.activity_horizontal_margin);
+            int padding = (int) getResources().getDimension(R.dimen.mpu_activity_horizontal_margin);
             tv.setPadding(padding, 0, padding, 0);
             tv.setMinHeight(UiHelper.dpToPx(getContext(), 52));
             tv.setGravity(Gravity.CENTER_VERTICAL);
@@ -88,16 +90,16 @@ public class ApplicationSelectionFragment extends AbstractTransactionFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_application_selection, container, false);
+        View view =  inflater.inflate(R.layout.mpu_fragment_application_selection, container, false);
 
         int textColor = MposUi.getInitializedInstance().getConfiguration().getAppearance().getTextColorPrimary();
         int backgroundColor = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
 
-        TextView headerView = (TextView) view.findViewById(R.id.header_view);
+        TextView headerView = (TextView) view.findViewById(R.id.mpu_header_view);
         headerView.setTextColor(textColor);
         headerView.setBackgroundColor(backgroundColor);
 
-        final ListView listView = (ListView) view.findViewById(R.id.application_list_view);
+        final ListView listView = (ListView) view.findViewById(R.id.mpu_application_list_view);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,7 +108,7 @@ public class ApplicationSelectionFragment extends AbstractTransactionFragment {
             }
         });
         listView.setAdapter(new ApplicationSelectionAdapter(view.getContext()));
-        view.findViewById(R.id.abort_button).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.mpu_abort_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getInteractionActivity().onAbortTransactionButtonClicked();

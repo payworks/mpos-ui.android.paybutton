@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,27 +24,38 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <TextView
+        android:id="@+id/mpu_header_view"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:id="@+id/toolbar">
+        android:layout_height="104dp"
+        android:text="@string/MPUSelectAccount"
+        android:textSize="@dimen/mpu_text_size_headline_material"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
+    />
 
-    </android.support.v7.widget.Toolbar>
+    <ListView
+        android:id="@+id/mpu_application_list_view"
+        android:layout_below="@+id/mpu_header_view"
+        android:layout_above="@+id/mpu_abort_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 xmlns:tools="http://schemas.android.com/tools"
-                 android:id="@+id/container"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 tools:ignore="MergeRootFrame"/>
+    <Button
+        style="@style/mpos.ui.Button"
+        android:id="@+id/mpu_abort_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/MPUAbort"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/mpu_activity_vertical_margin"
+    />
 
-
-</LinearLayout>
+</RelativeLayout>

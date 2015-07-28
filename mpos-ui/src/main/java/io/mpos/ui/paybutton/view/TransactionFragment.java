@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -73,18 +75,18 @@ public class TransactionFragment extends AbstractTransactionFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_transaction, container, false);
-        mStatusView = (TextView) view.findViewById(R.id.status_view);
-        mProgressView = (ImageView)view.findViewById(R.id.progress_view);
+        View view = inflater.inflate(R.layout.mpu_fragment_transaction, container, false);
+        mStatusView = (TextView) view.findViewById(R.id.mpu_status_view);
+        mProgressView = (ImageView)view.findViewById(R.id.mpu_progress_view);
 
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
         int secondaryColor = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimaryDark();
 
-        mIconView = (TextView) view.findViewById(R.id.status_icon_view);
+        mIconView = (TextView) view.findViewById(R.id.mpu_status_icon_view);
         mIconView.setTypeface(UiHelper.createAwesomeFontTypeface(view.getContext()));
         mIconView.setTextColor(color);
 
-        mAbortButton = (Button) view.findViewById(R.id.abort_button);
+        mAbortButton = (Button) view.findViewById(R.id.mpu_abort_button);
         mAbortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +120,7 @@ public class TransactionFragment extends AbstractTransactionFragment {
 
         if(showProgressView(mProcessDetails.getStateDetails())) {
             if(mProgressView.getAnimation() == null) {
-                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation);
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.mpu_rotation);
                 mProgressView.startAnimation(animation);
             }
             mProgressView.setVisibility(View.VISIBLE);
@@ -149,26 +151,26 @@ public class TransactionFragment extends AbstractTransactionFragment {
             case CONNECTING_TO_ACCESSORY_CHECKING_FOR_UPDATE:
             case CONNECTING_TO_ACCESSORY_UPDATING:
             case CONNECTING_TO_ACCESSORY_WAITING_FOR_READER:
-                return getString(R.string.fa_lock);
+                return getString(R.string.mpu_fa_lock);
             case PROCESSING_WAITING_FOR_PIN:
-                return getString(R.string.fa_th);
+                return getString(R.string.mpu_fa_th);
         }
 
         switch (state) {
             case CREATED:
             case INITIALIZING_TRANSACTION:
-                return getString(R.string.fa_lock);
+                return getString(R.string.mpu_fa_lock);
             case PROCESSING:
-                return getString(R.string.fa_bank);
+                return getString(R.string.mpu_fa_bank);
             case WAITING_FOR_CARD_PRESENTATION:
             case WAITING_FOR_CARD_REMOVAL:
-                return getString(R.string.fa_credit_card);
+                return getString(R.string.mpu_fa_credit_card);
             case APPROVED:
             case DECLINED:
             case ABORTED:
-                return getString(R.string.fa_bank);
+                return getString(R.string.mpu_fa_bank);
             case FAILED:
-                return getString(R.string.fa_times_circle);
+                return getString(R.string.mpu_fa_times_circle);
         }
 
         return "";
@@ -177,7 +179,7 @@ public class TransactionFragment extends AbstractTransactionFragment {
     //The Awesome Font character 'fa_bank' has some trailing whitespace and
     //isn't centered correctly
     private int statusIconPadding(String statusIcon) {
-        if(getString(R.string.fa_bank).equals(statusIcon)) {
+        if(getString(R.string.mpu_fa_bank).equals(statusIcon)) {
             return UiHelper.dpToPx(getActivity(), 4);
         }
 

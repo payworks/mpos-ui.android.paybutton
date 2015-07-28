@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,6 +31,7 @@ import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
+import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactions.Currency;
@@ -38,6 +41,7 @@ import io.mpos.ui.paybutton.controller.StatefulTransactionProviderProxy;
 import io.mpos.ui.paybutton.view.TransactionActivity;
 import io.mpos.ui.printbutton.view.PrintReceiptActivity;
 import io.mpos.ui.shared.model.MposUiConfiguration;
+import io.mpos.ui.shared.util.ErrorHolder;
 import io.mpos.ui.summarybutton.view.TransactionSummaryActivity;
 
 /**
@@ -58,12 +62,15 @@ public final class MposUi {
 
     public static final int REQUEST_CODE_PAYMENT = 1001;
     public static final int REQUEST_CODE_PRINT_RECEIPT = 1004;
+    public static final int REQUEST_CODE_SHOW_SUMMARY = 1007;
 
     public static final int RESULT_CODE_APPROVED = 2001;
     public static final int RESULT_CODE_FAILED = 2004;
 
     public static final int RESULT_CODE_PRINT_SUCCESS = 3001;
     public static final int RESULT_CODE_PRINT_FAILED = 3004;
+
+    public static final int RESULT_CODE_SUMMARY_CLOSED = 4001;
 
     public static final String RESULT_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.shared.MposUiController.TRANSACTION_IDENTIFIER";
 
@@ -160,6 +167,14 @@ public final class MposUi {
     }
 
     /**
+     * Returns the latest error which might have occurred in the MposUi.
+     * @return The last error object.
+     */
+    public MposError getError() {
+        return ErrorHolder.getInstance().getError();
+    }
+
+    /**
      * Creates an intent for a new transaction from a session identifier
      * (this identifier is created after registering the transaction on the backend).
      *
@@ -239,7 +254,8 @@ public final class MposUi {
     /**
      * Creates an intent for showing the summary screen of a transaction.
      *
-     * You should use the returned intent with {@code startActivity()}.
+     * You should use the returned intent with {@code startActivity()} or {@code startActivityForResult()} using request code {@link #REQUEST_CODE_SHOW_SUMMARY}
+     * if you want to be notified when the transaction summary screen is closed. The result code will always be {@link #RESULT_CODE_SUMMARY_CLOSED}.
      *
      * @param transactionIdentifier The identifier of the transaction to show the summary.
      * @return The intent which can be used to start a new activity.

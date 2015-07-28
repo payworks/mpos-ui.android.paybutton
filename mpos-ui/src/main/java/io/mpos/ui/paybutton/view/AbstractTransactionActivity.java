@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,14 +26,14 @@
 
 package io.mpos.ui.paybutton.view;
 
-import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import io.mpos.ui.R;
+import io.mpos.ui.shared.view.AbstractBaseActivity;
 
 
-public class AbstractTransactionActivity extends AppCompatActivity {
+public abstract class AbstractTransactionActivity extends AbstractBaseActivity {
 
     @Override
     public void onBackPressed() {
@@ -46,7 +48,12 @@ public class AbstractTransactionActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        super.onStop();
+    }
+
+    @Override
+    public void navigateBack() {
+        Toast.makeText(this, R.string.MPUBackButtonDisabled, Toast.LENGTH_LONG).show();
     }
 }

@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -63,18 +65,18 @@ public class SignatureActivityTest extends ActivityInstrumentationTestCase2<Sign
     }
 
     public void testRequiredButtonsPresent() {
-        Espresso.onView(ViewMatchers.withId(R.id.clear_button)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        Espresso.onView(ViewMatchers.withId(R.id.abort_button)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        Espresso.onView(ViewMatchers.withId(R.id.continue_button)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_clear_button)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_abort_button)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_continue_button)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
     public void testAmountViewShowsCorrectAmount() {
-        Espresso.onView(ViewMatchers.withId(R.id.amount_view))
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_amount_view))
                 .check(ViewAssertions.matches(ViewMatchers.withText("12.34$")));
     }
 
     public void testToolbarInvisible() {
-            Espresso.onView(ViewMatchers.withId(R.id.toolbar))
+            Espresso.onView(ViewMatchers.withId(R.id.mpu_toolbar))
                     .check(ViewAssertions.doesNotExist());
     }
 

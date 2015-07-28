@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -78,18 +80,18 @@ public class LoadTransactionSummaryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_load_transaction_summary, container, false);
+        View view = inflater.inflate(R.layout.mpu_fragment_load_transaction_summary, container, false);
 
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
 
-        ImageView progressView = (ImageView)view.findViewById(R.id.progress_view);
-        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation);
+        ImageView progressView = (ImageView)view.findViewById(R.id.mpu_progress_view);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.mpu_rotation);
         progressView.startAnimation(animation);
 
-        TextView iconView = (TextView) view.findViewById(R.id.status_icon_view);
+        TextView iconView = (TextView) view.findViewById(R.id.mpu_status_icon_view);
         iconView.setTypeface(UiHelper.createAwesomeFontTypeface(view.getContext()));
         iconView.setTextColor(color);
-        iconView.setText(R.string.fa_history);
+        iconView.setText(R.string.mpu_fa_history);
 
         return view;
     }

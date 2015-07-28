@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,8 +34,8 @@ android {
         applicationId "io.mpos.ui.tester"
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 20400
-        versionName "2.4.0"
+        versionCode 20401
+        versionName "2.4.1"
     }
     buildTypes {
         release {
@@ -65,16 +67,16 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
 
     compile project(':mpos-ui')
 
-    compile 'io.payworks:mpos.android.core:2.4.0@aar'
-    compile 'io.payworks:mpos.android.accessories.miura:2.4.0@aar'
-    compile 'io.payworks:mpos.android.comlinks.bluetooth:2.4.0@aar'
-    compile 'io.payworks:mpos.android.accessories.verifone-e105:2.4.0@aar'
-    compile 'io.payworks:mpos.android.comlinks.verifone-e105:2.4.0@aar'
-    compile 'io.payworks:mpos.android.accessories.sewoo:2.4.0@aar'
+    compile 'io.payworks:mpos.android.core:2.4.1@aar'
+    compile 'io.payworks:mpos.android.accessories.miura:2.4.1@aar'
+    compile 'io.payworks:mpos.android.comlinks.bluetooth:2.4.1@aar'
+    compile 'io.payworks:mpos.android.accessories.verifone-e105:2.4.1@aar'
+    compile 'io.payworks:mpos.android.comlinks.verifone-e105:2.4.1@aar'
+    compile 'io.payworks:mpos.android.accessories.sewoo:2.4.1@aar'
 
     compile('org.simpleframework:simple-xml:2.7.1') {
         exclude group: 'stax', module: 'stax'

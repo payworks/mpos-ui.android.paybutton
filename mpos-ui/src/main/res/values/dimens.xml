@@ -2,6 +2,8 @@
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
+  ~ The MIT License (MIT)
+  ~
   ~ Copyright (c) 2015 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,30 +26,30 @@
   -->
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="mpu_activity_horizontal_margin">16dp</dimen>
+    <dimen name="mpu_activity_vertical_margin">16dp</dimen>
 
-    <dimen name="activity_horizontal_margin_half">8dp</dimen>
-    <dimen name="activity_vertical_margin_half">8dp</dimen>
+    <dimen name="mpu_activity_horizontal_margin_half">8dp</dimen>
+    <dimen name="mpu_activity_vertical_margin_half">8dp</dimen>
 
-    <dimen name="standard_horizontal_margin">16dp</dimen>
-    <dimen name="standard_vertical_margin">16dp</dimen>
+    <dimen name="mpu_standard_horizontal_margin">16dp</dimen>
+    <dimen name="mpu_standard_vertical_margin">16dp</dimen>
 
-    <dimen name="dialog_content_padding">8dp</dimen>
+    <dimen name="mpu_dialog_content_padding">8dp</dimen>
 
-    <dimen name="card_radius">2dp</dimen>
-    <dimen name="card_elevation">16dp</dimen>
+    <dimen name="mpu_card_radius">2dp</dimen>
+    <dimen name="mpu_card_elevation">16dp</dimen>
 
-    <dimen name="content_padding">16dp</dimen>
-    <dimen name="card_image_padding">8dp</dimen>
-    <dimen name="card_heading">24sp</dimen>
-    <dimen name="card_body">16sp</dimen>
-    <dimen name="divider">1dp</dimen>
-    <dimen name="divider_padding">8dp</dimen>
-    <dimen name="issuer_card_icon_size">48dp</dimen>
+    <dimen name="mpu_content_padding">16dp</dimen>
+    <dimen name="mpu_card_image_padding">8dp</dimen>
+    <dimen name="mpu_card_heading">24sp</dimen>
+    <dimen name="mpu_card_body">16sp</dimen>
+    <dimen name="mpu_divider">1dp</dimen>
+    <dimen name="mpu_divider_padding">8dp</dimen>
+    <dimen name="mpu_issuer_card_icon_size">48dp</dimen>
 
-    <dimen name="bpb_default_stroke_width">5dp</dimen>
-    <dimen name="payment_status_icon_view_margin_top">70dp</dimen>
-    <dimen name="payment_status_icon_container">140dp</dimen>
+    <dimen name="mpu_bpb_default_stroke_width">5dp</dimen>
+    <dimen name="mpu_payment_status_icon_view_margin_top">70dp</dimen>
+    <dimen name="mpu_payment_status_icon_container">140dp</dimen>
 
 </resources>

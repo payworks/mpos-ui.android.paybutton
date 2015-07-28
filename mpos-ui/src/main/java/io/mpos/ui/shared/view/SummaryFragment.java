@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -61,8 +63,6 @@ public class SummaryFragment extends Fragment {
 
         void onSummaryRefundButtonClicked(String transactionIdentifier);
 
-        void onSummaryClosed(TransactionDataHolder transaction, MposError error);
-
         void onSummaryPrintReceiptButtonClicked(String transactionIdentifier);
     }
 
@@ -113,23 +113,22 @@ public class SummaryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_summary, container, false);
+        View view = inflater.inflate(R.layout.mpu_fragment_summary, container, false);
 
-        mTransactionStatusView = (TextView) view.findViewById(R.id.summary_tx_status_view);
-        mAmountView = (TextView) view.findViewById(R.id.summary_amount_view);
-        mTransactionTypeView = (TextView) view.findViewById(R.id.summary_tx_type_view);
-        mSubjectView = (TextView) view.findViewById(R.id.summary_subject_view);
-        mAccountNumberView = (TextView) view.findViewById(R.id.summary_account_number_view);
-        mSchemeView = (TextView) view.findViewById(R.id.summary_scheme_view);
-        mDateTimeView = (TextView) view.findViewById(R.id.summary_datetime_view);
-        mRetryButton = (Button) view.findViewById(R.id.summary_retry_button);
-        mSendReceiptButton = (Button) view.findViewById(R.id.summary_send_receipt_button);
-        mRefundButton = (Button) view.findViewById(R.id.summary_refund_button);
-        mCloseButton = (Button) view.findViewById(R.id.summary_close_button);
-        mPrintReceiptButton = (Button) view.findViewById(R.id.summary_print_receipt_button);
+        mTransactionStatusView = (TextView) view.findViewById(R.id.mpu_summary_tx_status_view);
+        mAmountView = (TextView) view.findViewById(R.id.mpu_summary_amount_view);
+        mTransactionTypeView = (TextView) view.findViewById(R.id.mpu_summary_tx_type_view);
+        mSubjectView = (TextView) view.findViewById(R.id.mpu_summary_subject_view);
+        mAccountNumberView = (TextView) view.findViewById(R.id.mpu_summary_account_number_view);
+        mSchemeView = (TextView) view.findViewById(R.id.mpu_summary_scheme_view);
+        mDateTimeView = (TextView) view.findViewById(R.id.mpu_summary_datetime_view);
+        mRetryButton = (Button) view.findViewById(R.id.mpu_summary_retry_button);
+        mSendReceiptButton = (Button) view.findViewById(R.id.mpu_summary_send_receipt_button);
+        mRefundButton = (Button) view.findViewById(R.id.mpu_summary_refund_button);
+        mPrintReceiptButton = (Button) view.findViewById(R.id.mpu_summary_print_receipt_button);
 
-        mSubjectViewDivider = view.findViewById(R.id.summary_divider_subject_view);
-        mSchemeAccNoViewDivider = view.findViewById(R.id.summary_divider_scheme_accno_view);
+        mSubjectViewDivider = view.findViewById(R.id.mpu_summary_divider_subject_view);
+        mSchemeAccNoViewDivider = view.findViewById(R.id.mpu_summary_divider_scheme_accno_view);
 
         return view;
     }
@@ -223,13 +222,6 @@ public class SummaryFragment extends Fragment {
     }
 
     private void setupButtons() {
-        mCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mInteractionActivity.onSummaryClosed(mTransactionDataHolder, mError);
-            }
-        });
-
         mSendReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,11 +256,7 @@ public class SummaryFragment extends Fragment {
         mPrintReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TransactionStatus status = TransactionStatus.valueOf(mTransactionDataHolder.getTransactionStatus());
-                switch (status) {
-                    case APPROVED:
-                        mInteractionActivity.onSummaryPrintReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
-                }
+                mInteractionActivity.onSummaryPrintReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
             }
         });
     }
@@ -318,7 +306,7 @@ public class SummaryFragment extends Fragment {
                 mSchemeView.setText(scheme.toString());
                 //The compound drawable padding is 8dp(in the image) + padding from layout is 8dp = 16dp
                 //We change padding from 8dp tp 16dp because we dont set the drawable. Only text is visible.
-                mSchemeView.setPadding(getResources().getDimensionPixelSize(R.dimen.content_padding), 0, 0, 0);
+                mSchemeView.setPadding(getResources().getDimensionPixelSize(R.dimen.mpu_content_padding), 0, 0, 0);
             } else { //scheme is null! WHAAT!
                 mAccountNumberView.setVisibility(View.GONE);
                 mSchemeAccNoViewDivider.setVisibility(View.GONE);
@@ -436,9 +424,9 @@ public class SummaryFragment extends Fragment {
 
     private int getTransactionStatusColor() {
         if (mTransactionDataHolder.getTransactionStatus().equals(TransactionStatus.APPROVED.name())) {
-            return R.color.transaction_state_approved;
+            return R.color.mpu_transaction_state_approved;
         } else {
-            return R.color.transaction_state_declined_aborted;
+            return R.color.mpu_transaction_state_declined_aborted;
         }
     }
 }

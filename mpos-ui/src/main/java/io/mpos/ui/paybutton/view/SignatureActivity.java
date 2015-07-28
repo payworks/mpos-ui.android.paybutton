@@ -1,6 +1,8 @@
 /*
  * mpos-ui : http://www.payworksmobile.com
  *
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,19 +34,20 @@ import java.io.ByteArrayOutputStream;
 import io.mpos.ui.shared.util.UiHelper;
 
 
-public class SignatureActivity extends AbstractTransactionActivity implements SignatureFragment.Listener {
+public class SignatureActivity extends AbstractTransactionActivity
+        implements SignatureFragment.Listener {
 
-    public final static String BUNDLE_KEY_AMOUNT = "mpos.io.view.SignatureActivity.AMOUNT";
-    public final static String BUNDLE_KEY_CARD_SCHEME_ID = "mpos.io.view.SignatureActivity.CARD_SCHEME_ID";
+    public final static String BUNDLE_KEY_AMOUNT = "io.mpos.ui.paybutton.view.SignatureActivity.AMOUNT";
+    public final static String BUNDLE_KEY_CARD_SCHEME_ID = "io.mpos.ui.paybutton.view.SignatureActivity.CARD_SCHEME_ID";
 
-    public final static String BUNDLE_KEY_SIGNATURE_IMAGE = "mpos.io.view.SignatureActivity.SIGNATURE_IMAGE";
-    public final static String BUNDLE_KEY_SIGNATURE_VERIFIED = "mpos.io.view.SignatureActivity.SIGNATURE_VERIFIED";
+    public final static String BUNDLE_KEY_SIGNATURE_IMAGE = "io.mpos.ui.paybutton.view.SignatureActivity.SIGNATURE_IMAGE";
+    public final static String BUNDLE_KEY_SIGNATURE_VERIFIED = "io.mpos.ui.paybutton.view.SignatureActivity.SIGNATURE_VERIFIED";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UiHelper.setActionbarWithCustomColors(this, null, false);
+        UiHelper.setActionbarWithCustomColors(this, null);
 
         String amount = getIntent().getStringExtra(BUNDLE_KEY_AMOUNT);
         int resId = getIntent().getIntExtra(BUNDLE_KEY_CARD_SCHEME_ID, 0);

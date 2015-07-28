@@ -1,3 +1,5 @@
+mpos-ui : http://www.payworksmobile.com
+
 The MIT License (MIT)
 
 Copyright (c) 2015 payworks GmbH
