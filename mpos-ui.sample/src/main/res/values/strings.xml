@@ -34,6 +34,7 @@
     <string name="header_test">TEST : Test environment and real card reader</string>
     <string name="option_e105">Charge 13.37€ on a E105</string>
     <string name="option_miura">Charge 13.37€ on a MIURA</string>
+    <string name="option_bbpos_chipper">Charge 13.37€ on a Bbpos Chipper</string>
     <string name="header_last_transaction">Last transaction</string>
     <string name="option_last_summary">Show summary of last transaction</string>
     <string name="option_last_refund">Refund last transaction</string>

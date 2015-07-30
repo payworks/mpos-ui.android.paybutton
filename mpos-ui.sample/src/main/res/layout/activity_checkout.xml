@@ -84,6 +84,7 @@
             style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#FF7043"
             android:text="@string/option_transaction_declined"
             />
 
@@ -103,19 +104,30 @@
             android:background="#707070"/>
 
         <TextView
-            android:id="@+id/transaction_e105_charge"
-            style="@style/CheckoutButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/option_e105"
-            />
-
-        <TextView
             android:id="@+id/transaction_miura_charge"
             style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_miura"
+            android:background="#66BB6A"
+            />
+
+        <TextView
+            android:id="@+id/transaction_bbpos_chipper_charge"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/option_bbpos_chipper"
+            android:background="#26C6DA"
+            />
+
+        <TextView
+            android:id="@+id/transaction_e105_charge"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/option_e105"
+            android:background="#29B6F6"
             />
 
         <TextView

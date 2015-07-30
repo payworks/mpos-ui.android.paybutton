@@ -34,8 +34,8 @@ android {
         applicationId "io.mpos.ui.tester"
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 20401
-        versionName "2.4.1"
+        versionCode 20500
+        versionName "2.5.0-PREVIEW01"
     }
     buildTypes {
         release {
@@ -71,12 +71,13 @@ dependencies {
 
     compile project(':mpos-ui')
 
-    compile 'io.payworks:mpos.android.core:2.4.1@aar'
-    compile 'io.payworks:mpos.android.accessories.miura:2.4.1@aar'
-    compile 'io.payworks:mpos.android.comlinks.bluetooth:2.4.1@aar'
-    compile 'io.payworks:mpos.android.accessories.verifone-e105:2.4.1@aar'
-    compile 'io.payworks:mpos.android.comlinks.verifone-e105:2.4.1@aar'
-    compile 'io.payworks:mpos.android.accessories.sewoo:2.4.1@aar'
+    compile 'io.payworks:mpos.android.core:2.5.0-PREVIEW01@aar'
+    compile 'io.payworks:mpos.android.accessories.miura:2.5.0-PREVIEW01@aar'
+    compile 'io.payworks:mpos.android.comlinks.bluetooth:2.5.0-PREVIEW01@aar'
+    compile 'io.payworks:mpos.android.accessories.verifone-e105:2.5.0-PREVIEW01@aar'
+    compile 'io.payworks:mpos.android.comlinks.verifone-e105:2.5.0-PREVIEW01@aar'
+    compile 'io.payworks:mpos.android.accessories.bbpos-chipper:2.5.0-PREVIEW01@aar'
+    compile 'io.payworks:mpos.android.accessories.sewoo:2.5.0-PREVIEW01@aar'
 
     compile('org.simpleframework:simple-xml:2.7.1') {
         exclude group: 'stax', module: 'stax'
