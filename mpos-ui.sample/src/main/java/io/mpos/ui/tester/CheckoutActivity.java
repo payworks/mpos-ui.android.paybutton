@@ -104,7 +104,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 MposUi.getInitializedInstance()
                         .getConfiguration().getAppearance()
                         .setColorPrimary(Color.parseColor("#7cb342"))
-                        .setColorPrimaryDark(Color.parseColor("#E64A19"))
+                        .setColorPrimaryDark(Color.parseColor("#689f38"))
                         .setTextColorPrimary(Color.WHITE);
                 startPayment(113.73);
             }
@@ -142,17 +142,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
                 MposUi mposUi = MposUi.getInitializedInstance();
                 mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MIURA_MPI);
-                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
-                startPayment(13.37);
-            }
-        });
-
-        findViewById(R.id.transaction_bbpos_chipper_charge).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
-                MposUi mposUi = MposUi.getInitializedInstance();
-                mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.BBPOS_CHIPPER);
                 mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 startPayment(13.37);
             }

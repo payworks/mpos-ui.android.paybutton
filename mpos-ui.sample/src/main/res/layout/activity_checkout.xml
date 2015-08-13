@@ -109,16 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_miura"
-            android:background="#66BB6A"
-            />
-
-        <TextView
-            android:id="@+id/transaction_bbpos_chipper_charge"
-            style="@style/CheckoutButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/option_bbpos_chipper"
-            android:background="#26C6DA"
+            android:background="#B0BEC5"
             />
 
         <TextView
@@ -127,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/option_e105"
-            android:background="#29B6F6"
+            android:background="#BCAAA4"
             />
 
         <TextView
