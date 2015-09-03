@@ -99,7 +99,6 @@ public class TransactionActivity extends AbstractTransactionActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mpu_activity_payment);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         if (getCallingActivity() == null) {
             Log.w(TAG, "The transaction activity was started without startActivityForResult() and will not return a result code.");

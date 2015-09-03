@@ -131,10 +131,12 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
     @Override
     public void onCompleted(PrintingProcess printingProcess, PrintingProcessDetails printingProcessDetails) {
         updateView(printingProcessDetails);
-        if (printingProcessDetails.getError() != null) { //THERE WAS AN ERROR!
-            mInteractionActivity.onReceiptPrintCompleted(printingProcessDetails.getError());
-        } else {
-            mInteractionActivity.onReceiptPrintCompleted(null);
+        if (mInteractionActivity != null) {
+            if (printingProcessDetails.getError() != null) { //THERE WAS AN ERROR!
+                mInteractionActivity.onReceiptPrintCompleted(printingProcessDetails.getError());
+            } else {
+                mInteractionActivity.onReceiptPrintCompleted(null);
+            }
         }
     }
 

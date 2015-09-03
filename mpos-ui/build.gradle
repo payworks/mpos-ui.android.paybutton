@@ -33,8 +33,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 20403
-        versionName "2.4.3"
+        versionCode 20404
+        versionName "2.4.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -80,7 +80,7 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.1'
 
-    compile 'io.payworks:mpos.android.core:2.4.3@aar'
+    compile 'io.payworks:mpos.android.core:2.4.4@aar'
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'

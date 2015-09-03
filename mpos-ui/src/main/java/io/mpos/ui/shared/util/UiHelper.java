@@ -30,9 +30,11 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.View;
 
 import java.math.BigDecimal;
 
@@ -79,9 +81,9 @@ public class UiHelper {
     }
 
     public static void setActionbarWithCustomColors(AppCompatActivity activity, Toolbar toolbar) {
-        if(toolbar != null) {
+        if (toolbar != null) {
+            setupUpNavigation(activity, toolbar);
             activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getTextColorPrimary();
             toolbar.setTitleTextColor(color);
@@ -121,5 +123,15 @@ public class UiHelper {
         } catch (Exception ex) {
             return -1;
         }
+    }
+
+    private static void setupUpNavigation(final AppCompatActivity activity, Toolbar toolbar) {
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavUtils.navigateUpFromSameTask(activity);
+            }
+        });
     }
 }

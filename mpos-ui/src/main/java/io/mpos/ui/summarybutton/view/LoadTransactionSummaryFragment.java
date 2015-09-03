@@ -107,6 +107,12 @@ public class LoadTransactionSummaryFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mInteractionActivity = null;
+    }
+
     private void setTransactionIdentifier(String identifier) {
         mTransactionIdentifier = identifier;
     }
@@ -116,10 +122,12 @@ public class LoadTransactionSummaryFragment extends Fragment {
         transactionProvider.lookupTransaction(mTransactionIdentifier, new LookupTransactionListener() {
             @Override
             public void onCompleted(String identifier, Transaction transaction, MposError error) {
-                if (error == null) {
-                    mInteractionActivity.onTransactionLoaded(transaction);
-                } else {
-                    mInteractionActivity.onLoadingError(error);
+                if (mInteractionActivity != null) {
+                    if (error == null) {
+                        mInteractionActivity.onTransactionLoaded(transaction);
+                    } else {
+                        mInteractionActivity.onLoadingError(error);
+                    }
                 }
             }
         });

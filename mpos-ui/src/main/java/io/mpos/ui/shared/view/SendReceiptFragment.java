@@ -36,6 +36,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -125,6 +126,7 @@ public class SendReceiptFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         getActivity().setTitle(R.string.MPUSendReceipt);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         try {
             mInteractionActivity = (Interaction) activity;
@@ -166,11 +168,13 @@ public class SendReceiptFragment extends Fragment {
         mProgressView.setAnimation(null);
         mProgressView.setVisibility(View.INVISIBLE);
 
-        if (error == null) {
-            Toast.makeText(getActivity(), R.string.MPUReceiptSent, Toast.LENGTH_LONG).show();
-            mInteractionActivity.onReceiptSent();
-        } else {
-            showErrorDialog(error);
+        if (mInteractionActivity != null) {
+            if (error == null) {
+                Toast.makeText(getActivity(), R.string.MPUReceiptSent, Toast.LENGTH_LONG).show();
+                mInteractionActivity.onReceiptSent();
+            } else {
+                showErrorDialog(error);
+            }
         }
     }
 
