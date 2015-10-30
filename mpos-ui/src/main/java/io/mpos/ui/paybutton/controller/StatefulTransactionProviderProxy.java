@@ -217,6 +217,8 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     }
 
     public boolean abortTransaction() {
+        mAwaitingApplicationSelection = false;
+        mAwaitingSignature = false;
         return mCurrentTransactionProcess.requestAbort();
     }
 
@@ -239,7 +241,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     public void teardown() {
         //keep transaction reference
-        boolean completed = (mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.APPROVED ||
+        boolean completed = (mLastTransactionProcessDetails == null || mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.APPROVED ||
                 mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.DECLINED ||
                 mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.ABORTED ||
                 mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.FAILED);
@@ -278,7 +280,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         return mTransactionSessionLookup;
     }
 
-    void clearForNewTransaction() {
+    public void clearForNewTransaction() {
         mTransactionProvider = null;
         mLastTransactionProcessDetails = null;
         mCurrentTransactionProcess = null;

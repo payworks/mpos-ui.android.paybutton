@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ mpos-ui : http://www.payworksmobile.com
+  ~
+  ~ The MIT License (MIT)
+  ~
+  ~ Copyright (c) 2015 payworks GmbH
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<resources>
+<string name="MPUAbort">"Keskeytä"</string>
+<string name="MPURetry">"Yritä uudelleen"</string>
+<string name="MPUSendReceipt">"Lähetä kuitti"</string>
+<string name="MPUResendReceipt">"Lähetä kuitti uudelleen"</string>
+<string name="MPUClose">"Sulje"</string>
+<string name="MPUPaymentSuccessful">"Maksu onnistui."</string>
+<string name="MPUPaymentRefunded">"Maksu palautettu."</string>
+<string name="MPUPaymentDeclined">"Maksu hylätty."</string>
+<string name="MPUPaymentAborted">"Maksu keskeytetty."</string>
+<string name="MPURefundApproved">"Palautus onnistui."</string>
+<string name="MPURefundDeclined">"Palautus hylätty."</string>
+<string name="MPURefundAborted">"Palautus keskeytetty."</string>
+<string name="MPURefundPayment">"Palauta maksu"</string>
+<string name="MPURefundPrompt">"Haluatko varmasti palauttaa tämän maksun?"</string>
+<string name="MPURefund">"Palauta"</string>
+<string name="MPUSummary">"Yhteenveto"</string>
+<string name="MPUInvalidEmailAddress">"Virheellinen sähköpostiosoite"</string>
+<string name="MPUEnterValidEmailAddress">"Syötä oikea sähköpostiosoite."</string>
+<string name="MPUOK">"OK"</string>
+<string name="MPUCouldNotSendReceipt">"Kuitin lähetys ei onnistu"</string>
+<string name="MPUPleaseTryAgain">"Yritä uudelleen."</string>
+<string name="MPUSelectAccount">"Valitse tili"</string>
+<string name="MPUSale">"Myynti"</string>
+<string name="MPUEnterEmailAddress">"Anna sähköpostiosoite"</string>
+<string name="MPUSend">"Lähetä"</string>
+<string name="MPUContinue">"Jatka"</string>
+<string name="MPUBackButtonDisabled">"Takaisin-painike ei ole käytössä maksamisen aikana. Käytä yllä olevia painikkeita."</string>
+<string name="MPUSignatureStatusLine">"Hyväksyn maksavani summan %1$s."</string>
+<string name="MPUError">"Virhe"</string>
+<string name="MPUReceiptSent">"Kuitti lähetetty."</string>
+<string name="MPUFetching">"Haetaan tapahtuma"</string>
+<string name="MPULoading">"Ladataan…"</string>
+<string name="MPUVersion">"Versio"</string>
+<string name="MPULoggedInAs">"Kirjauduttu tunnuksella"</string>
+<string name="MPULogout">"Uloskirjautuminen"</string>
+<string name="MPUHelp">"Ohje"</string>
+<string name="MPUForgot">"Unohditko salasanan?"</string>
+<string name="MPULogin">"Rekisteröidy"</string>
+<string name="MPUEmail">"Sähköposti"</string>
+<string name="MPUEmailAddress">"Sähköpostiosoite"</string>
+<string name="MPUPassword">"Salasana"</string>
+<string name="MPURequired">"vaaditaan"</string>
+<string name="MPUWrongCredentials">"Syötit väärän salasanan tai sähköpostiosoitteellasi ei ole tiliä."</string>
+<string name="MPUUnknownUsername">"Tällä sähköpostiosoitteella ei ole tiliä."</string>
+<string name="MPUBack">"Takaisin"</string>
+<string name="MPUPasswordReset">"Lähetimme sinulle sähköpostiviestin. Katso viestistä tarkemmat ohjeet."</string>
+<string name="MPURequestPassword">"Nollaa salasana"</string>
+<string name="MPUActions">"Toimenpiteet"</string>
+<string name="MPUSettings">"Asetukset"</string>
+<string name="MPUInfo">"Tiedot"</string>
+<string name="MPUVisa">"Visa"</string>
+<string name="MPUMastercard">"Mastercard"</string>
+<string name="MPUMaestro">"Maestro"</string>
+<string name="MPUAmericanExpress">"American Express"</string>
+<string name="MPUPrintReceipt">"Tulosta kuitti"</string>
+<string name="MPUReprintReceipt">"Tulosta kuitti uudelleen"</string>
+<string name="MPUPrinting">"Tulostetaan…"</string>
+</resources>

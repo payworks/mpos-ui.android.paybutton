@@ -33,6 +33,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -225,7 +226,13 @@ public class SummaryFragment extends Fragment {
         mSendReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mInteractionActivity.onSendReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
+                if (mTransactionDataHolder.getRefundTransactionIdentifier() == null) {
+                    Log.e(TAG, "RefundTxIdentifier is null !");
+                    mInteractionActivity.onSendReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
+                } else {
+                    Log.e(TAG, "RefundTxIdentifier is : " + mTransactionDataHolder.getRefundTransactionIdentifier());
+                    mInteractionActivity.onSendReceiptButtonClicked(mTransactionDataHolder.getRefundTransactionIdentifier());
+                }
             }
         });
 
@@ -256,7 +263,11 @@ public class SummaryFragment extends Fragment {
         mPrintReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInteractionActivity.onSummaryPrintReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
+                if (mTransactionDataHolder.getRefundTransactionIdentifier() == null) {
+                    mInteractionActivity.onSummaryPrintReceiptButtonClicked(mTransactionDataHolder.getTransactionIdentifier());
+                } else {
+                    mInteractionActivity.onSummaryPrintReceiptButtonClicked(mTransactionDataHolder.getRefundTransactionIdentifier());
+                }
             }
         });
     }
@@ -298,7 +309,7 @@ public class SummaryFragment extends Fragment {
             }
 
             PaymentDetailsScheme scheme = PaymentDetailsScheme.UNKNOWN;
-            if(mTransactionDataHolder.getPaymentDetailsScheme()!=null)
+            if (mTransactionDataHolder.getPaymentDetailsScheme() != null)
                 scheme = PaymentDetailsScheme.valueOf(mTransactionDataHolder.getPaymentDetailsScheme());
             if (UiHelper.getDrawableIdImageForCreditCard(scheme) != -1) {
                 mSchemeView.setCompoundDrawablesWithIntrinsicBounds(UiHelper.getDrawableIdImageForCreditCard(scheme), 0, 0, 0);

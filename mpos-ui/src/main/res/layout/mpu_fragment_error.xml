@@ -24,57 +24,54 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/payment_fragment_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
-                android:paddingRight="@dimen/mpu_activity_horizontal_margin"
-                android:paddingTop="@dimen/mpu_activity_vertical_margin"
-                android:paddingBottom="@dimen/mpu_activity_vertical_margin"
-                android:layout_gravity="center">
+<RelativeLayout
+    android:id="@+id/payment_fragment_error"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:paddingBottom="@dimen/mpu_activity_vertical_margin"
+    android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
+    android:paddingRight="@dimen/mpu_activity_horizontal_margin"
+    android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
     <FrameLayout
         android:id="@+id/mpu_status_icon_view_container"
-        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top"
-        android:layout_centerHorizontal="true"
         android:layout_width="@dimen/mpu_payment_status_icon_container"
-        android:layout_height="@dimen/mpu_payment_status_icon_container">
+        android:layout_height="@dimen/mpu_payment_status_icon_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
 
         <ImageView
-            android:src="@drawable/mpu_transaction_progress_drawable"
             android:id="@+id/mpu_progress_view"
-            android:visibility="invisible"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-        />
+            android:src="@drawable/mpu_transaction_progress_drawable"
+            android:visibility="invisible"/>
 
         <TextView
-            style="@style/MpuTransactionStatusIconView"
             android:id="@+id/mpu_status_icon_view"
-            android:text="@string/mpu_fa_times_circle"
+            style="@style/MpuTransactionStatusIconView"
             android:layout_gravity="center"
             android:gravity="center"
             android:singleLine="true"
-            />
+            android:text="@string/mpu_fa_times_circle"/>
     </FrameLayout>
 
     <TextView
-        style="@style/MpuTransactionStatusTextView"
         android:id="@+id/mpu_status_view"
-        android:layout_centerHorizontal="true"
+        style="@style/MpuTransactionStatusTextView"
         android:layout_below="@+id/mpu_status_icon_view_container"
-        />
+        android:layout_centerHorizontal="true"/>
 
     <Button
-        style="@style/mpos.ui.Button"
         android:id="@+id/mpu_retry_button"
+        style="@style/mpos.ui.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/MPURetry"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        />
+        android:text="@string/MPURetry"/>
 
 </RelativeLayout>

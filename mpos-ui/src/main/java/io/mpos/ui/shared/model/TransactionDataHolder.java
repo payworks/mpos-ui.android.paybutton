@@ -30,9 +30,6 @@ import android.os.Parcelable;
 
 import io.mpos.transactions.Transaction;
 
-/**
- * Created by Abhijith Srivatsav<abhijith.srivatsav@payworksmobile.com> on 18/06/15.
- */
 public class TransactionDataHolder implements Parcelable {
 
     private String mTransactionIdentifier;
@@ -48,12 +45,13 @@ public class TransactionDataHolder implements Parcelable {
     private String mRefundDetailsStatus;
     private String mErrorType;
     private long mCreatedTimestamp;
+    private String mRefundTransactionIdentifier;
 
 
     public TransactionDataHolder() {
     }
 
-    public static TransactionDataHolder createTransactionDataHolder(Transaction transaction){
+    public static TransactionDataHolder createTransactionDataHolder(Transaction transaction) {
         TransactionDataHolder holder = new TransactionDataHolder();
         holder.setTransactionIdentifier(transaction.getIdentifier());
         holder.setReferencedTransactionIdentifier(transaction.getReferencedTransactionIdentifier());
@@ -71,6 +69,12 @@ public class TransactionDataHolder implements Parcelable {
                 holder.setPaymentDetailsSource(transaction.getPaymentDetails().getSource().name());
             }
             holder.setMaskedAccountNumber(transaction.getPaymentDetails().getMaskedAccountNumber());
+        }
+
+        if (transaction.getRefundDetails()!=null &&
+                transaction.getRefundDetails().getRefundTransactions()!= null &&
+                transaction.getRefundDetails().getRefundTransactions().size() > 0) {
+            holder.setRefundTransactionIdentifier(transaction.getRefundDetails().getRefundTransactions().get(0).getIdentifier());
         }
 
         if (transaction.getRefundDetails() != null && transaction.getRefundDetails().getStatus() != null) {
@@ -187,12 +191,15 @@ public class TransactionDataHolder implements Parcelable {
         mTransactionStatus = transactionStatus;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getRefundTransactionIdentifier() {
+        return mRefundTransactionIdentifier;
     }
 
-    protected TransactionDataHolder(String transactionIdentifier, String referencedTransactionIdentifier, String transactionStatus, String currency, String subject, String amount, String transactionType, String paymentDetailsScheme, String paymentDetailsSource, String customerVerification, String maskedAccountNumber, String refundDetailsStatus, String errorType, long createdTimestamp) {
+    public void setRefundTransactionIdentifier(String refundTransactionIdentifier) {
+        mRefundTransactionIdentifier = refundTransactionIdentifier;
+    }
+
+    protected TransactionDataHolder(String transactionIdentifier, String referencedTransactionIdentifier, String transactionStatus, String currency, String subject, String amount, String transactionType, String paymentDetailsScheme, String paymentDetailsSource, String customerVerification, String maskedAccountNumber, String refundDetailsStatus, String errorType, long createdTimestamp, String refundTransactionIdentifier) {
         mTransactionIdentifier = transactionIdentifier;
         mReferencedTransactionIdentifier = referencedTransactionIdentifier;
         mTransactionStatus = transactionStatus;
@@ -206,6 +213,7 @@ public class TransactionDataHolder implements Parcelable {
         mRefundDetailsStatus = refundDetailsStatus;
         mErrorType = errorType;
         mCreatedTimestamp = createdTimestamp;
+        mRefundTransactionIdentifier = refundTransactionIdentifier;
     }
 
     protected TransactionDataHolder(Parcel in) {
@@ -222,6 +230,12 @@ public class TransactionDataHolder implements Parcelable {
         mRefundDetailsStatus = in.readString();
         mErrorType = in.readString();
         mCreatedTimestamp = in.readLong();
+        mRefundTransactionIdentifier = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -239,6 +253,7 @@ public class TransactionDataHolder implements Parcelable {
         dest.writeString(mRefundDetailsStatus);
         dest.writeString(mErrorType);
         dest.writeLong(mCreatedTimestamp);
+        dest.writeString(mRefundTransactionIdentifier);
     }
 
     @SuppressWarnings("unused")

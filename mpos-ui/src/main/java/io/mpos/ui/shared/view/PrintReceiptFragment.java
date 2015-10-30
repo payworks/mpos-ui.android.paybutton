@@ -48,9 +48,6 @@ import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
 import io.mpos.ui.shared.util.UiHelper;
 
-/**
- * Created by Abhijith Srivatsav<abhijith.srivatsav@payworksmobile.com> on 27/05/15.
- */
 public class PrintReceiptFragment extends Fragment implements StatefulPrintingProcessProxy.Callback {
 
     public interface Interaction {

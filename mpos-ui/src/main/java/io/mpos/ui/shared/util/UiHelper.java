@@ -26,15 +26,19 @@
 package io.mpos.ui.shared.util;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.app.NavUtils;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Button;
 
 import java.math.BigDecimal;
 
@@ -48,12 +52,12 @@ public class UiHelper {
     private static Typeface awesomeFont;
 
     public static String joinAndTrimStatusInformation(String[] information) {
-        if(information == null) {
+        if (information == null) {
             return "";
         }
 
         String retVal = "";
-        for(String line : information) {
+        for (String line : information) {
             retVal += line.trim() + "\n";
         }
 
@@ -69,7 +73,7 @@ public class UiHelper {
     }
 
     public static Typeface createAwesomeFontTypeface(Context context) {
-        if(awesomeFont == null) {
+        if (awesomeFont == null) {
             awesomeFont = Typeface.createFromAsset(context.getAssets(), "font/fontawesome-webfont.ttf");
         }
         return awesomeFont;
@@ -89,7 +93,7 @@ public class UiHelper {
             toolbar.setTitleTextColor(color);
 
             final Drawable navigationDrawable = toolbar.getNavigationIcon();
-            if(navigationDrawable!=null){
+            if (navigationDrawable != null) {
                 navigationDrawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
                 toolbar.setNavigationIcon(navigationDrawable);
             }
@@ -98,10 +102,15 @@ public class UiHelper {
             toolbar.setBackgroundColor(color);
         }
 
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimaryDark();
             activity.getWindow().setStatusBarColor(color);
         }
+    }
+
+
+    public static void tintButton(Button button, int color) {
+        button.setTextColor(getColorsStateListForTint(color));
     }
 
     public static int getDrawableIdImageForCreditCard(PaymentDetailsScheme cardScheme) {
@@ -125,6 +134,12 @@ public class UiHelper {
         }
     }
 
+    public static void tintView(View view, int color) {
+        Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
+        DrawableCompat.setTint(wrappedDrawable, color);
+        view.setBackgroundDrawable(wrappedDrawable);
+    }
+
     private static void setupUpNavigation(final AppCompatActivity activity, Toolbar toolbar) {
         toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -134,4 +149,29 @@ public class UiHelper {
             }
         });
     }
+
+    private static ColorStateList getColorsStateListForTint(int color) {
+
+        int[][] colorStates = new int[][]{
+                new int[]{-android.R.attr.state_enabled},  // disabled state (-)
+                new int[]{}                                // enabled
+        };
+
+        int[] colors = new int[]{
+                setAlphaForColor(color, 0.4f),
+                color
+        };
+
+        return new ColorStateList(colorStates, colors);
+
+    }
+
+    private static int setAlphaForColor(int color, float alphaFactor) {
+        int alpha = Math.round(Color.alpha(color) * alphaFactor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
+    }
+
 }

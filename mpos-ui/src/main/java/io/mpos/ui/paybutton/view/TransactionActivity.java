@@ -30,8 +30,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -53,21 +53,28 @@ import io.mpos.transactions.Transaction;
 import io.mpos.transactions.TransactionStatus;
 import io.mpos.transactions.TransactionType;
 import io.mpos.ui.R;
+import io.mpos.ui.acquirer.MposUiAccountManager;
+import io.mpos.ui.acquirer.view.LoginFragment;
 import io.mpos.ui.paybutton.controller.StatefulTransactionProviderProxy;
-import io.mpos.ui.shared.util.ErrorHolder;
-import io.mpos.ui.shared.view.PrintReceiptFragment;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
 import io.mpos.ui.shared.model.MposUiConfiguration;
 import io.mpos.ui.shared.model.TransactionDataHolder;
+import io.mpos.ui.shared.util.ErrorHolder;
 import io.mpos.ui.shared.util.UiHelper;
 import io.mpos.ui.shared.util.UiState;
 import io.mpos.ui.shared.view.ErrorFragment;
+import io.mpos.ui.shared.view.PrintReceiptFragment;
 import io.mpos.ui.shared.view.SendReceiptFragment;
 import io.mpos.ui.shared.view.SummaryFragment;
 
-public class TransactionActivity extends AbstractTransactionActivity
-        implements StatefulTransactionProviderProxy.Callback, AbstractTransactionFragment.Interaction, ErrorFragment.Interaction, SummaryFragment.Interaction, SendReceiptFragment.Interaction, PrintReceiptFragment.Interaction {
+public class TransactionActivity extends AbstractTransactionActivity implements StatefulTransactionProviderProxy.Callback,
+        AbstractTransactionFragment.Interaction,
+        ErrorFragment.Interaction,
+        SummaryFragment.Interaction,
+        SendReceiptFragment.Interaction,
+        PrintReceiptFragment.Interaction,
+        LoginFragment.Interaction {
 
     private final static String TAG = "TransactionActivity";
 
@@ -84,7 +91,11 @@ public class TransactionActivity extends AbstractTransactionActivity
     public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.paybutton.view.TransactionActivity.TRANSACTION_IDENTIFIER";
     public final static String BUNDLE_EXTRA_IS_REFUND = "io.mpos.ui.paybutton.view.TransactionActivity.IS_REFUND";
 
+    public final static String BUNDLE_EXTRA_ACQUIRER_LOGIN = "io.mpos.ui.paybutton.TransactionActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
+    public final static String BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID = "io.mpos.ui.paybutton.TransactionActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
+
     private static final int REQUEST_CODE_SIGNATURE = 1;
+
     private static final String BUNDLE_FORMATTED_AMOUNT = "io.mpos.ui.paybutton.view.TransactionActivity.FORMATTED_AMOUNT";
     private static final String BUNDLE_TITLE_TRANSACTION_TYPE = "io.mpos.ui.paybutton.view.TransactionActivity.TITLE_TRANSACTION_TYPE";
 
@@ -93,10 +104,16 @@ public class TransactionActivity extends AbstractTransactionActivity
     private String mFormattedAmount;
     private String mTitleTransactionType;
 
+    private MposUiAccountManager mMposUiAccountManager;
+    private String mMerchantIdentifier;
+    private String mMerchantSecretKey;
+    private ProviderMode mProviderMode;
+    private boolean isAcquirerMode;
+
     private StatefulTransactionProviderProxy mStatefulTransactionProviderProxy = StatefulTransactionProviderProxy.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mpu_activity_payment);
 
@@ -108,27 +125,79 @@ public class TransactionActivity extends AbstractTransactionActivity
 
         ErrorHolder.getInstance().clear();
 
-        if (getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER)) {
-            if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
+            if (getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER)) {
                 setTitle("");
             } else {
-                mFormattedAmount = savedInstanceState.getString(BUNDLE_FORMATTED_AMOUNT);
-                mTitleTransactionType = savedInstanceState.getString(BUNDLE_TITLE_TRANSACTION_TYPE);
+                Currency currency = (Currency) getIntent().getSerializableExtra(BUNDLE_EXTRA_CURRENCY);
+                BigDecimal amount = (BigDecimal) getIntent().getSerializableExtra(BUNDLE_EXTRA_AMOUNT);
+                constructTransactionTypeTitle();
+                mFormattedAmount = UiHelper.formatAmountWithSymbol(currency, amount);
                 setTitle(constructTitle());
             }
-
         } else {
-            Currency currency = (Currency) getIntent().getSerializableExtra(BUNDLE_EXTRA_CURRENCY);
-            BigDecimal amount = (BigDecimal) getIntent().getSerializableExtra(BUNDLE_EXTRA_AMOUNT);
-            constructTransactionTypeTitle();
-
-            mFormattedAmount = UiHelper.formatAmountWithSymbol(currency, amount);
-
+            mFormattedAmount = savedInstanceState.getString(BUNDLE_FORMATTED_AMOUNT);
+            mTitleTransactionType = savedInstanceState.getString(BUNDLE_TITLE_TRANSACTION_TYPE);
+            setUiState((UiState) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_UI_STATE));
             setTitle(constructTitle());
         }
 
         if (!mStatefulTransactionProviderProxy.isTransactionOnGoing() && savedInstanceState == null) {
-            startTransaction();
+            if (getIntent().hasExtra(BUNDLE_EXTRA_ACQUIRER_LOGIN)) {
+                isAcquirerMode = true;
+                String applicationIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID);
+                mMposUiAccountManager = MposUiAccountManager.getInitializedInstance();
+                mProviderMode = mMposUiAccountManager.getProviderMode();
+                if (mMposUiAccountManager.isLoggedIn()) {
+                    // Already logged in. Proceed with the transaciton.
+                    mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
+                    mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
+                    setTitle(constructTitle());
+                    startTransaction();
+                } else {
+                    // Show the acquirer UI and continue only if logged in.
+                    mStatefulTransactionProviderProxy.clearForNewTransaction(); // This needs to be done!
+                    showLoginFragment(applicationIdentifier);
+                }
+            } else {
+                mMerchantSecretKey = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
+                mMerchantIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
+                mProviderMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
+                startTransaction();
+            }
+        }
+    }
+
+    private String modifyCustomIdentifier(String applicationIdentifier, String customIdentifier) {
+        if (customIdentifier != null || !TextUtils.isEmpty(customIdentifier)) {
+            return applicationIdentifier + "-" + customIdentifier;
+        }
+        return applicationIdentifier;
+    }
+
+    private void startTransaction() {
+        boolean isRefund = getIntent().getBooleanExtra(BUNDLE_EXTRA_IS_REFUND, false);
+        String sessionIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER);
+        String subject = getIntent().getStringExtra(BUNDLE_EXTRA_SUBJECT);
+        String customIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_CUSTOM_IDENTIFIER);
+        String transactionIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_TRANSACTION_IDENTIFIER);
+        AccessoryFamily accessoryFamily = (AccessoryFamily) getIntent().getSerializableExtra(BUNDLE_EXTRA_ACCESSORY_FAMILY);
+        BigDecimal amount = (BigDecimal) getIntent().getSerializableExtra(BUNDLE_EXTRA_AMOUNT);
+        Currency currency = (Currency) getIntent().getSerializableExtra(BUNDLE_EXTRA_CURRENCY);
+        if (isAcquirerMode) {
+            String customIdentifierPrefix = MposUiAccountManager.getInitializedInstance().getIntegratorIdentifier();
+            customIdentifier = modifyCustomIdentifier(customIdentifierPrefix, customIdentifier);
+            accessoryFamily = MposUiAccountManager.getInitializedInstance().getApplicationData().getMposUiConfiguration().getAccessoryFamily();
+        }
+
+        if (sessionIdentifier == null) {
+            if (isRefund) {
+                mStatefulTransactionProviderProxy.startRefundTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, accessoryFamily, transactionIdentifier, subject, customIdentifier);
+            } else {
+                mStatefulTransactionProviderProxy.startChargeTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, accessoryFamily, amount, currency, subject, customIdentifier);
+            }
+        } else {
+            mStatefulTransactionProviderProxy.startTransactionWithSessionIdentifier(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, accessoryFamily, sessionIdentifier);
         }
     }
 
@@ -184,10 +253,27 @@ public class TransactionActivity extends AbstractTransactionActivity
 
         if (getUiState() == UiState.RECEIPT_SENDING || getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
             showSummaryFragment(mStatefulTransactionProviderProxy.getCurrentTransaction(), null);
-        } else if (getUiState() == UiState.SUMMARY_DISPLAYING || getUiState() == UiState.TRANSACTION_ERROR) {
+        } else if (getUiState() == UiState.TRANSACTION_ERROR) {
+            processErrorState();
+        } else if (getUiState() == UiState.SUMMARY_DISPLAYING || getUiState() == UiState.LOGIN_DISPLAYING) {
             finishWithResult();
+        } else if (getUiState() == UiState.FORGOT_PASSWORD_DISPLAYING) {
+            LoginFragment loginFragment = (LoginFragment) getFragmentManager().findFragmentByTag(LoginFragment.TAG);
+            if (loginFragment != null) {
+                loginFragment.setLoginMode(true);
+            }
         } else {
             super.navigateBack();
+        }
+    }
+
+    private void processErrorState() {
+        if (isAcquirerMode  &&
+                MposUi.getInitializedInstance().getError()!= null &&
+                MposUi.getInitializedInstance().getError().getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
+            showLoginFragment(MposUiAccountManager.getInitializedInstance().getApplicationData().getIdentifier());
+        } else {
+            finishWithResult();
         }
     }
 
@@ -238,8 +324,10 @@ public class TransactionActivity extends AbstractTransactionActivity
             showSummaryFragment(transaction, null);
         } else {
             ErrorHolder.getInstance().setError(error);
-
-            if(mStatefulTransactionProviderProxy.getLastTransactionProcessDetails().getState() == TransactionProcessDetailsState.NOT_REFUNDABLE) {
+            if (isAcquirerMode && error.getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
+                mMposUiAccountManager.logout(false);
+            }
+            if (mStatefulTransactionProviderProxy.getLastTransactionProcessDetails().getState() == TransactionProcessDetailsState.NOT_REFUNDABLE) {
                 showErrorFragment(UiState.TRANSACTION_ERROR, false, error, details);
             } else {
                 showErrorFragment(UiState.TRANSACTION_ERROR, !getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), error, details);
@@ -310,38 +398,30 @@ public class TransactionActivity extends AbstractTransactionActivity
         StatefulPrintingProcessProxy.getInstance().requestAbort();
     }
 
+    // Login Interaction
+
+    @Override
+    public void onLoginCompleted() {
+        mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
+        mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
+        setTitle(constructTitle());
+        startTransaction();
+    }
+
+    @Override
+    public void onLoginModeChanged(boolean loginMode) {
+        // handle back button behaviour
+        if (loginMode) {
+            setUiState(UiState.LOGIN_DISPLAYING);
+        } else {
+            setUiState(UiState.FORGOT_PASSWORD_DISPLAYING);
+
+        }
+    }
+
     @Override
     public TransactionProvider getTransactionProvider() {
         return mStatefulTransactionProviderProxy.getTransactionProvider();
-    }
-
-    private void startTransaction() {
-        boolean isRefund = getIntent().getBooleanExtra(BUNDLE_EXTRA_IS_REFUND, false);
-        String sessionIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER);
-        String merchantId = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
-        String merchantSecret = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
-        String subject = getIntent().getStringExtra(BUNDLE_EXTRA_SUBJECT);
-        String customIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_CUSTOM_IDENTIFIER);
-        String transactionIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_TRANSACTION_IDENTIFIER);
-        ProviderMode providerMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
-        AccessoryFamily accessoryFamily = (AccessoryFamily) getIntent().getSerializableExtra(BUNDLE_EXTRA_ACCESSORY_FAMILY);
-        BigDecimal amount = (BigDecimal) getIntent().getSerializableExtra(BUNDLE_EXTRA_AMOUNT);
-        Currency currency = (Currency) getIntent().getSerializableExtra(BUNDLE_EXTRA_CURRENCY);
-
-        if (mStatefulTransactionProviderProxy.isTransactionOnGoing()) {
-            setResult(MposUi.RESULT_CODE_FAILED);
-            finish();
-        }
-
-        if (sessionIdentifier == null) {
-            if (isRefund) {
-                mStatefulTransactionProviderProxy.startRefundTransaction(getApplicationContext(), providerMode, merchantId, merchantSecret, accessoryFamily, transactionIdentifier, subject, customIdentifier);
-            } else {
-                mStatefulTransactionProviderProxy.startChargeTransaction(getApplicationContext(), providerMode, merchantId, merchantSecret, accessoryFamily, amount, currency, subject, customIdentifier);
-            }
-        } else {
-            mStatefulTransactionProviderProxy.startTransactionWithSessionIdentifier(getApplicationContext(), providerMode, merchantId, merchantSecret, accessoryFamily, sessionIdentifier);
-        }
     }
 
     private void finishWithResult() {
@@ -406,7 +486,15 @@ public class TransactionActivity extends AbstractTransactionActivity
         showFragment(fragment, PrintReceiptFragment.TAG, UiState.RECEIPT_PRINTING, false);
     }
 
+    private void showLoginFragment(String applicationIdentifier) {
+        LoginFragment fragment = LoginFragment.newInstance(applicationIdentifier);
+        showFragment(fragment, LoginFragment.TAG, UiState.LOGIN_DISPLAYING, true);
+    }
+
     private String constructTitle() {
+        if (mFormattedAmount == null && mTitleTransactionType == null) { // Initialized with Session identifier;
+            return "";
+        }
         if (mFormattedAmount == null) {
             return mTitleTransactionType;
         } else {

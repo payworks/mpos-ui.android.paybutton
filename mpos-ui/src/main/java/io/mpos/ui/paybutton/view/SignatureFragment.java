@@ -42,7 +42,7 @@ import io.mpos.ui.shared.util.UiHelper;
 
 public class SignatureFragment extends Fragment implements SignatureView.SignatureViewListener {
 
-    private final static String TAG = "SignatureFragment";
+    public final static String TAG = "SignatureFragment";
 
     private final static String BUNDLE_KEY_AMOUNT = "io.mpos.ui.SignatureFragment.AMOUNT";
     private final static String BUNDLE_KEY_CARD_SCHEME = "io.mpos.ui.SignatureFragment.CARD_SCHEME";

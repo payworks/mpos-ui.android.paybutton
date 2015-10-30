@@ -33,10 +33,16 @@ import java.math.BigDecimal;
 
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
+import io.mpos.transactionprovider.FetchReceiptListener;
 import io.mpos.transactionprovider.TransactionProcessDetails;
+import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
 import io.mpos.ui.BuildConfig;
+import io.mpos.ui.acquirer.ApplicationName;
+import io.mpos.ui.acquirer.MposUiAccountManager;
+import io.mpos.ui.acquirer.view.LoginActivity;
+import io.mpos.ui.acquirer.view.SettingsActivity;
 import io.mpos.ui.paybutton.controller.StatefulTransactionProviderProxy;
 import io.mpos.ui.paybutton.view.TransactionActivity;
 import io.mpos.ui.printbutton.view.PrintReceiptActivity;
@@ -46,23 +52,26 @@ import io.mpos.ui.summarybutton.view.TransactionSummaryActivity;
 
 /**
  * Entry point for the Payworks SDK and paybutton UI.
- *
+ * <p>
  * Used to create intents to start activities for:
  * <ul>
- *     <li>creating a charge/refund transaction,</li>
- *     <li>showing a summary of a transaction,</li>
- *     <li>printing a receipt of a transaction.</li>
+ * <li>creating a charge/refund transaction,</li>
+ * <li>showing a summary of a transaction,</li>
+ * <li>printing a receipt of a transaction.</li>
  * </ul>
- *
+ * <p>
  * Can be also used for getting the information about the last processed transaction.
- *
+ * <p>
  * Implemented as a singleton, make sure to initialize it using {@link #initialize(android.content.Context, io.mpos.provider.ProviderMode, String, String)}.
  */
 public final class MposUi {
 
     public static final int REQUEST_CODE_PAYMENT = 1001;
-    public static final int REQUEST_CODE_PRINT_RECEIPT = 1004;
-    public static final int REQUEST_CODE_SHOW_SUMMARY = 1007;
+    public static final int REQUEST_CODE_PRINT_RECEIPT = 1003;
+    public static final int REQUEST_CODE_SHOW_SUMMARY = 1005;
+    public static final int REQUEST_CODE_LOGIN = 1007;
+    public static final int REQUEST_CODE_SETTINGS = 1009;
+
 
     public static final int RESULT_CODE_APPROVED = 2001;
     public static final int RESULT_CODE_FAILED = 2004;
@@ -72,6 +81,12 @@ public final class MposUi {
 
     public static final int RESULT_CODE_SUMMARY_CLOSED = 4001;
 
+    public static final int RESULT_CODE_LOGIN_SUCCESS = 5001;
+    public static final int RESULT_CODE_LOGIN_FAILED = 5002;
+
+    public static final int RESULT_CODE_SETTINGS_CLOSED = 6001;
+
+
     public static final String RESULT_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.shared.MposUiController.TRANSACTION_IDENTIFIER";
 
     private static MposUi INSTANCE;
@@ -80,15 +95,25 @@ public final class MposUi {
     private ProviderMode mProviderMode;
     private String mMerchantIdentifier;
     private String mMerchantSecret;
+    private TransactionProvider mTransactionProvider;
+
+    private MposUiMode mMposUiMode = MposUiMode.PROVIDER;
+    private MposUiAccountManager mMposUiAccountManager;
+
+    private enum MposUiMode {
+        PROVIDER,
+        ACQUIRER
+    }
 
     private MposUiConfiguration mConfiguration = new MposUiConfiguration();
 
     /**
      * Initialization method for this singleton class.
-     * @param context Android context of your application.
-     * @param mode Enum value specifying which backend environment to use.
+     *
+     * @param context            Android context of your application.
+     * @param mode               Enum value specifying which backend environment to use.
      * @param merchantIdentifier Identifier of the merchant which should be used for transactions.
-     * @param merchantSecret Secret (authentication token) of the merchant which should be used for transactions.
+     * @param merchantSecret     Secret (authentication token) of the merchant which should be used for transactions.
      * @return Initialized singleton object.
      */
     public static MposUi initialize(Context context, ProviderMode mode, String merchantIdentifier, String merchantSecret) {
@@ -99,10 +124,11 @@ public final class MposUi {
     /**
      * Initialization method for this singleton class.
      * Deprecated alias for {@link #initialize(android.content.Context, io.mpos.provider.ProviderMode, String, String)}, use that method instead.
-     * @param context Android context of your application.
-     * @param mode Enum value specifying which backend environment to use.
+     *
+     * @param context            Android context of your application.
+     * @param mode               Enum value specifying which backend environment to use.
      * @param merchantIdentifier Identifier of the merchant which should be used for transactions.
-     * @param merchantSecret Secret (authentication token) of the merchant which should be used for transactions.
+     * @param merchantSecret     Secret (authentication token) of the merchant which should be used for transactions.
      * @return Initialized singleton object.
      */
     @Deprecated
@@ -110,8 +136,14 @@ public final class MposUi {
         return initialize(context, mode, merchantIdentifier, merchantSecret);
     }
 
+    public static MposUi initialize(Context context, ApplicationName applicationName, String integratorIdentifier) {
+        INSTANCE = new MposUi(context.getApplicationContext(), applicationName, integratorIdentifier);
+        return INSTANCE;
+    }
+
     /**
      * Gets the singleton instance of this class.
+     *
      * @return Initialized MposUi object.
      */
     public static MposUi getInitializedInstance() {
@@ -120,6 +152,7 @@ public final class MposUi {
 
     /**
      * Gets the SDK and MposUi version you are using.
+     *
      * @return Version code.
      */
     public static String getVersion() {
@@ -128,6 +161,7 @@ public final class MposUi {
 
     /**
      * Gets the configuration holder for the MposUi.
+     *
      * @return Configuration holder.
      */
     public MposUiConfiguration getConfiguration() {
@@ -136,6 +170,7 @@ public final class MposUi {
 
     /**
      * Sets the configuration for the MposUi.
+     *
      * @param configuration Configuration holder.
      */
     public void setConfiguration(MposUiConfiguration configuration) {
@@ -144,6 +179,7 @@ public final class MposUi {
 
     /**
      * Returns if a transaction is ongoing.
+     *
      * @return Whether is transaction ongoing.
      */
     public boolean isTransactionOngoing() {
@@ -152,6 +188,7 @@ public final class MposUi {
 
     /**
      * Returns the current transaction which is ongoing or finished in the MposUi.
+     *
      * @return The transaction object.
      */
     public Transaction getTransaction() {
@@ -160,6 +197,7 @@ public final class MposUi {
 
     /**
      * Returns the current transaction process which is ongoing or finished in the MposUi.
+     *
      * @return The transaction process object.
      */
     public TransactionProcessDetails getTransactionProcessDetails() {
@@ -168,6 +206,7 @@ public final class MposUi {
 
     /**
      * Returns the latest error which might have occurred in the MposUi.
+     *
      * @return The last error object.
      */
     public MposError getError() {
@@ -177,7 +216,7 @@ public final class MposUi {
     /**
      * Creates an intent for a new transaction from a session identifier
      * (this identifier is created after registering the transaction on the backend).
-     *
+     * <p>
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
      * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
      * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
@@ -188,6 +227,12 @@ public final class MposUi {
      */
     public Intent createTransactionIntent(String sessionIdentifier) {
         Intent intent = new Intent(mContext, TransactionActivity.class);
+
+        if (mMposUiMode == MposUiMode.ACQUIRER) {
+            intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN, true);
+            intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        }
+
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
@@ -198,20 +243,26 @@ public final class MposUi {
 
     /**
      * Creates an intent for a new charge transaction from the transaction data.
-     *
+     * <p>
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
      * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
      * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
      * using {@link #RESULT_EXTRA_TRANSACTION_IDENTIFIER} key.
      *
-     * @param amount The transaction amount.
-     * @param currency The transaction currency.
-     * @param subject The subject of the transaction.
+     * @param amount           The transaction amount.
+     * @param currency         The transaction currency.
+     * @param subject          The subject of the transaction.
      * @param customIdentifier The subject of the transaction.
      * @return The intent which can be used to start a new activity for result.
      */
     public Intent createChargeTransactionIntent(BigDecimal amount, Currency currency, @Nullable String subject, @Nullable String customIdentifier) {
         Intent intent = new Intent(mContext, TransactionActivity.class);
+
+        if (mMposUiMode == MposUiMode.ACQUIRER) {
+            intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN, true);
+            intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        }
+
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
@@ -227,19 +278,25 @@ public final class MposUi {
     /**
      * Creates an intent for a new refund transaction from the identifier of the transaction
      * which is to be refunded.
-     *
+     * <p>
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
      * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
      * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
      * using {@link #RESULT_EXTRA_TRANSACTION_IDENTIFIER} key.
      *
      * @param transactionIdentifier The identifier of the old transaction which is to be refunded.
-     * @param subject The subject of the new transaction.
-     * @param customIdentifier The subject of the new transaction.
+     * @param subject               The subject of the new transaction.
+     * @param customIdentifier      The subject of the new transaction.
      * @return The intent which can be used to start a new activity.
      */
     public Intent createRefundTransactionIntent(String transactionIdentifier, @Nullable String subject, @Nullable String customIdentifier) {
         Intent intent = new Intent(mContext, TransactionActivity.class);
+
+        if (mMposUiMode == MposUiMode.ACQUIRER) {
+            intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN, true);
+            intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        }
+
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
@@ -253,7 +310,7 @@ public final class MposUi {
 
     /**
      * Creates an intent for showing the summary screen of a transaction.
-     *
+     * <p>
      * You should use the returned intent with {@code startActivity()} or {@code startActivityForResult()} using request code {@link #REQUEST_CODE_SHOW_SUMMARY}
      * if you want to be notified when the transaction summary screen is closed. The result code will always be {@link #RESULT_CODE_SUMMARY_CLOSED}.
      *
@@ -262,6 +319,12 @@ public final class MposUi {
      */
     public Intent createTransactionSummaryIntent(String transactionIdentifier) {
         Intent intent = new Intent(mContext, TransactionSummaryActivity.class);
+
+        if (mMposUiMode == MposUiMode.ACQUIRER) {
+            intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN, true);
+            intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        }
+
         intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
         intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
         intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
@@ -271,7 +334,8 @@ public final class MposUi {
 
     /**
      * Creates an intent for printing a receipt of a transaction.
-     *
+     * <p>
+     * Use only when MposUi is initialized with an Application.
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PRINT_RECEIPT}.
      * The result code will be either {@link #RESULT_CODE_PRINT_SUCCESS} if the receipt data was successfully sent to the printer
      * or {@link #RESULT_CODE_PRINT_FAILED} otherwise.
@@ -281,6 +345,12 @@ public final class MposUi {
      */
     public Intent createPrintReceiptIntent(String transactionIdentifier) {
         Intent intent = new Intent(mContext, PrintReceiptActivity.class);
+
+        if (mMposUiMode == MposUiMode.ACQUIRER) {
+            intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN, true);
+            intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        }
+
         intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
         intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
         intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
@@ -288,10 +358,111 @@ public final class MposUi {
         return intent;
     }
 
+    /**
+     * Creates an intent for the login screen
+     * <p>
+     * Use only when MposUi is initialized with an Application.
+     * The user is logged out forcefully before showing the login screen
+     * <p>
+     * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_LOGIN}.
+     * The result code will be either {@link #RESULT_CODE_LOGIN_SUCCESS} if the login was successful or {@link #RESULT_CODE_LOGIN_FAILED} otherwise.
+     *
+     * @return The intent which can be used to start a new activity.
+     * @throws IllegalStateException if the MposUi in not initialized with an Application
+     */
+    public Intent createLoginIntent() throws IllegalStateException {
+        if (mMposUiMode != MposUiMode.ACQUIRER) {
+            throwExceptionForWrongMode(MposUiMode.ACQUIRER);
+        }
+        // Forcing login
+        mMposUiAccountManager.logout(false);
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        intent.putExtra(LoginActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        return intent;
+    }
+
+    /**
+     * Creates an intent for the settings screen
+     * <p>
+     * Use only when MposUi is initialized with an Application.
+     * You should use the returned intent with {@code startActivity()} or {@code startActivityForResult()} using request code {@link #REQUEST_CODE_SETTINGS}
+     * if you want to be notified when the settings screen is closed. The result code will always be {@link #RESULT_CODE_SETTINGS_CLOSED}.
+     *
+     * @return The intent which can be used to start a new activity.
+     * @throws IllegalStateException if the MposUi in not initialized with an Application
+     */
+    public Intent createSettingsIntent() throws IllegalStateException {
+        if (mMposUiMode != MposUiMode.ACQUIRER) {
+            throwExceptionForWrongMode(MposUiMode.ACQUIRER);
+        }
+        Intent intent = new Intent(mContext, SettingsActivity.class);
+        intent.putExtra(SettingsActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        return intent;
+    }
+
+    /**
+     * Logs the user out of the application.
+     * Use only when MposUi is initialized with an Application.
+     *
+     * @throws IllegalStateException if the MposUi in not initialized with an application
+     */
+    public void logout() throws IllegalStateException {
+        if (mMposUiMode != MposUiMode.ACQUIRER) {
+            throwExceptionForWrongMode(MposUiMode.ACQUIRER);
+        }
+        mMposUiAccountManager.logout(false);
+    }
+
+    /**
+     * Checks if the user is logged in with the Application.
+     * Use only when MposUi is initialized with an Application.
+     *
+     * @return boolean indicating whether logged in or not.
+     * @throws IllegalStateException if the MposUi in not initialized with an Application
+     */
+    public boolean isLoggedIn() throws IllegalStateException {
+        if (mMposUiMode != MposUiMode.ACQUIRER) {
+            throwExceptionForWrongMode(MposUiMode.ACQUIRER);
+        }
+        return mMposUiAccountManager.isLoggedIn();
+    }
+
+    /**
+     * Returns the transaction provider used for the previous transaction.
+     * Returns null if the transaction hasn't been processed before.
+     * This can be used to query receipts, see {@link io.mpos.transactionprovider.TransactionProvider#fetchCustomerReceiptForTransaction(String, FetchReceiptListener)}
+     * @return TransactionProvider
+     */
+    public TransactionProvider getTransactionProvider() {
+        TransactionProvider provider = StatefulTransactionProviderProxy.getInstance().getTransactionProvider();
+        return provider;
+    }
+
     private MposUi(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret) {
         mContext = context;
         mProviderMode = providerMode;
         mMerchantIdentifier = merchantIdentifier;
         mMerchantSecret = merchantSecret;
+        mMposUiMode = MposUiMode.PROVIDER;
+    }
+
+    private MposUi(Context context, ApplicationName applicationName, String integratorIdentifier) {
+        mMposUiMode = MposUiMode.ACQUIRER;
+        mContext = context;
+        mMposUiAccountManager = MposUiAccountManager.initialize(context, applicationName, integratorIdentifier);
+        mConfiguration = mMposUiAccountManager.getApplicationData().getMposUiConfiguration();
+        if (mMposUiAccountManager.isLoggedIn()) {
+            mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
+            mMerchantSecret = mMposUiAccountManager.getMerchantSecretKey();
+            mProviderMode = ProviderMode.LIVE;
+        }
+    }
+
+    private void throwExceptionForWrongMode(MposUiMode mode) throws IllegalStateException {
+        if (mode == MposUiMode.ACQUIRER) {
+            throw new IllegalStateException("MposUi needs to be initialized with an Application to use this method");
+        } else {
+            throw new IllegalStateException("MposUi needs to be initialized with a Provider to use this method");
+        }
     }
 }

@@ -36,6 +36,7 @@ public class MposUiAppearance {
     private int mColorPrimary = Color.parseColor("#03a9f4");
     private int mColorPrimaryDark = Color.parseColor("#039be5");
     private int mTextColorPrimary = Color.WHITE;
+    private int mBackgroundColor = Color.parseColor("#eeeeee");
 
     /**
      * Get the primary color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
@@ -88,6 +89,24 @@ public class MposUiAppearance {
      */
     public MposUiAppearance setTextColorPrimary(int textColorPrimary) {
         mTextColorPrimary = textColorPrimary;
+        return this;
+    }
+
+    /**
+     * Get the window background color used by MposUi.
+     * @return The primary text color.
+     */
+    public int getBackgroundColor() {
+        return mBackgroundColor;
+    }
+
+    /**
+     * Set the window background color used by MposUi.
+     * @param backgroundColor The color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setBackgroundColor(int backgroundColor) {
+        mBackgroundColor = backgroundColor;
         return this;
     }
 }

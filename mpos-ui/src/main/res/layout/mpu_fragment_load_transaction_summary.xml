@@ -24,23 +24,31 @@
   ~ THE SOFTWARE.
   -->
 
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:id="@+id/mpu_status_icon_view_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
-    <ImageView
-        android:src="@drawable/mpu_transaction_progress_drawable"
-        android:id="@+id/mpu_progress_view"
+    <FrameLayout
         android:layout_width="@dimen/mpu_payment_status_icon_container"
         android:layout_height="@dimen/mpu_payment_status_icon_container"
-        android:layout_centerInParent="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
 
-    <TextView
-        style="@style/MpuTransactionStatusIconView"
-        android:id="@+id/mpu_status_icon_view"
-        android:layout_centerInParent="true" />
+        <ImageView
+            android:id="@+id/mpu_progress_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/mpu_transaction_progress_drawable"
+            />
+
+        <TextView
+            android:id="@+id/mpu_status_icon_view"
+            style="@style/MpuTransactionStatusIconView"
+            android:layout_gravity="center"
+            />
+    </FrameLayout>
 
 </RelativeLayout>

@@ -33,11 +33,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import io.mpos.Mpos;
+import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Transaction;
 import io.mpos.ui.R;
+import io.mpos.ui.acquirer.MposUiAccountManager;
+import io.mpos.ui.acquirer.view.LoginFragment;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
 import io.mpos.ui.shared.model.TransactionDataHolder;
@@ -50,8 +53,13 @@ import io.mpos.ui.shared.view.PrintReceiptFragment;
 import io.mpos.ui.shared.view.SendReceiptFragment;
 import io.mpos.ui.shared.view.SummaryFragment;
 
-public class TransactionSummaryActivity extends AbstractBaseActivity
-        implements LoadTransactionSummaryFragment.Interaction, SummaryFragment.Interaction, ErrorFragment.Interaction, SendReceiptFragment.Interaction, PrintReceiptFragment.Interaction {
+public class TransactionSummaryActivity extends AbstractBaseActivity implements
+        LoadTransactionSummaryFragment.Interaction,
+        SummaryFragment.Interaction,
+        ErrorFragment.Interaction,
+        SendReceiptFragment.Interaction,
+        PrintReceiptFragment.Interaction,
+        LoginFragment.Interaction {
 
     private final static String TAG = "TransactionSummaryActivity";
 
@@ -60,15 +68,25 @@ public class TransactionSummaryActivity extends AbstractBaseActivity
     public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_SECRET";
     public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.summarybutton.TransactionSummaryActivity.PROVIDER_MODE";
 
-    public final static String SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER = "io.mpos.ui.TRANSACTION_DATA_HOLDER";
+    public final static String BUNDLE_EXTRA_ACQUIRER_LOGIN = "io.mpos.ui.summarybutton.TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
+    public final static String BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID = "io.mpos.ui.summarybutton.TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
+
+    private final static String SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER = "io.mpos.ui.TRANSACTION_DATA_HOLDER";
+    private final static String SAVED_INSTANCE_STATE_UI_STATE = "io.mpos.ui.UI_STATE";
 
     private TransactionProvider mTransactionProvider;
     private Transaction mTransaction;
     private TransactionDataHolder mTransactionDataHolder;
     private ViewGroup mContainer;
 
+    private String mMerchantIdentifier;
+    private String mMerchantSecretKey;
+    private ProviderMode mProviderMode;
+    private MposUiAccountManager mMposUiAccountManager;
+    private boolean isAcquirerMode;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mpu_activity_transaction_summary);
 
@@ -77,18 +95,41 @@ public class TransactionSummaryActivity extends AbstractBaseActivity
         mContainer = (ViewGroup) findViewById(R.id.mpu_fragment_container);
 
         ErrorHolder.getInstance().clear();
-        createMposProvider();
 
         if (savedInstanceState == null) {
-            showLoadingFragment();
+            if (getIntent().hasExtra(BUNDLE_EXTRA_ACQUIRER_LOGIN)) {
+                isAcquirerMode = true;
+                String applicationIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID);
+                mMposUiAccountManager = MposUiAccountManager.getInitializedInstance();
+                mProviderMode = mMposUiAccountManager.getProviderMode();
+
+                if (mMposUiAccountManager.isLoggedIn()) {
+                    mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
+                    mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
+                    createMposProvider();
+                    showLoadingFragment();
+                } else {
+                    // Show the acquirer UI and continue only if logged in.
+                    showLoginFragment(applicationIdentifier);
+                }
+            } else {
+                mMerchantSecretKey = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
+                mMerchantIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
+                mProviderMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
+
+                createMposProvider();
+                showLoadingFragment();
+            }
         } else {
             mTransactionDataHolder = savedInstanceState.getParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER);
+            setUiState((UiState) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_UI_STATE));
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER, mTransactionDataHolder);
+        outState.putSerializable(SAVED_INSTANCE_STATE_UI_STATE, getUiState());
         super.onSaveInstanceState(outState);
     }
 
@@ -103,8 +144,25 @@ public class TransactionSummaryActivity extends AbstractBaseActivity
 
         if (getUiState() == UiState.RECEIPT_PRINTING) {
             Toast.makeText(this, R.string.MPUBackButtonDisabled, Toast.LENGTH_LONG).show();
-        } else if (getUiState() == UiState.RECEIPT_SENDING || getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
+        } else if (getUiState() == UiState.FORGOT_PASSWORD_DISPLAYING) {
+            LoginFragment loginFragment = (LoginFragment) getFragmentManager().findFragmentByTag(LoginFragment.TAG);
+            if (loginFragment != null) {
+                loginFragment.setLoginMode(true);
+            }
+        } else if (getUiState() == UiState.SUMMARY_ERROR || getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
+            processErrorState();
+        } else if (getUiState() == UiState.RECEIPT_SENDING) {
             showSummaryFragment();
+        } else {
+            finishWithResult();
+        }
+    }
+
+    private void processErrorState() {
+        if (isAcquirerMode  &&
+                MposUi.getInitializedInstance().getError()!= null &&
+                MposUi.getInitializedInstance().getError().getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
+            showLoginFragment(MposUiAccountManager.getInitializedInstance().getApplicationData().getIdentifier());
         } else {
             finishWithResult();
         }
@@ -124,6 +182,10 @@ public class TransactionSummaryActivity extends AbstractBaseActivity
 
     @Override
     public void onLoadingError(MposError error) {
+        if (isAcquirerMode && error.getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
+            // Authentication failed. We need to logout.
+            mMposUiAccountManager.logout(false);
+        }
         ErrorHolder.getInstance().setError(error);
         showErrorFragment(UiState.SUMMARY_ERROR, false, error);
     }
@@ -181,10 +243,26 @@ public class TransactionSummaryActivity extends AbstractBaseActivity
         StatefulPrintingProcessProxy.getInstance().requestAbort();
     }
 
+    @Override
+    public void onLoginCompleted() {
+        mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
+        mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
+        createMposProvider();
+        showLoadingFragment();
+    }
+
+    @Override
+    public void onLoginModeChanged(boolean loginMode) {
+        if (loginMode) {
+            setUiState(UiState.LOGIN_DISPLAYING);
+        } else {
+            setUiState(UiState.FORGOT_PASSWORD_DISPLAYING);
+        }
+    }
+
     private void showLoadingFragment() {
         String transactionIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_TRANSACTION_IDENTIFIER);
         LoadTransactionSummaryFragment fragment = LoadTransactionSummaryFragment.newInstance(transactionIdentifier);
-
         showFragment(fragment, LoadTransactionSummaryFragment.TAG, UiState.SUMMARY_LOADING, true);
     }
 
@@ -208,12 +286,13 @@ public class TransactionSummaryActivity extends AbstractBaseActivity
         showFragment(fragment, PrintReceiptFragment.TAG, UiState.RECEIPT_PRINTING, false);
     }
 
-    private void createMposProvider() {
-        String merchantId = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
-        String merchantSecret = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
-        ProviderMode providerMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
+    private void showLoginFragment(String applicationIdentifier) {
+        LoginFragment fragment = LoginFragment.newInstance(applicationIdentifier);
+        showFragment(fragment, LoginFragment.TAG, UiState.LOGIN_DISPLAYING, true);
+    }
 
-        mTransactionProvider = Mpos.createTransactionProvider(getApplicationContext(), providerMode, merchantId, merchantSecret);
+    private void createMposProvider() {
+        mTransactionProvider = Mpos.createTransactionProvider(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey);
     }
 
     private void hideSoftKeyboard() {

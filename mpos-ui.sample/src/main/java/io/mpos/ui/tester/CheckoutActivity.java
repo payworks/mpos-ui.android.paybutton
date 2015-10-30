@@ -51,6 +51,7 @@ import io.mpos.accessories.AccessoryFamily;
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactions.Currency;
+import io.mpos.ui.acquirer.ApplicationName;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.model.MposUiConfiguration;
 
@@ -61,6 +62,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private final static String MERCHANT_SECRET = "<create a test merchant in the gateway manager>";
 
     private String mLastTransactionIdentifier = null;
+    private boolean mIsAcquirerMode = false;
 
     @Override
     protected void onResume() {
@@ -80,6 +82,8 @@ public class CheckoutActivity extends AppCompatActivity {
         TextView sdkVersionText = (TextView) findViewById(R.id.sdk_version);
         sdkVersionText.setText("SDK version : " + Mpos.getVersion());
 
+        MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+
         findViewById(R.id.transaction_signature).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +94,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         .getConfiguration().getAppearance()
                         .setColorPrimary(Color.parseColor("#ff9800"))
                         .setColorPrimaryDark(Color.parseColor("#f57c00"))
+                        .setBackgroundColor(Color.parseColor("#FFF3E0"))
                         .setTextColorPrimary(Color.BLACK);
                 startPayment(108.20);
             }
@@ -105,6 +110,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         .getConfiguration().getAppearance()
                         .setColorPrimary(Color.parseColor("#7cb342"))
                         .setColorPrimaryDark(Color.parseColor("#689f38"))
+                        .setBackgroundColor(Color.parseColor("#E8F5E9"))
                         .setTextColorPrimary(Color.WHITE);
                 startPayment(113.73);
             }
@@ -120,6 +126,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         .getConfiguration().getAppearance()
                         .setColorPrimary(Color.parseColor("#F4511E"))
                         .setColorPrimaryDark(Color.parseColor("#D84315"))
+                        .setBackgroundColor(Color.parseColor("#FFEBEE"))
                         .setTextColorPrimary(Color.WHITE);
                 startPayment(110.40);
             }
@@ -128,21 +135,24 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.transaction_e105_charge).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
-                MposUi mposUi = MposUi.getInitializedInstance();
-                mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.VERIFONE_E105);
-                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                if (!mIsAcquirerMode) {
+                    MposUi mposUi = MposUi.getInitializedInstance();
+                    mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.VERIFONE_E105);
+                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                }
                 startPayment(13.37);
+
             }
         });
 
         findViewById(R.id.transaction_miura_charge).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
-                MposUi mposUi = MposUi.getInitializedInstance();
-                mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MIURA_MPI);
-                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                if (!mIsAcquirerMode) {
+                    MposUi mposUi = MposUi.getInitializedInstance();
+                    mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MIURA_MPI);
+                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                }
                 startPayment(13.37);
             }
         });
@@ -170,18 +180,66 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+
+        findViewById(R.id.show_login).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = MposUi.getInitializedInstance().createLoginIntent();
+                startActivityForResult(intent, MposUi.REQUEST_CODE_LOGIN);
+            }
+        });
+
+        findViewById(R.id.show_settings).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = MposUi.getInitializedInstance().createSettingsIntent();
+                startActivityForResult(intent, MposUi.REQUEST_CODE_SETTINGS);
+            }
+        });
+
+        findViewById(R.id.logout).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MposUi.getInitializedInstance().logout();
+            }
+        });
+
+        findViewById(R.id.init_with_concardis).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsAcquirerMode = true;
+                MposUi.initialize(CheckoutActivity.this, ApplicationName.CONCARDIS, "test-integrator");
+            }
+        });
+
+        findViewById(R.id.init_with_mcashier).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsAcquirerMode = true;
+                MposUi.initialize(CheckoutActivity.this, ApplicationName.MCASHIER, "test-integrator");
+            }
+        });
+
+        findViewById(R.id.init_with_provider).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsAcquirerMode = false;
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+            }
+        });
+
+
         updateViews();
     }
 
     void initMockPaymentController() {
-        MposUi.initialize(this, ProviderMode.MOCK, "mock", "mock");
-        MposUi mposUi = MposUi.getInitializedInstance();
+        MposUi mposUi = MposUi.initialize(this, ProviderMode.MOCK, "mock", "mock");
         mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MOCK);
         mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
     }
 
     void startPayment(double amount) {
-        Intent intent = MposUi.getInitializedInstance().createChargeTransactionIntent(BigDecimal.valueOf(amount), Currency.EUR, "subject", null);
+        Intent intent = MposUi.getInitializedInstance().createChargeTransactionIntent(BigDecimal.valueOf(amount), Currency.EUR, "subject", "hello");
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
     }
 
@@ -221,6 +279,15 @@ public class CheckoutActivity extends AppCompatActivity {
         } else if (requestCode == MposUi.REQUEST_CODE_SHOW_SUMMARY) {
             // resultCode is always MposUi.RESULT_CODE_SUMMARY_CLOSED
 
+            Toast.makeText(this, "Summary Closed", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == MposUi.REQUEST_CODE_LOGIN) {
+            if (resultCode == MposUi.RESULT_CODE_LOGIN_SUCCESS) {
+                Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == MposUi.REQUEST_CODE_SETTINGS) {
+            // resultCode is always MposUi.RESULT_CODE_SETTINGS_CLOSED
             Toast.makeText(this, "Summary Closed", Toast.LENGTH_SHORT).show();
         }
 

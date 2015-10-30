@@ -100,7 +100,6 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginBottom="4dp"
-
             android:background="#707070"/>
 
         <TextView
@@ -108,8 +107,8 @@
             style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/option_miura"
             android:background="#B0BEC5"
+            android:text="@string/option_miura"
             />
 
         <TextView
@@ -117,9 +116,95 @@
             style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/option_e105"
             android:background="#BCAAA4"
+            android:text="@string/option_e105"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/header_init"
+            android:textColor="#707070"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="4dp"
+            android:background="#707070"/>
+
+        <TextView
+            android:id="@+id/init_with_concardis"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#006379"
+            android:text="@string/init_with_concardis"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/init_with_mcashier"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#82BFCF"
+            android:text="@string/init_with_mcashier"
+            />
+
+        <TextView
+            android:id="@+id/init_with_provider"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#CDDC39"
+            android:text="@string/init_with_provider"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/header_acquirer"
+            android:textColor="#707070"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="4dp"
+            android:background="#707070"/>
+
+
+        <TextView
+            android:id="@+id/show_login"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#448AFF"
+            android:text="@string/login"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/show_settings"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#448AFF"
+            android:text="@string/settings"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/logout"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#448AFF"
+            android:text="@string/logout"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:layout_width="match_parent"

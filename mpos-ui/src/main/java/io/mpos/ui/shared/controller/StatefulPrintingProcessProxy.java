@@ -32,9 +32,6 @@ import io.mpos.transactionprovider.PrintingProcessListener;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.ui.shared.MposUi;
 
-/**
- * Created by Abhijith Srivatsav<abhijith.srivatsav@payworksmobile.com> on 28/05/15.
- */
 public class StatefulPrintingProcessProxy {
 
     private static final String TAG = "StatefulPrinterController";

@@ -79,5 +79,21 @@ public enum UiState {
     /**
      * Error printing receipt
      */
-    RECEIPT_PRINTING_ERROR
+    RECEIPT_PRINTING_ERROR,
+
+    /**
+     * Login screen is displayed
+     */
+    LOGIN_DISPLAYING,
+
+    /**
+     * Forgot password screen is displayed
+     */
+    FORGOT_PASSWORD_DISPLAYING,
+
+    /**
+     * Settings screen is displayed
+     */
+    SETTINGS_DISPLAYING
+
 }

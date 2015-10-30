@@ -25,37 +25,34 @@
   ~ THE SOFTWARE.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
 
     <TextView
         android:id="@+id/mpu_header_view"
         android:layout_width="match_parent"
         android:layout_height="104dp"
-        android:text="@string/MPUSelectAccount"
-        android:textSize="@dimen/mpu_text_size_headline_material"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
-    />
+        android:text="@string/MPUSelectAccount"
+        android:textSize="@dimen/mpu_text_size_headline_material"/>
 
     <ListView
         android:id="@+id/mpu_application_list_view"
-        android:layout_below="@+id/mpu_header_view"
-        android:layout_above="@+id/mpu_abort_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_above="@+id/mpu_abort_button"
+        android:layout_below="@+id/mpu_header_view"/>
 
     <Button
-        style="@style/mpos.ui.Button"
         android:id="@+id/mpu_abort_button"
+        style="@style/mpos.ui.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/MPUAbort"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_margin="@dimen/mpu_activity_vertical_margin"
-    />
+        android:text="@string/MPUAbort"/>
 
 </RelativeLayout>

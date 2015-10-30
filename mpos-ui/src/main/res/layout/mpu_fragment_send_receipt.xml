@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 android:paddingBottom="@dimen/mpu_activity_vertical_margin"
                 android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
                 android:paddingRight="@dimen/mpu_activity_horizontal_margin"
@@ -55,24 +56,24 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_below="@id/mpu_status_icon_view_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/mpu_status_icon_view_container"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/mpu_email_address_view"
-            android:layout_weight="1"
-            android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
             android:hint="@string/MPUEnterEmailAddress"
             android:inputType="textEmailAddress"
             android:padding="@dimen/mpu_dialog_content_padding"/>
 
         <Button
-            style="@style/mpos.ui.Button"
             android:id="@+id/mpu_send_button"
+            style="@style/mpos.ui.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/MPUSend"/>

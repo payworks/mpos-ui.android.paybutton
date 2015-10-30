@@ -24,8 +24,8 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.mpos.ui">
+<manifest package="io.mpos.ui"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
@@ -34,8 +34,8 @@
         </activity>
         <activity
             android:name=".paybutton.view.SignatureActivity"
-            android:theme="@style/Theme.mpos.ui"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/Theme.mpos.ui">
         </activity>
 
         <activity
@@ -47,6 +47,17 @@
             android:name=".printbutton.view.PrintReceiptActivity"
             android:theme="@style/Theme.mpos.ui">
         </activity>
+
+        <activity
+            android:name=".acquirer.view.LoginActivity"
+            android:theme="@style/Theme.mpos.ui">
+        </activity>
+
+        <activity
+            android:name=".acquirer.view.SettingsActivity"
+            android:theme="@style/Theme.mpos.ui">
+        </activity>
+
     </application>
 
 </manifest>

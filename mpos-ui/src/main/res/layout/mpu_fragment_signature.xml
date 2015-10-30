@@ -25,31 +25,29 @@
   ~ THE SOFTWARE.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:paddingBottom="@dimen/mpu_activity_vertical_margin"
-             android:paddingTop="@dimen/mpu_activity_vertical_margin"
-             >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:paddingBottom="@dimen/mpu_activity_vertical_margin"
+                android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
     <Button
-        style="@style/mpos.ui.Button"
         android:id="@+id/mpu_continue_button"
-        android:text="@string/MPUContinue"
+        style="@style/mpos.ui.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/mpu_activity_horizontal_margin"
         android:enabled="false"
-    />
+        android:text="@string/MPUContinue"/>
 
     <io.mpos.ui.paybutton.view.SignatureView
         android:id="@+id/mpu_signature_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/mpu_continue_button"
-    />
+        android:layout_alignParentTop="true"/>
 
     <TextView
         android:id="@+id/mpu_authorize_amount_view"
@@ -58,70 +56,64 @@
         android:layout_above="@id/mpu_continue_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:paddingTop="2dp"
         android:gravity="center"
-        />
+        android:paddingTop="2dp"/>
 
     <View
         android:id="@+id/mpu_signature_view_separator"
-        android:layout_height="1px"
-        android:background="#000"
         android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/mpu_authorize_amount_view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/mpu_activity_horizontal_margin"
         android:layout_marginRight="@dimen/mpu_activity_horizontal_margin"
-        android:layout_above="@id/mpu_authorize_amount_view"
-    />
+        android:background="#000"/>
 
     <LinearLayout
         android:id="@+id/mpu_amount_view_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/mpu_activity_horizontal_margin"
         android:gravity="center_vertical"
-    >
+        android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/mpu_scheme_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="center"
-        />
+            android:scaleType="center"/>
 
         <TextView
             android:id="@+id/mpu_amount_view"
-            android:textAppearance="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            />
+            android:textAppearance="@android:style/TextAppearance.Medium"/>
     </LinearLayout>
 
     <Button
-        style="@style/mpos.ui.Button"
         android:id="@+id/mpu_clear_button"
+        style="@style/mpos.ui.Button"
         android:layout_width="@dimen/mpu_action_button_min_width_material"
         android:layout_height="@dimen/mpu_action_button_min_height_material"
-        android:text="@string/mpu_fa_close"
-        android:layout_alignRight="@id/mpu_continue_button"
-        android:enabled="false"
-        android:layout_alignTop="@id/mpu_amount_view_container"
         android:layout_alignEnd="@id/mpu_continue_button"
-    />
+        android:layout_alignRight="@id/mpu_continue_button"
+        android:layout_alignTop="@id/mpu_amount_view_container"
+        android:enabled="false"
+        android:text="@string/mpu_fa_close"/>
 
 
     <Button
-        style="@style/mpos.ui.Button"
         android:id="@+id/mpu_abort_button"
-        android:text="@string/MPUAbort"
+        style="@style/mpos.ui.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/mpu_continue_button"
         android:layout_alignLeft="@id/mpu_amount_view_container"
-    />
+        android:text="@string/MPUAbort"/>
 
 
 </RelativeLayout>

@@ -76,9 +76,11 @@
 <string name="MPUActions">"Azioni"</string>
 <string name="MPUSettings">"Impostazioni"</string>
 <string name="MPUInfo">"Info"</string>
-<string name="MPUPrintReceipt">"Stampare giustificativo
-"</string>
+<string name="MPUVisa">"Visa"</string>
+<string name="MPUMastercard">"Mastercard"</string>
+<string name="MPUMaestro">"Maestro"</string>
+<string name="MPUAmericanExpress">"American Express"</string>
+<string name="MPUPrintReceipt">"Stampare giustificativo"</string>
 <string name="MPUReprintReceipt">"Stampara giustificativo a nuovo"</string>
-<string name="MPUPrinting">"Stampando...
-"</string>
+<string name="MPUPrinting">"Stampando..."</string>
 </resources>

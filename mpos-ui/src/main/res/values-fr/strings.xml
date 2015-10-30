@@ -76,6 +76,10 @@
 <string name="MPUActions">"Actes"</string>
 <string name="MPUSettings">"Paramètres"</string>
 <string name="MPUInfo">"Infos"</string>
+<string name="MPUVisa">"Visa"</string>
+<string name="MPUMastercard">"Mastercard"</string>
+<string name="MPUMaestro">"Maestro"</string>
+<string name="MPUAmericanExpress">"American Express"</string>
 <string name="MPUPrintReceipt">"Imprimer le justificatif"</string>
 <string name="MPUReprintReceipt">"Reimprimer le justificatif"</string>
 <string name="MPUPrinting">"Imprimant..."</string>

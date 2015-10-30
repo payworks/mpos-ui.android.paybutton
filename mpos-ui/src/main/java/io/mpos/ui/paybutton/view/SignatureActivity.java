@@ -27,6 +27,7 @@ package io.mpos.ui.paybutton.view;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import java.io.ByteArrayOutputStream;
@@ -44,9 +45,9 @@ public class SignatureActivity extends AbstractTransactionActivity
     public final static String BUNDLE_KEY_SIGNATURE_VERIFIED = "io.mpos.ui.paybutton.view.SignatureActivity.SIGNATURE_VERIFIED";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setWhiteBackground();
         UiHelper.setActionbarWithCustomColors(this, null);
 
         String amount = getIntent().getStringExtra(BUNDLE_KEY_AMOUNT);
@@ -56,9 +57,13 @@ public class SignatureActivity extends AbstractTransactionActivity
             SignatureFragment signatureFragment = SignatureFragment.newInstance(amount, resId);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, signatureFragment)
+                    .add(android.R.id.content, signatureFragment, SignatureFragment.TAG)
                     .commit();
         }
+    }
+
+    private void setWhiteBackground() {
+        getWindow().getDecorView().setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -69,7 +74,7 @@ public class SignatureActivity extends AbstractTransactionActivity
         Intent resultIntent = new Intent();
         resultIntent.putExtra(BUNDLE_KEY_SIGNATURE_IMAGE, byteArray);
         resultIntent.putExtra(BUNDLE_KEY_SIGNATURE_VERIFIED, verified);
-        setResult(RESULT_OK,resultIntent);
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="mpu_acquirer_data_index">
+        <item>applicationIdentifier</item>
+        <item>terminalFamily</item>
+        <item>printerFamily</item>
+        <item>featureSummaryPrintReceipt</item>
+        <item>featureSummarySendReceipt</item>
+        <item>featureSummaryRefund</item>
+        <item>colorPrimary</item>
+        <item>colorPrimaryDark</item>
+        <item>textColorPrimary</item>
+        <item>backgroundColor</item>
+    </string-array>
+
+    <!-- Make sure the data for each acquirer is in the order as in the index -->
+    <string-array name="mpu_acquirer_concardis">
+        <item>concardis.terminal</item>
+        <item>Miura</item>
+        <item>Sewoo</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>#006379</item>
+        <item>#004A5A</item>
+        <item>#FFFFFF</item>
+        <item>#EEEEEE</item>
+    </string-array>
+
+    <string-array name="mpu_acquirer_mcashier">
+        <item>six.terminal</item>
+        <item>Miura</item>
+        <item>Sewoo</item>
+        <item>false</item>
+        <item>true</item>
+        <item>true</item>
+        <item>#82BFCF</item>
+        <item>#6CB4C6</item>
+        <item>#FFFFFF</item>
+        <item>#EEEEEE</item>
+    </string-array>
+
+
+</resources>

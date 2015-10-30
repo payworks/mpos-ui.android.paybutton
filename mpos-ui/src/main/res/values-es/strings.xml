@@ -76,8 +76,11 @@
 <string name="MPUActions">"Acciones"</string>
 <string name="MPUSettings">"Configuración"</string>
 <string name="MPUInfo">"Info"</string>
+<string name="MPUVisa">"Visa"</string>
+<string name="MPUMastercard">"Mastercard"</string>
+<string name="MPUMaestro">"Maestro"</string>
+<string name="MPUAmericanExpress">"American Express"</string>
 <string name="MPUPrintReceipt">"Imprimir Recibo"</string>
 <string name="MPUReprintReceipt">"Reimprimir Recibo"</string>
-<string name="MPUPrinting">"Imprimiendo...
-"</string>
+<string name="MPUPrinting">"Imprimiendo..."</string>
 </resources>

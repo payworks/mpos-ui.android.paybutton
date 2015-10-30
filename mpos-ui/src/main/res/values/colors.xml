@@ -35,4 +35,6 @@
     <color name="mpu_payment_button_textcolor_disabled">#33000000</color>
     <color name="mpu_payment_button_textcolor">#000</color>
     <color name="mpu_payment_button_negative_textcolor">#424242</color>
+    <color name="mpu_login_button_tint">#4caf50</color>
+    <color name="mpu_deactivate_background">#AAFFFFFF</color>
 </resources>

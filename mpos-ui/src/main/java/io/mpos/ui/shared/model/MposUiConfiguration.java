@@ -76,6 +76,7 @@ public class MposUiConfiguration {
 
     private AccessoryFamily mAccessoryFamily = AccessoryFamily.MOCK;
     private AccessoryFamily mPrinterAccessoryFamily = AccessoryFamily.MOCK;
+    private String mApplicationIdentifier;
 
     /**
      * Set appearance of the MposUi.

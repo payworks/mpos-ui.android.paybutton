@@ -25,23 +25,23 @@
   ~ THE SOFTWARE.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
     >
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/mpu_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:id="@+id/mpu_toolbar">
+        android:minHeight="?attr/actionBarSize">
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout android:id="@+id/mpu_fragment_container"
+                 xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:tools="http://schemas.android.com/tools"
-                 android:id="@+id/mpu_fragment_container"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  tools:ignore="MergeRootFrame"/>

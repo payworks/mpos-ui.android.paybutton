@@ -30,6 +30,8 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import io.mpos.ui.R;
+import io.mpos.ui.shared.MposUi;
+import io.mpos.ui.shared.util.UiState;
 import io.mpos.ui.shared.view.AbstractBaseActivity;
 
 
@@ -54,6 +56,10 @@ public abstract class AbstractTransactionActivity extends AbstractBaseActivity {
 
     @Override
     public void navigateBack() {
+        if (getUiState() == UiState.LOGIN_DISPLAYING) {
+            setResult(MposUi.RESULT_CODE_FAILED);
+            finish();
+        }
         Toast.makeText(this, R.string.MPUBackButtonDisabled, Toast.LENGTH_LONG).show();
     }
 }

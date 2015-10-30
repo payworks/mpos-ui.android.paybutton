@@ -27,18 +27,26 @@
 package io.mpos.ui.shared.view;
 
 import android.app.Fragment;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import io.mpos.Mpos;
 import io.mpos.ui.R;
+import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.util.UiState;
 
-/**
- * Created by jakub on 27/07/15.
- */
 public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     private UiState mUiState = UiState.IDLE;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int windowBackgroundColor = MposUi.getInitializedInstance().getConfiguration().getAppearance().getBackgroundColor();
+        getWindow().getDecorView().setBackgroundColor(windowBackgroundColor);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
