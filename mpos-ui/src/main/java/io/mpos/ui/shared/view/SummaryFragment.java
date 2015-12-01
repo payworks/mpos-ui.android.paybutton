@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 
-import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.PaymentDetailsScheme;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.RefundDetailsStatus;
@@ -68,15 +67,17 @@ public class SummaryFragment extends Fragment {
     }
 
     public final static String TAG = "SummaryFragment";
+    private final static String SAVED_INSTANCE_STATE_REFUND_ENABLED = "io.mpos.ui.SummaryFragment.REFUND_ENABLED";
+    private final static String SAVED_INSTANCE_STATE_RETRY_ENABLED = "io.mpos.ui.SummaryFragment.RETRY_ENABLED";
+    private final static String SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER = "io.mpos.ui.SummaryFragment.TRANSACTION_DATA_HOLDER";
+
     private TransactionDataHolder mTransactionDataHolder;
-    private MposError mError;
     private boolean mRetryEnabled;
     private boolean mRefundEnabled;
 
-    public static SummaryFragment newInstance(boolean retryEnabled, boolean refundEnabled, TransactionDataHolder transactionDataHolder, MposError error) {
+    public static SummaryFragment newInstance(boolean retryEnabled, boolean refundEnabled, TransactionDataHolder transactionDataHolder) {
         SummaryFragment fragment = new SummaryFragment();
         fragment.setTransactionDataHolder(transactionDataHolder);
-        fragment.setError(error);
         fragment.setRetryEnabled(retryEnabled);
         fragment.setRefundEnabled(refundEnabled);
         return fragment;
@@ -157,8 +158,22 @@ public class SummaryFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER, mTransactionDataHolder);
+        outState.putBoolean(SAVED_INSTANCE_STATE_REFUND_ENABLED, mRefundEnabled);
+        outState.putBoolean(SAVED_INSTANCE_STATE_RETRY_ENABLED, mRetryEnabled);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mTransactionDataHolder = savedInstanceState.getParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER);
+            mRefundEnabled = savedInstanceState.getBoolean(SAVED_INSTANCE_STATE_REFUND_ENABLED);
+            mRetryEnabled = savedInstanceState.getBoolean(SAVED_INSTANCE_STATE_RETRY_ENABLED);
+        }
 
         showTransactionStatus();
         showTransactionAmountAndType();
@@ -356,10 +371,6 @@ public class SummaryFragment extends Fragment {
 
     public void setTransactionDataHolder(TransactionDataHolder transactionDataHolder) {
         mTransactionDataHolder = transactionDataHolder;
-    }
-
-    public void setError(MposError error) {
-        mError = error;
     }
 
     public void setRetryEnabled(boolean retryEnabled) {

@@ -35,6 +35,7 @@ import java.util.EnumSet;
 import java.util.Locale;
 
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.provider.ProviderMode;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.model.MposUiAppearance;
@@ -155,9 +156,16 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
             return;
         }
 
+        AccessoryFamily accessoryFamily = resolveAccessoryFamily(applicationData[INDEX_TERMINAL_FAMILY]);
+        AccessoryFamily printerAccessoryFamily = resolveAccessoryFamily(applicationData[INDEX_PRINTER_FAMILY]);
+
         MposUiConfiguration mposUiConfiguration = new MposUiConfiguration();
-        mposUiConfiguration.setAccessoryFamily(resolveAccessoryFamily(applicationData[INDEX_TERMINAL_FAMILY]));
-        mposUiConfiguration.setPrinterAccessoryFamily(resolveAccessoryFamily(applicationData[INDEX_PRINTER_FAMILY]));
+        mposUiConfiguration.setAccessoryFamily(accessoryFamily);
+        mposUiConfiguration.setPrinterAccessoryFamily(printerAccessoryFamily);
+
+        mposUiConfiguration.setTerminalParameters(getAccessoryParametersForAccessoryFamily(accessoryFamily));
+        mposUiConfiguration.setPrinterParameters(getAccessoryParametersForAccessoryFamily(printerAccessoryFamily));
+
         mposUiConfiguration.setSignatureCapture(MposUiConfiguration.SignatureCapture.ON_SCREEN);
         mposUiConfiguration.setSummaryFeatures(resolveSummaryFeatures(applicationData[INDEX_FEATURE_PRINT_RECEIPT], applicationData[INDEX_FEATURE_SEND_RECEIPT], applicationData[INDEX_FEATURE_REFUND]));
 
@@ -174,6 +182,15 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         mApplicationData.setImageResourceId(acquirerImageResourceId);
         mApplicationData.setIdentifier(applicationId);
         mApplicationData.setHelpUrl(resolveHelpUrl(applicationId));
+    }
+
+    private AccessoryParameters getAccessoryParametersForAccessoryFamily(AccessoryFamily accessoryFamily) {
+        if (accessoryFamily == AccessoryFamily.MIURA_MPI) {
+            return new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
+        } else if (accessoryFamily == AccessoryFamily.SEWOO) {
+            return new AccessoryParameters.Builder(AccessoryFamily.SEWOO).bluetooth().build();
+        }
+        return null;
     }
 
     private String resolveHelpUrl(String applicationIdentifier) {

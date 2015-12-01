@@ -50,7 +50,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import io.mpos.MposExtended;
+import io.mpos.Mpos;
 import io.mpos.accounts.listeners.LoginListener;
 import io.mpos.accounts.listeners.PasswordResetRequestListener;
 import io.mpos.errors.ErrorType;
@@ -169,7 +169,7 @@ public class LoginFragment extends Fragment {
             ProviderMode providerMode = mMposUiAccountManager.getProviderMode();
             if (loginMode) {
                 enableUi(false);
-                MposExtended.loginWithApplication(getActivity().getApplicationContext(), providerMode, mApplicationIdentifier, mEmailText, mPasswordText, new LoginListener() {
+                Mpos.loginWithApplication(getActivity().getApplicationContext(), providerMode, mApplicationIdentifier, mEmailText, mPasswordText, new LoginListener() {
                     @Override
                     public void onLoginSuccessful(final String username, final String merchantId, final String merchantSecret) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -199,7 +199,7 @@ public class LoginFragment extends Fragment {
                 });
             } else {
                 enableUi(false);
-                MposExtended.requestPasswordResetForApplication(getActivity(), providerMode, mApplicationIdentifier, mEmailText, new PasswordResetRequestListener() {
+                Mpos.requestPasswordResetForApplication(getActivity(), providerMode, mApplicationIdentifier, mEmailText, new PasswordResetRequestListener() {
                     @Override
                     public void onPasswordResetRequestSuccessful(String username) {
                         getActivity().runOnUiThread(new Runnable() {

@@ -38,6 +38,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.transactionprovider.PrintingProcess;
 import io.mpos.transactionprovider.PrintingProcessDetails;
@@ -84,7 +86,14 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
         setRetainInstance(true);
 
         mTransactionProvider = mInteractionActivity.getTransactionProvider();
-        mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider);
+        AccessoryFamily accessoryFamily = MposUi.getInitializedInstance().getConfiguration().getPrinterAccessoryFamily();
+        AccessoryParameters accessoryParameters = MposUi.getInitializedInstance().getConfiguration().getPrinterParameters();
+
+        if (accessoryParameters != null) {
+            mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider, accessoryParameters);
+        } else {
+            mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider, accessoryFamily);
+        }
     }
 
     @Nullable

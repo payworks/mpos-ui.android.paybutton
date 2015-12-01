@@ -26,11 +26,11 @@
 package io.mpos.ui.shared.controller;
 
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.transactionprovider.PrintingProcess;
 import io.mpos.transactionprovider.PrintingProcessDetails;
 import io.mpos.transactionprovider.PrintingProcessListener;
 import io.mpos.transactionprovider.TransactionProvider;
-import io.mpos.ui.shared.MposUi;
 
 public class StatefulPrintingProcessProxy {
 
@@ -61,12 +61,20 @@ public class StatefulPrintingProcessProxy {
     private PrintingProcessDetails mlastPrintingProcessDetails;
     private boolean mPrintingProcessOngoing;
 
-    public void printReceipt(String transactionIdentifier, TransactionProvider transactionProvider) {
+    @Deprecated
+    public void printReceipt(String transactionIdentifier, TransactionProvider transactionProvider, AccessoryFamily accessoryFamily) {
         mTransactionProvider = transactionProvider;
         mTransactionIdentifier = transactionIdentifier;
         mPrintingProcessOngoing = true;
-        AccessoryFamily accessoryFamily = MposUi.getInitializedInstance().getConfiguration().getPrinterAccessoryFamily();
         mPrintingProcess = mTransactionProvider.printCustomerReceiptForTransaction(transactionIdentifier, accessoryFamily, mPrintingProcessListenerProxy);
+    }
+
+
+    public void printReceipt(String transactionIdentifier, TransactionProvider transactionProvider, AccessoryParameters accessoryParameters) {
+        mTransactionProvider = transactionProvider;
+        mTransactionIdentifier = transactionIdentifier;
+        mPrintingProcessOngoing = true;
+        mPrintingProcess = mTransactionProvider.printCustomerReceiptForTransaction(transactionIdentifier, accessoryParameters, mPrintingProcessListenerProxy);
     }
 
     private PrintingProcessListener mPrintingProcessListenerProxy = new PrintingProcessListener() {

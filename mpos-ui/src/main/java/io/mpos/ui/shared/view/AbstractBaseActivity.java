@@ -69,7 +69,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.mpu_fade_in, R.anim.mpu_fade_out)
                 .replace(R.id.mpu_fragment_container, fragment, tag)
-                .commit();
+                .commitAllowingStateLoss();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(showDisplayHomeAsUp);

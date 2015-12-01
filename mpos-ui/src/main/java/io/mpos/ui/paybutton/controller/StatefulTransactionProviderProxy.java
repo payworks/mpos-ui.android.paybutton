@@ -38,6 +38,7 @@ import io.mpos.Mpos;
 import io.mpos.accessories.Accessory;
 import io.mpos.accessories.AccessoryConnectionState;
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
 import io.mpos.provider.ProviderMode;
@@ -49,6 +50,7 @@ import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.TransactionTemplate;
+import io.mpos.transactions.parameters.TransactionParameters;
 
 /**
  * StatefulTransactionProviderProxy keeps the state of the ongoing transaction independent of the Fragment/Activity's lifecycle.
@@ -98,6 +100,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     }
 
 
+    @Deprecated
     public void startChargeTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, BigDecimal amount, Currency currency, String subject, String customIdentifier) {
         clearForNewTransaction();
 
@@ -108,6 +111,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mTransactionIsOnGoing = true;
     }
 
+    @Deprecated
     public void startRefundTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, String transactionIdentifier, String subject, String customIdentifier) {
         clearForNewTransaction();
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
@@ -117,6 +121,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mTransactionIsOnGoing = true;
     }
 
+    @Deprecated
     public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, String sessionIdentifier) {
         clearForNewTransaction();
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
@@ -124,6 +129,22 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryFamily, this);
         mTransactionIsOnGoing = true;
         mTransactionSessionLookup = true;
+    }
+
+    public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, String sessionIdentifier) {
+        clearForNewTransaction();
+        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
+
+        mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryParameters, this);
+        mTransactionIsOnGoing = true;
+        mTransactionSessionLookup = true;
+    }
+
+    public void startTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, TransactionParameters transactionParameters) {
+        clearForNewTransaction();
+        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
+        mCurrentTransactionProcess = mTransactionProvider.startTransaction(transactionParameters, accessoryParameters, this);
+        mTransactionIsOnGoing = true;
     }
 
     @Override

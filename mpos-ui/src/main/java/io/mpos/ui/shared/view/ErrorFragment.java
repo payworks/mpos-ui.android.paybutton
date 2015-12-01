@@ -35,7 +35,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import io.mpos.errors.ErrorType;
+import java.io.Serializable;
+
 import io.mpos.errors.MposError;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.ui.R;
@@ -51,6 +52,9 @@ public class ErrorFragment extends Fragment {
     }
 
     public static final String TAG = "ErrorFragment";
+    private final static String SAVED_INSTANCE_STATE_MPOS_ERROR_DATA_HOLDER = "io.mpos.ui.ErrorFragment.MPOS_ERROR_DATA_HOLDER";
+    private final static String SAVED_INSTANCE_STATE_PROCESS_DETAILS_INFORMATION = "io.mpos.ui.ErrorFragment.PROCESS_DETAILS_INFORMATION";
+    private final static String SAVED_INSTANCE_STATE_RETRY_ENABLED = "io.mpos.ui.ErrorFragment.RETRY_ENABLED";
 
     private Interaction mInteractionActivity;
     private MposError mError;
@@ -72,6 +76,12 @@ public class ErrorFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        if (savedInstanceState != null) {
+            mError = (MposError) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_MPOS_ERROR_DATA_HOLDER);
+            mTransactionProcessDetails = (TransactionProcessDetails) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_PROCESS_DETAILS_INFORMATION);
+            mRetryEnabled = savedInstanceState.getBoolean(SAVED_INSTANCE_STATE_RETRY_ENABLED);
+        }
     }
 
     @Override
@@ -91,7 +101,7 @@ public class ErrorFragment extends Fragment {
             retryButton.setVisibility(View.GONE);
         }
 
-        if (mError.getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
+        if ("SERVER_AUTHENTICATION_FAILED".equals(mError.getErrorType())) {
             retryButton.setVisibility(View.GONE);
         }
 
@@ -118,6 +128,14 @@ public class ErrorFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement ErrorFragment.Interaction");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(SAVED_INSTANCE_STATE_MPOS_ERROR_DATA_HOLDER, mError);
+        outState.putSerializable(SAVED_INSTANCE_STATE_PROCESS_DETAILS_INFORMATION, mTransactionProcessDetails);
+        outState.putBoolean(SAVED_INSTANCE_STATE_RETRY_ENABLED, mRetryEnabled);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

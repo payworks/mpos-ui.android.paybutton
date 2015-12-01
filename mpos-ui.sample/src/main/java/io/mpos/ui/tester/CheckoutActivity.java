@@ -48,9 +48,11 @@ import java.util.EnumSet;
 
 import io.mpos.Mpos;
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactions.Currency;
+import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.acquirer.ApplicationName;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.model.MposUiConfiguration;
@@ -137,7 +139,8 @@ public class CheckoutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!mIsAcquirerMode) {
                     MposUi mposUi = MposUi.getInitializedInstance();
-                    mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.VERIFONE_E105);
+                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.VERIFONE_E105).audioJack().build();
+                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
                     mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 }
                 startPayment(13.37);
@@ -150,7 +153,8 @@ public class CheckoutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!mIsAcquirerMode) {
                     MposUi mposUi = MposUi.getInitializedInstance();
-                    mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MIURA_MPI);
+                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
+                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
                     mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 }
                 startPayment(13.37);
@@ -168,7 +172,10 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.refund_last).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent refundIntent = MposUi.getInitializedInstance().createRefundTransactionIntent(mLastTransactionIdentifier, null, null);
+                TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(mLastTransactionIdentifier).
+                        subject("subject-refund").
+                        build();
+                Intent refundIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
                 startActivity(refundIntent);
             }
         });
@@ -228,22 +235,30 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
-
         updateViews();
     }
 
     void initMockPaymentController() {
         MposUi mposUi = MposUi.initialize(this, ProviderMode.MOCK, "mock", "mock");
-        mposUi.getConfiguration().setAccessoryFamily(AccessoryFamily.MOCK);
+        AccessoryParameters mockAccessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MOCK).mocked().build();
+        mposUi.getConfiguration().setTerminalParameters(mockAccessoryParameters);
         mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
     }
 
     void startPayment(double amount) {
-        Intent intent = MposUi.getInitializedInstance().createChargeTransactionIntent(BigDecimal.valueOf(amount), Currency.EUR, "subject", "hello");
+        TransactionParameters params = new TransactionParameters.Builder().
+                charge(BigDecimal.valueOf(amount), Currency.EUR).
+                subject("subject").
+                customIdentifier("customId").
+                build();
+        Intent intent = MposUi.getInitializedInstance().createTransactionIntent(params);
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
+
     }
 
     void printReceipt(String transactionIdentifier) {
+        AccessoryParameters printerAccessoryParams = new AccessoryParameters.Builder(AccessoryFamily.SEWOO).bluetooth().build();
+        MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(printerAccessoryParams);
         Intent intent = MposUi.getInitializedInstance().createPrintReceiptIntent(transactionIdentifier);
         startActivityForResult(intent, MposUi.REQUEST_CODE_PRINT_RECEIPT);
     }

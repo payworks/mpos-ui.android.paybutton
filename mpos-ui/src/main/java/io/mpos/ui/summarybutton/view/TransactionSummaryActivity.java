@@ -272,7 +272,7 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     private void showSummaryFragment() {
-        SummaryFragment fragment = SummaryFragment.newInstance(false, true, mTransactionDataHolder, null);
+        SummaryFragment fragment = SummaryFragment.newInstance(false, true, mTransactionDataHolder);
         showFragment(fragment, SummaryFragment.TAG, UiState.SUMMARY_DISPLAYING, true);
     }
 
