@@ -48,8 +48,9 @@
         <a href=\'http://payworksmobile.com\'>Website</a>&nbsp;&nbsp;
         <a href=\'https://github.com/payworks\'>GitHub</a>
     ]]></string>
-    <string name="init_with_concardis">Initialize with Concardis</string>
+    <string name="init_with_concardis">Initialize with ConCardis</string>
     <string name="init_with_mcashier">Initialize with mCashier</string>
+    <string name="init_with_secure_retail">Initialize with Secure Retail</string>
     <string name="init_with_provider">Initialize with Provider</string>
     <string name="login">Login</string>
     <string name="settings">Settings</string>

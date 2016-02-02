@@ -28,6 +28,7 @@
     <string name="mpu_fa_bank" translatable="false">&#xf19c;</string>
     <string name="mpu_fa_th" translatable="false">&#xf00a;</string>
     <string name="mpu_fa_lock" translatable="false">&#xf023;</string>
+    <string name="mpu_fa_search" translatable="false">&#xf002;</string>
     <string name="mpu_fa_credit_card" translatable="false">&#xf09d;</string>
     <string name="mpu_fa_times_circle" translatable="false">&#xf057;</string>
     <string name="mpu_fa_compress" translatable="false">&#xf066;</string>

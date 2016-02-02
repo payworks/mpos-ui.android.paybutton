@@ -22,8 +22,8 @@
         <item>true</item>
         <item>true</item>
         <item>true</item>
-        <item>#006379</item>
-        <item>#004A5A</item>
+        <item>#dc4405</item>
+        <item>#A03203</item>
         <item>#FFFFFF</item>
         <item>#EEEEEE</item>
     </string-array>
@@ -37,6 +37,19 @@
         <item>true</item>
         <item>#82BFCF</item>
         <item>#6CB4C6</item>
+        <item>#FFFFFF</item>
+        <item>#EEEEEE</item>
+    </string-array>
+
+    <string-array name="mpu_acquirer_secure_retail">
+        <item>secureretail.terminal</item>
+        <item>Miura</item>
+        <item>Sewoo</item>
+        <item>false</item>
+        <item>true</item>
+        <item>true</item>
+        <item>#1b0a40</item>
+        <item>#0F0623</item>
         <item>#FFFFFF</item>
         <item>#EEEEEE</item>
     </string-array>

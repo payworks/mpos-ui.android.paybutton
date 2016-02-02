@@ -28,6 +28,7 @@ package io.mpos.ui.shared;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.math.BigDecimal;
 
@@ -137,8 +138,32 @@ public final class MposUi {
         return initialize(context, mode, merchantIdentifier, merchantSecret);
     }
 
+    /**
+     * Initialization using an application for this singleton class.
+     * ProviderMode is set to LIVE by default
+     *
+     * @param context              Android context of your application.
+     * @param applicationName      Enum value specifying which Application to use.
+     * @param integratorIdentifier Identifier of the integrator.
+     * @return Initialized singleton object.
+     * @deprecated 2.6.0
+     */
+    @Deprecated
     public static MposUi initialize(Context context, ApplicationName applicationName, String integratorIdentifier) {
-        INSTANCE = new MposUi(context.getApplicationContext(), applicationName, integratorIdentifier);
+        return initialize(context.getApplicationContext(), ProviderMode.LIVE, applicationName, integratorIdentifier);
+    }
+
+    /**
+     * Initialization method for this singleton class.
+     *
+     * @param context              Android context of your application.
+     * @param providerMode         Enum value specifying which backend environment to use.
+     * @param applicationName      Enum value specifying which Application to use.
+     * @param integratorIdentifier Identifier of the integrator.
+     * @return Initialized singleton object.
+     */
+    public static MposUi initialize(Context context, ProviderMode providerMode, ApplicationName applicationName, String integratorIdentifier) {
+        INSTANCE = new MposUi(context.getApplicationContext(), providerMode, applicationName, integratorIdentifier);
         return INSTANCE;
     }
 
@@ -475,15 +500,20 @@ public final class MposUi {
         mMposUiMode = MposUiMode.PROVIDER;
     }
 
-    private MposUi(Context context, ApplicationName applicationName, String integratorIdentifier) {
+    private MposUi(Context context, ProviderMode providerMode, ApplicationName applicationName, String integratorIdentifier) {
+
+        if (TextUtils.isEmpty(integratorIdentifier)) {
+            throw new IllegalArgumentException("Integrator Identifier cannot be null / empty.");
+        }
+
         mMposUiMode = MposUiMode.ACQUIRER;
         mContext = context;
-        mMposUiAccountManager = MposUiAccountManager.initialize(context, applicationName, integratorIdentifier);
+        mMposUiAccountManager = MposUiAccountManager.initialize(context, providerMode, applicationName, integratorIdentifier);
         mConfiguration = mMposUiAccountManager.getApplicationData().getMposUiConfiguration();
         if (mMposUiAccountManager.isLoggedIn()) {
             mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
             mMerchantSecret = mMposUiAccountManager.getMerchantSecretKey();
-            mProviderMode = ProviderMode.LIVE;
+            mProviderMode = mMposUiAccountManager.getProviderMode();
         }
     }
 

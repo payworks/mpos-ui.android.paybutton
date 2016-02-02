@@ -210,6 +210,11 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mCurrentTransactionProcess.continueWithCustomerSignature(signature, verified);
     }
 
+    public void continueWithCustomerSignatureOnReceipt() {
+        mAwaitingSignature = false;
+        mCurrentTransactionProcess.continueWithCustomerSignatureOnReceipt();
+    }
+
     public void continueWithApplicationSelection(ApplicationInformation selectedApplication) {
         mAwaitingApplicationSelection = false;
         mCurrentTransactionProcess.continueWithSelectedApplication(selectedApplication);

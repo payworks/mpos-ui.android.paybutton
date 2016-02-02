@@ -61,6 +61,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
     private static final String PREFERENCE_KEY_USERNAME = "io.mpos.ui.account.merchant.username";
     private static final String PREFERENCE_KEY_APPLICATION_ID = "io.mpos.ui.account.applicationid";
 
+    private ProviderMode mProviderMode;
     private ApplicationData mApplicationData;
     private String mMerchantIdentifier;
     private String mApplicationId;
@@ -72,11 +73,11 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
 
     private static MposUiAccountManager INSTANCE;
 
-    public static MposUiAccountManager initialize(Context context, ApplicationName applicationName, String integratorIdentifier) {
+    public static MposUiAccountManager initialize(Context context, ProviderMode providerMode, ApplicationName applicationName, String integratorIdentifier) {
         if (INSTANCE != null && applicationName == INSTANCE.getApplicationData().getApplicationName()) {
             return INSTANCE;
         }
-        INSTANCE = new MposUiAccountManager(context, applicationName, integratorIdentifier);
+        INSTANCE = new MposUiAccountManager(context, providerMode, applicationName, integratorIdentifier);
         return INSTANCE;
     }
 
@@ -84,7 +85,8 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         return INSTANCE;
     }
 
-    private MposUiAccountManager(Context context, ApplicationName applicationName, String integratorIdentifier) {
+    private MposUiAccountManager(Context context, ProviderMode providerMode, ApplicationName applicationName, String integratorIdentifier) {
+        mProviderMode = providerMode;
         mApplicationData = new ApplicationData();
         mApplicationData.setApplicationName(applicationName);
         mIntegratorIdentifier = integratorIdentifier;
@@ -95,6 +97,8 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
             case CONCARDIS:
                 init(context, R.array.mpu_acquirer_concardis, R.drawable.mpu_concardis_logo);
                 break;
+            case SECURE_RETAIL:
+                init(context, R.array.mpu_acquirer_secure_retail, R.drawable.mpu_secure_retail_logo);
         }
         mSharedPrefs = context.getSharedPreferences(SHARED_PREFERENCE_FILE_NAME_KEY, Context.MODE_PRIVATE);
         mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
@@ -254,7 +258,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
     }
 
     public ProviderMode getProviderMode() {
-        return ProviderMode.LIVE;
+        return mProviderMode;
     }
 
 }

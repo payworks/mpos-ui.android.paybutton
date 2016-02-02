@@ -190,11 +190,11 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         }
     }
 
-    private String modifyCustomIdentifier(String applicationIdentifier, String customIdentifier) {
-        if (customIdentifier != null || !TextUtils.isEmpty(customIdentifier)) {
-            return applicationIdentifier + "-" + customIdentifier;
+    private String modifyCustomIdentifier(String integratorIdentifier, String customIdentifier) {
+        if (!TextUtils.isEmpty(customIdentifier)) {
+            return integratorIdentifier + "-" + customIdentifier;
         }
-        return applicationIdentifier;
+        return integratorIdentifier;
     }
 
     private void parseExtras() {
@@ -230,8 +230,13 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     private void startTransaction() {
 
         if (mIsAcquirerMode) {
-            String customIdentifierPrefix = MposUiAccountManager.getInitializedInstance().getIntegratorIdentifier();
-            mCustomIdentifier = modifyCustomIdentifier(customIdentifierPrefix, mCustomIdentifier);
+            String integratorIdentifier = MposUiAccountManager.getInitializedInstance().getIntegratorIdentifier();
+            if (mHasTransactionParameters) {
+                String modifiedCustomIdentifier = modifyCustomIdentifier(integratorIdentifier, mTransactionParameters.getCustomIdentifier());
+                mTransactionParameters = io.mpos.ui.shared.util.TransactionParametersHelper.getTransactionParametersWithNewCustomerIdentifier(mTransactionParameters, modifiedCustomIdentifier);
+            } else {
+                mCustomIdentifier = modifyCustomIdentifier(integratorIdentifier, mCustomIdentifier);
+            }
         }
 
         if (mHasSessionIdentifier) {
@@ -241,7 +246,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
                 mStatefulTransactionProviderProxy.startTransactionWithSessionIdentifier(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryFamily, mSessionIdentifier);
             }
         } else if (mHasTransactionParameters) {
-
             mStatefulTransactionProviderProxy.startTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryParameters, mTransactionParameters);
         } else {
             if (mIsRefund) {
@@ -250,7 +254,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
                 mStatefulTransactionProviderProxy.startChargeTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryFamily, mAmount, mCurrency, mSubject, mCustomIdentifier);
             }
         }
-
     }
 
     private void constructTransactionTypeTitle() {
@@ -341,7 +344,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         if (MposUi.getInitializedInstance().getConfiguration().getSignatureCapture() == MposUiConfiguration.SignatureCapture.ON_SCREEN) {
             showSignatureActivity();
         } else {
-            throw new IllegalStateException("Signature on paper isn't supported, right now!");
+            mStatefulTransactionProviderProxy.continueWithCustomerSignatureOnReceipt();
         }
     }
 
@@ -380,6 +383,8 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
             }
             if (mStatefulTransactionProviderProxy.getLastTransactionProcessDetails().getState() == TransactionProcessDetailsState.NOT_REFUNDABLE) {
                 showErrorFragment(UiState.TRANSACTION_ERROR, false, error, details);
+            } else if (error.getErrorType() == ErrorType.ACCESSORY_BUSY) {
+                showErrorFragment(UiState.TRANSACTION_ERROR, true, error, details);
             } else {
                 showErrorFragment(UiState.TRANSACTION_ERROR, !getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), error, details);
             }

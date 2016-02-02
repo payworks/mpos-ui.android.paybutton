@@ -215,7 +215,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mIsAcquirerMode = true;
-                MposUi.initialize(CheckoutActivity.this, ApplicationName.CONCARDIS, "test-integrator");
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, ApplicationName.CONCARDIS, "test-integrator");
             }
         });
 
@@ -223,7 +223,15 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mIsAcquirerMode = true;
-                MposUi.initialize(CheckoutActivity.this, ApplicationName.MCASHIER, "test-integrator");
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, ApplicationName.MCASHIER, "test-integrator");
+            }
+        });
+
+        findViewById(R.id.init_with_secure_retail).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsAcquirerMode = true;
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, ApplicationName.SECURE_RETAIL, "test-integrator");
             }
         });
 

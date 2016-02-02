@@ -135,6 +135,15 @@
             android:background="#707070"/>
 
         <TextView
+            android:id="@+id/init_with_provider"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#CDDC39"
+            android:text="@string/init_with_provider"
+            />
+
+        <TextView
             android:id="@+id/init_with_concardis"
             style="@style/CheckoutButton"
             android:layout_width="match_parent"
@@ -154,12 +163,13 @@
             />
 
         <TextView
-            android:id="@+id/init_with_provider"
+            android:id="@+id/init_with_secure_retail"
             style="@style/CheckoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#CDDC39"
-            android:text="@string/init_with_provider"
+            android:background="#1b0a40"
+            android:text="@string/init_with_secure_retail"
+            android:textColor="@android:color/white"
             />
 
         <TextView
