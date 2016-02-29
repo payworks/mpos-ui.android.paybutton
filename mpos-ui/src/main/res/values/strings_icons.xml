@@ -36,5 +36,6 @@
     <string name="mpu_fa_email" translatable="false">&#xf0e0;</string>
     <string name="mpu_fa_history" translatable="false">&#xf1da;</string>
     <string name="mpu_fa_print" translatable="false">&#xf02f;</string>
+    <string name="mpu_fa_info" translatable="false">&#xf129;</string>
     <string name="MPUUnknown" translatable="false">Unknown</string>
 </resources>

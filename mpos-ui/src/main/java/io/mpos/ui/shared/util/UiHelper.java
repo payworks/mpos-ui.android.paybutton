@@ -126,6 +126,14 @@ public class UiHelper {
                     return R.drawable.mpu_visacard_image;
                 case AMERICAN_EXPRESS:
                     return R.drawable.mpu_american_express_image;
+                case JCB:
+                    return R.drawable.mpu_jcb_image;
+                case DINERS:
+                    return R.drawable.mpu_diners_image;
+                case DISCOVER:
+                    return R.drawable.mpu_discover_image;
+                case UNION_PAY:
+                    return R.drawable.mpu_unionpay_image;
                 default:
                     return -1;
             }

@@ -51,6 +51,7 @@ import io.mpos.accessories.AccessoryFamily;
 import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
+import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.acquirer.ApplicationName;
@@ -134,6 +135,27 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.transaction_ask_for_tip).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initMockPaymentController();
+
+                //Styling the Payment Controller.
+                MposUi.getInitializedInstance()
+                        .getConfiguration().getAppearance()
+                        .setColorPrimary(Color.parseColor("#ffbb00"))
+                        .setColorPrimaryDark(Color.parseColor("#D49B00"))
+                        .setBackgroundColor(Color.parseColor("#FFF3E0"))
+                        .setTextColorPrimary(Color.BLACK);
+
+                TransactionProcessParameters processParameters = new TransactionProcessParameters.Builder()
+                        .addAskForTipStep()
+                        .build();
+
+                startPayment(105, processParameters);
+            }
+        });
+
         findViewById(R.id.transaction_e105_charge).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +180,20 @@ public class CheckoutActivity extends AppCompatActivity {
                     mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 }
                 startPayment(13.37);
+            }
+        });
+
+        findViewById(R.id.transaction_miura_charge_with_tip).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mIsAcquirerMode) {
+                    MposUi mposUi = MposUi.getInitializedInstance();
+                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
+                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
+                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                }
+                TransactionProcessParameters processParameters = new TransactionProcessParameters.Builder().addAskForTipStep().build();
+                startPayment(13.37, processParameters);
             }
         });
 
@@ -254,14 +290,17 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     void startPayment(double amount) {
+        startPayment(amount, null);
+    }
+
+    void startPayment(double amount, TransactionProcessParameters processParameters) {
         TransactionParameters params = new TransactionParameters.Builder().
                 charge(BigDecimal.valueOf(amount), Currency.EUR).
                 subject("subject").
                 customIdentifier("customId").
                 build();
-        Intent intent = MposUi.getInitializedInstance().createTransactionIntent(params);
+        Intent intent = MposUi.getInitializedInstance().createTransactionIntent(params, processParameters);
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
-
     }
 
     void printReceipt(String transactionIdentifier) {

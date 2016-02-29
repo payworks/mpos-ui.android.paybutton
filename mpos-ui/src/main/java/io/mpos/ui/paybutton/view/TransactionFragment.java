@@ -132,6 +132,7 @@ public class TransactionFragment extends AbstractTransactionFragment {
 
     private boolean showProgressView(TransactionProcessDetailsStateDetails state)  {
         switch(state) {
+            case PREPARING_TRANSACTION_ASKING_FOR_TIP:
             case PROCESSING_WAITING_FOR_PIN:
             case PROCESSING_WAITING_FOR_CARD_PRESENTATION:
             case PROCESSING_WAITING_FOR_CARD_REMOVAL:
@@ -161,6 +162,8 @@ public class TransactionFragment extends AbstractTransactionFragment {
             case CREATED:
             case INITIALIZING_TRANSACTION:
                 return getString(R.string.mpu_fa_lock);
+            case PREPARING:
+                return getString(R.string.mpu_fa_info);
             case PROCESSING:
                 return getString(R.string.mpu_fa_bank);
             case WAITING_FOR_CARD_PRESENTATION:

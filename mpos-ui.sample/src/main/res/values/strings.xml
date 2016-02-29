@@ -25,17 +25,19 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <string name="app_name">mPOS UI Sample</string>
-    <string name="title_activity_checkout">mPOS UI Sample</string>
+    <string name="app_name">PayButton Sample</string>
+    <string name="title_activity_checkout">PayButton Sample</string>
     <string name="option_signature_required">Charge 108.20€\nSignature required</string>
     <string name="header_mock">MOCK: Simulated internet and card reader</string>
     <string name="option_application_selection">Charge 113.73€\nApplication selection required</string>
     <string name="option_transaction_declined">Charge 110.40€\nTransaction fails</string>
+    <string name="option_ask_for_tip">Charge 105€\nAsk for tip, input 1€</string>
     <string name="header_test">TEST : Test environment and real card reader</string>
     <string name="header_init">Initialization</string>
     <string name="header_acquirer">Acquirer</string>
     <string name="option_e105">Charge 13.37€ on a E105</string>
     <string name="option_miura">Charge 13.37€ on a MIURA</string>
+    <string name="option_miura_with_tip">Charge 13.37€ on a MIURA\nAsk for tip</string>
     <string name="header_last_transaction">Last transaction</string>
     <string name="option_last_summary">Show summary of last transaction</string>
     <string name="option_last_refund">Refund last transaction</string>

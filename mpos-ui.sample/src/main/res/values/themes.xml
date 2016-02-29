@@ -27,7 +27,7 @@
 <resources>
     <style name="Theme.MyTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#2196f3</item>
-        <item name="colorPrimaryDark">#0d47a1</item>
+        <item name="colorPrimaryDark">#0C85E9</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">true</item>
     </style>

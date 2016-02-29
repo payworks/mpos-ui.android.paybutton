@@ -48,6 +48,7 @@ import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
+import io.mpos.ui.shared.util.ParametersHelper;
 import io.mpos.ui.shared.util.UiHelper;
 
 public class PrintReceiptFragment extends Fragment implements StatefulPrintingProcessProxy.Callback {
@@ -86,14 +87,13 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
         setRetainInstance(true);
 
         mTransactionProvider = mInteractionActivity.getTransactionProvider();
-        AccessoryFamily accessoryFamily = MposUi.getInitializedInstance().getConfiguration().getPrinterAccessoryFamily();
         AccessoryParameters accessoryParameters = MposUi.getInitializedInstance().getConfiguration().getPrinterParameters();
-
-        if (accessoryParameters != null) {
-            mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider, accessoryParameters);
-        } else {
-            mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider, accessoryFamily);
+        if (accessoryParameters == null) {
+            AccessoryFamily accessoryFamily = MposUi.getInitializedInstance().getConfiguration().getPrinterAccessoryFamily();
+            accessoryParameters = ParametersHelper.getAccessoryParametersForAccessoryFamily(accessoryFamily);
         }
+
+        mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider, accessoryParameters);
     }
 
     @Nullable

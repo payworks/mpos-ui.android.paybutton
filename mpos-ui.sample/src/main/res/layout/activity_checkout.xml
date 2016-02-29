@@ -89,6 +89,15 @@
             />
 
         <TextView
+            android:id="@+id/transaction_ask_for_tip"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffbb00"
+            android:text="@string/option_ask_for_tip"
+            />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -109,6 +118,15 @@
             android:layout_height="wrap_content"
             android:background="#B0BEC5"
             android:text="@string/option_miura"
+            />
+
+        <TextView
+            android:id="@+id/transaction_miura_charge_with_tip"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#909ba1"
+            android:text="@string/option_miura_with_tip"
             />
 
         <TextView

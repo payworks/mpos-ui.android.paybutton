@@ -47,6 +47,7 @@ import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactionprovider.TransactionProcessDetailsState;
 import io.mpos.transactionprovider.TransactionProcessWithRegistrationListener;
 import io.mpos.transactionprovider.TransactionProvider;
+import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.TransactionTemplate;
@@ -131,19 +132,20 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mTransactionSessionLookup = true;
     }
 
-    public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, String sessionIdentifier) {
+    public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, String sessionIdentifier, TransactionProcessParameters transactionProcessParameters) {
         clearForNewTransaction();
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
+        mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryParameters, transactionProcessParameters, this);
 
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryParameters, this);
         mTransactionIsOnGoing = true;
         mTransactionSessionLookup = true;
     }
 
-    public void startTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, TransactionParameters transactionParameters) {
+    public void startTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, TransactionParameters transactionParameters, TransactionProcessParameters transactionProcessParameters) {
         clearForNewTransaction();
         mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(transactionParameters, accessoryParameters, this);
+        mCurrentTransactionProcess = mTransactionProvider.startTransaction(transactionParameters, accessoryParameters, transactionProcessParameters, this);
+
         mTransactionIsOnGoing = true;
     }
 
@@ -175,7 +177,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         }
 
         if (mCallback != null) {
-
             //signature required callback
             if (!mAwaitingSignature && !mAwaitingApplicationSelection) {
                 mCallback.onStatusChanged(paymentProcessDetails, transaction);
