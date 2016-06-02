@@ -37,10 +37,12 @@
     <string name="header_acquirer">Acquirer</string>
     <string name="option_e105">Charge 13.37€ on a E105</string>
     <string name="option_miura">Charge 13.37€ on a MIURA</string>
+    <string name="option_miura_preauthorize">Pre-Authorize 13.37€ on a MIURA</string>
     <string name="option_miura_with_tip">Charge 13.37€ on a MIURA\nAsk for tip</string>
     <string name="header_last_transaction">Last transaction</string>
     <string name="option_last_summary">Show summary of last transaction</string>
     <string name="option_last_refund">Refund last transaction</string>
+    <string name="option_last_capture">Capture last transaction</string>
     <string name="option_last_print">Print last transaction</string>
     <string name="info">Info</string>
     <string name="info_pw_paybutton">payworks Pay Button (BETA)</string>
@@ -53,6 +55,7 @@
     <string name="init_with_concardis">Initialize with ConCardis</string>
     <string name="init_with_mcashier">Initialize with mCashier</string>
     <string name="init_with_secure_retail">Initialize with Secure Retail</string>
+    <string name="init_with_yourbrand">Initialize with YourBrand</string>
     <string name="init_with_provider">Initialize with Provider</string>
     <string name="login">Login</string>
     <string name="settings">Settings</string>

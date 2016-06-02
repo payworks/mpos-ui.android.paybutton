@@ -4,7 +4,7 @@
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Anuluj"</string>
 <string name="MPURetry">"Spróbuj ponownie"</string>
@@ -32,15 +31,25 @@
 <string name="MPUResendReceipt">"Powtórnie wyślij pokwitowanie"</string>
 <string name="MPUClose">"Zamknij"</string>
 <string name="MPUPaymentSuccessful">"Płatność wykonano."</string>
-<string name="MPUPaymentRefunded">"Płatność zwrócono."</string>
-<string name="MPUPaymentDeclined">"Płatność odrzucono."</string>
-<string name="MPUPaymentAborted">"Płatność anulowano."</string>
+<string name="MPURefunded">"Zwrócono"</string>
+<string name="MPUDeclined">"Odrzucono"</string>
+<string name="MPUAborted">"Anulowano"</string>
+<string name="MPUPreauthorized">"Wstępnie autoryzowano"</string>
+<string name="MPUTotal">"Łącznie"</string>
+<string name="MPUSale">"Sprzedaż"</string>
+<string name="MPUUnknown">"Nieznany"</string>
 <string name="MPURefundApproved">"Zwrot wykonano."</string>
 <string name="MPURefundDeclined">"Zwrot odrzucono."</string>
 <string name="MPURefundAborted">"Zwrot anulowano."</string>
 <string name="MPURefundPayment">"Zwróć płatność"</string>
+<string name="MPUCapturePayment">"Przechwycić płatność"</string>
 <string name="MPURefundPrompt">"Czy na pewno chcesz zwrócić tę płatność?"</string>
+<string name="MPUCapturePrompt">"Na pewno chcesz przechwycić tę płatność?"</string>
+<string name="MPUTransactionTypeSale">"Sprzedaż"</string>
+<string name="MPUTransactionTypeRefund">"Zwrot"</string>
+<string name="MPUTransactionTypePreauthorization">"Preautoryzacja"</string>
 <string name="MPURefund">"Zwrot"</string>
+<string name="MPUCapture">"Przechwyć"</string>
 <string name="MPUSummary">"Podsumowanie"</string>
 <string name="MPUInvalidEmailAddress">"Niepoprawny adres e-mail"</string>
 <string name="MPUEnterValidEmailAddress">"Wprowadź poprawny adres e-mail."</string>
@@ -48,9 +57,9 @@
 <string name="MPUCouldNotSendReceipt">"Nie można wysłać pokwitowania"</string>
 <string name="MPUPleaseTryAgain">"Spróbuj ponownie."</string>
 <string name="MPUSelectAccount">"Wybierz konto"</string>
-<string name="MPUSale">"Sprzedaż"</string>
 <string name="MPUEnterEmailAddress">"Wprowadź adres e-mail"</string>
 <string name="MPUSend">"Wyślij"</string>
+<string name="MPUResend">"Wyślij ponownie"</string>
 <string name="MPUContinue">"Kontynuuj"</string>
 <string name="MPUBackButtonDisabled">"Przycisk "cofnij" jest nieaktywny w fazie płacenia. Użyj klawiszy powyżej."</string>
 <string name="MPUSignatureStatusLine">"Zgadzam się zapłacić kwotę %1$s."</string>
@@ -80,7 +89,8 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUPrintReceipt">"Wydrukuj pokwitowanie"</string>
-<string name="MPUReprintReceipt">"Powtórnie wydrukuj pokwitowanie"</string>
+<string name="MPUReprint">"Drukuj ponownie"</string>
 <string name="MPUPrinting">"Drukowanie..."</string>
+<string name="MPUPrint">"Drukuj"</string>
+<string name="MPUPartiallyCaptured">"Preautoryzacja dla %1$s"</string>
 </resources>

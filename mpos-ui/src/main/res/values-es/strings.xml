@@ -4,7 +4,7 @@
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Cancelar"</string>
 <string name="MPURetry">"Volver a intentar"</string>
@@ -32,15 +31,25 @@
 <string name="MPUResendReceipt">"Reenviar Recibo"</string>
 <string name="MPUClose">"Cerrar"</string>
 <string name="MPUPaymentSuccessful">"Pago completado."</string>
-<string name="MPUPaymentRefunded">"Pago reembolsado."</string>
-<string name="MPUPaymentDeclined">"Pago rechazado."</string>
-<string name="MPUPaymentAborted">"Pago abortado."</string>
+<string name="MPURefunded">"Reembolsado"</string>
+<string name="MPUDeclined">"Rechazado"</string>
+<string name="MPUAborted">"Abortado"</string>
+<string name="MPUPreauthorized">"Preautorizado"</string>
+<string name="MPUTotal">"Total"</string>
+<string name="MPUSale">"Pago"</string>
+<string name="MPUUnknown">"Desconocido"</string>
 <string name="MPURefundApproved">"Reembolso completado con éxito."</string>
 <string name="MPURefundDeclined">"Reembolso rechazado."</string>
 <string name="MPURefundAborted">"Reembolso cancelado."</string>
 <string name="MPURefundPayment">"Reembolsar pago"</string>
+<string name="MPUCapturePayment">"Capturar pago"</string>
 <string name="MPURefundPrompt">"¿Está seguro de que quiere reembolsar el pago?"</string>
+<string name="MPUCapturePrompt">"¿Está seguro de que desea capturar este pago?"</string>
+<string name="MPUTransactionTypeSale">"Venta"</string>
+<string name="MPUTransactionTypeRefund">"Reembolso"</string>
+<string name="MPUTransactionTypePreauthorization">"Preautorización"</string>
 <string name="MPURefund">"Reembolso"</string>
+<string name="MPUCapture">"Capturar"</string>
 <string name="MPUSummary">"Sumario"</string>
 <string name="MPUInvalidEmailAddress">"Correo electrónico inválido"</string>
 <string name="MPUEnterValidEmailAddress">"Por favor introduzca un correo electrónico válido."</string>
@@ -48,9 +57,9 @@
 <string name="MPUCouldNotSendReceipt">"No se pudo enviar el recibo"</string>
 <string name="MPUPleaseTryAgain">"Por favor, inténtelo de nuevo"</string>
 <string name="MPUSelectAccount">"Selecione una cuenta"</string>
-<string name="MPUSale">"Venta"</string>
 <string name="MPUEnterEmailAddress">"Correo electrónico"</string>
 <string name="MPUSend">"Enviar"</string>
+<string name="MPUResend">"Reenviar"</string>
 <string name="MPUContinue">"Continuar"</string>
 <string name="MPUBackButtonDisabled">"El botón Atrás ha sido desactivado durante el proceso de pago. Por favor, utilice los botones de arriba."</string>
 <string name="MPUSignatureStatusLine">"Estoy de acuerdo en pagar la cantidad de %1$s."</string>
@@ -80,7 +89,8 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUPrintReceipt">"Imprimir Recibo"</string>
-<string name="MPUReprintReceipt">"Reimprimir Recibo"</string>
+<string name="MPUReprint">"Volver a imprimir"</string>
 <string name="MPUPrinting">"Imprimiendo..."</string>
+<string name="MPUPrint">"Imprimir"</string>
+<string name="MPUPartiallyCaptured">"de la preautorización para %1$s"</string>
 </resources>

@@ -113,7 +113,7 @@ public class UiHelper {
         button.setTextColor(getColorsStateListForTint(color));
     }
 
-    public static int getDrawableIdImageForCreditCard(PaymentDetailsScheme cardScheme) {
+    public static int getDrawableIdForCardScheme(PaymentDetailsScheme cardScheme) {
         //if the given scheme is something totally unknown, we catch the exception and send back a -1
         try {
             switch (cardScheme) {
@@ -146,6 +146,30 @@ public class UiHelper {
         Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
         DrawableCompat.setTint(wrappedDrawable, color);
         view.setBackgroundDrawable(wrappedDrawable);
+    }
+
+    public static String getPartialCaptureHintText(Context context, BigDecimal amount, Currency currency) {
+        String amountText = formatAmountWithSymbol(currency, amount);
+        return context.getString(R.string.MPUPartiallyCaptured, amountText);
+    }
+
+    public static String formatAccountNumber(String accountNumber) {
+        if (accountNumber == null) {
+            return "";
+        }
+        accountNumber = accountNumber.replaceAll(" ", ""); // Removing spaces
+        accountNumber = accountNumber.replaceAll("-", ""); // Removing dashes(-)
+        accountNumber = accountNumber.replaceAll("[^0-9]", "\u2022"); // Making everything except numbers X's
+
+        int initialLength = accountNumber.length();
+        int numberOfSpaces = (initialLength - 1) / 4;
+
+        StringBuilder sb = new StringBuilder(accountNumber);
+        for (int i = 1; i <= numberOfSpaces; i++) {
+            sb.insert(initialLength - 4 * i, " "); // Inserting spaces in the right spot.
+        }
+
+        return sb.toString();
     }
 
     private static void setupUpNavigation(final AppCompatActivity activity, Toolbar toolbar) {

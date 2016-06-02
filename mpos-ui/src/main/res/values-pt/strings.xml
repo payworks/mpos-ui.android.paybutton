@@ -4,7 +4,7 @@
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Abortar"</string>
 <string name="MPURetry">"Voltar a tentar"</string>
@@ -32,15 +31,25 @@
 <string name="MPUResendReceipt">"Reenviar Recibo"</string>
 <string name="MPUClose">"Fechar"</string>
 <string name="MPUPaymentSuccessful">"Pagamento bem sucedido."</string>
-<string name="MPUPaymentRefunded">"Pagamento reembolsado."</string>
-<string name="MPUPaymentDeclined">"Pagamento rejeitado."</string>
-<string name="MPUPaymentAborted">"Pagamento abortado."</string>
+<string name="MPURefunded">"Reembolsado"</string>
+<string name="MPUDeclined">"Rejeitado"</string>
+<string name="MPUAborted">"Abortado"</string>
+<string name="MPUPreauthorized">"Pré-autorizado"</string>
+<string name="MPUTotal">"Total"</string>
+<string name="MPUSale">"Venda"</string>
+<string name="MPUUnknown">"Desconhecido"</string>
 <string name="MPURefundApproved">"Reembolso bem sucedido."</string>
 <string name="MPURefundDeclined">"Reembolso rejeitado."</string>
 <string name="MPURefundAborted">"Reembolso abortado."</string>
 <string name="MPURefundPayment">"Reembolsar pagamento"</string>
+<string name="MPUCapturePayment">"Capturar pagamento"</string>
 <string name="MPURefundPrompt">"Tem a certeza que pretende reembolsar este pagamento?"</string>
+<string name="MPUCapturePrompt">"Tem a certeza de que quer capturar este pagamento?"</string>
+<string name="MPUTransactionTypeSale">"Venda"</string>
+<string name="MPUTransactionTypeRefund">"Reembolso"</string>
+<string name="MPUTransactionTypePreauthorization">"Pré-autorização"</string>
 <string name="MPURefund">"Reembolso"</string>
+<string name="MPUCapture">"Capturar"</string>
 <string name="MPUSummary">"Sumário"</string>
 <string name="MPUInvalidEmailAddress">"Email inválido"</string>
 <string name="MPUEnterValidEmailAddress">"Por favor insira um endereço de email válido."</string>
@@ -48,9 +57,9 @@
 <string name="MPUCouldNotSendReceipt">"Não foi possível enviar o recibo"</string>
 <string name="MPUPleaseTryAgain">"Por favor tente novamente."</string>
 <string name="MPUSelectAccount">"Seleccione conta"</string>
-<string name="MPUSale">"Venda"</string>
 <string name="MPUEnterEmailAddress">"Introduza o email"</string>
 <string name="MPUSend">"Enviar"</string>
+<string name="MPUResend">"Reenviar"</string>
 <string name="MPUContinue">"Continuar"</string>
 <string name="MPUBackButtonDisabled">"A função "Voltar" é desactivada durante o processo de pagamento. Por favor utilize as funções acima."</string>
 <string name="MPUSignatureStatusLine">"Concordo pagar o montante de %1$s."</string>
@@ -80,7 +89,8 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUPrintReceipt">"Imprimir Recibo"</string>
-<string name="MPUReprintReceipt">"Reimprimir Recibo"</string>
+<string name="MPUReprint">"Reimprimir"</string>
 <string name="MPUPrinting">"A imprimir..."</string>
+<string name="MPUPrint">"Imprimir"</string>
+<string name="MPUPartiallyCaptured">"de Pré-autorização para %1$s"</string>
 </resources>

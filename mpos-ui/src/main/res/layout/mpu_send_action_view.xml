@@ -4,7 +4,7 @@
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,9 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<resources>
-    <string name="mpu_fa_bank" translatable="false">&#xf19c;</string>
-    <string name="mpu_fa_th" translatable="false">&#xf00a;</string>
-    <string name="mpu_fa_lock" translatable="false">&#xf023;</string>
-    <string name="mpu_fa_search" translatable="false">&#xf002;</string>
-    <string name="mpu_fa_credit_card" translatable="false">&#xf09d;</string>
-    <string name="mpu_fa_times_circle" translatable="false">&#xf057;</string>
-    <string name="mpu_fa_compress" translatable="false">&#xf066;</string>
-    <string name="mpu_fa_close" translatable="false">&#xf00d;</string>
-    <string name="mpu_fa_email" translatable="false">&#xf0e0;</string>
-    <string name="mpu_fa_history" translatable="false">&#xf1da;</string>
-    <string name="mpu_fa_print" translatable="false">&#xf02f;</string>
-    <string name="mpu_fa_info" translatable="false">&#xf129;</string>
-</resources>
+<Button android:id="@+id/mpu_menu_send_button"
+        style="@style/MpuActionButtonStyle"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/MPUSend"/>

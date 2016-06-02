@@ -28,5 +28,6 @@ package io.mpos.ui.acquirer;
 public enum ApplicationName {
     MCASHIER,
     CONCARDIS,
-    SECURE_RETAIL
+    SECURE_RETAIL,
+    YOURBRAND
 }

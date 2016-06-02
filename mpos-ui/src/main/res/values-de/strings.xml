@@ -4,7 +4,7 @@
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Abbrechen"</string>
 <string name="MPURetry">"Wiederholen"</string>
@@ -32,15 +31,25 @@
 <string name="MPUResendReceipt">"Beleg nochmals senden"</string>
 <string name="MPUClose">"Schließen"</string>
 <string name="MPUPaymentSuccessful">"Zahlung erfolgreich."</string>
-<string name="MPUPaymentRefunded">"Zahlung zurückerstattet."</string>
-<string name="MPUPaymentDeclined">"Zahlung abgelehnt."</string>
-<string name="MPUPaymentAborted">"Zahlung abgebrochen."</string>
+<string name="MPURefunded">"Rückerstattet"</string>
+<string name="MPUDeclined">"Abgelehnt"</string>
+<string name="MPUAborted">"Abgebrochen"</string>
+<string name="MPUPreauthorized">"Reserviert"</string>
+<string name="MPUTotal">"Gesamt"</string>
+<string name="MPUSale">"Zahlung"</string>
+<string name="MPUUnknown">"Unbekannt"</string>
 <string name="MPURefundApproved">"Rückerstattung erfolgreich."</string>
 <string name="MPURefundDeclined">"Rückerstattung abgelehnt."</string>
 <string name="MPURefundAborted">"Rückerstattung abgebrochen."</string>
 <string name="MPURefundPayment">"Zahlung zurückerstatten"</string>
+<string name="MPUCapturePayment">"Zahlung buchen"</string>
 <string name="MPURefundPrompt">"Sind Sie sicher, dass Sie diese Zahlung zurückerstatten möchten?"</string>
-<string name="MPURefund">"Rückerstattung"</string>
+<string name="MPUCapturePrompt">"Sind Sie sicher, dass Sie diese Zahlung buchen möchten?"</string>
+<string name="MPUTransactionTypeSale">"Zahlung"</string>
+<string name="MPUTransactionTypeRefund">"Rückerstattung"</string>
+<string name="MPUTransactionTypePreauthorization">"Reservierung"</string>
+<string name="MPURefund">"Rückerstatten"</string>
+<string name="MPUCapture">"Buchen"</string>
 <string name="MPUSummary">"Übersicht"</string>
 <string name="MPUInvalidEmailAddress">"Ungültige E-Mail Adresse"</string>
 <string name="MPUEnterValidEmailAddress">"Bitte eine gültige E-Mail Adresse eingeben."</string>
@@ -48,9 +57,9 @@
 <string name="MPUCouldNotSendReceipt">"Konnte Beleg nicht senden"</string>
 <string name="MPUPleaseTryAgain">"Bitte versuchen Sie es noch einmal."</string>
 <string name="MPUSelectAccount">"Konto auswählen"</string>
-<string name="MPUSale">"Zahlung"</string>
 <string name="MPUEnterEmailAddress">"E-Mail Adresse eingeben"</string>
 <string name="MPUSend">"Senden"</string>
+<string name="MPUResend">"Senden"</string>
 <string name="MPUContinue">"Weiter"</string>
 <string name="MPUBackButtonDisabled">"Die "Zurück"-Funktion ist während des Bezahlvorgangs deaktiviert. Bitte die Funktionen oben benutzen."</string>
 <string name="MPUSignatureStatusLine">"Hiermit autorisiere ich die Zahlung in Höhe von %1$s."</string>
@@ -80,7 +89,8 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUPrintReceipt">"Beleg drucken"</string>
-<string name="MPUReprintReceipt">"Beleg nochmals drucken"</string>
+<string name="MPUReprint">"Drucken"</string>
 <string name="MPUPrinting">"Drucken..."</string>
+<string name="MPUPrint">"Drucken"</string>
+<string name="MPUPartiallyCaptured">"aus Reservierung über %1$s"</string>
 </resources>

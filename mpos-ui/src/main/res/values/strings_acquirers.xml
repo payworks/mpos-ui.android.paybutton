@@ -54,5 +54,17 @@
         <item>#EEEEEE</item>
     </string-array>
 
+    <string-array name="mpu_acquirer_yourbrand">
+        <item>YourBrand.terminal</item>
+        <item>Miura</item>
+        <item>Sewoo</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>#5B5B5B</item>
+        <item>#000000</item>
+        <item>#FFFFFF</item>
+        <item>#EEEEEE</item>
+    </string-array>
 
 </resources>

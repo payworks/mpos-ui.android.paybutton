@@ -67,7 +67,12 @@ public class MposUiConfiguration {
         /**
          * Refund transaction right away.
          */
-        REFUND_TRANSACTION
+        REFUND_TRANSACTION,
+
+        /**
+         * Capture the transaction.
+         */
+        CAPTURE_TRANSACTION
     }
 
 

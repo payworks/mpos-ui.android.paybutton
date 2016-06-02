@@ -25,8 +25,18 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <color name="mpu_transaction_state_approved">#4caf50</color>
-    <color name="mpu_transaction_state_declined_aborted">#f44336</color>
+    <color name="mpu_transaction_state_approved">#417505</color>
+    <color name="mpu_transaction_state_declined_aborted">#BD041A</color>
+    <color name="mpu_transaction_state_refunded">#0058BF</color>
+    <color name="mpu_transaction_state_preauthorized">#E39C03</color>
+
+    <color name="mpu_card_heading">#B3000000</color>
+    <color name="mpu_card_body">#B3000000</color>
+    <color name="mpu_card_timestamp">#8C000000</color>
+    <color name="mpu_card_history_title">#8C000000</color>
+    <color name="mpu_status_text">#B3000000</color>
+    <color name="mpu_history_background">#E7E7E7</color>
+
     <color name="mpu_divider">#1A000000</color>
     <color name="mpu_payment_progress_bar_default_color">#616161</color>
     <color name="mpu_payment_button_pressed_state">#12000000</color>

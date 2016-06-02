@@ -115,6 +115,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     private boolean mHasSessionIdentifier;
 
     private TransactionType mTransactionType;
+    private TransactionParameters.Type mTransactionParametersType;
 
     private StatefulTransactionProviderProxy mStatefulTransactionProviderProxy = StatefulTransactionProviderProxy.getInstance();
 
@@ -195,6 +196,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         } else {
             mTransactionParameters = (TransactionParameters) getIntent().getSerializableExtra(BUNDLE_EXTRA_TRANSACTION_PARAMETERS);
             mTransactionType = mTransactionParameters.getType();
+            mTransactionParametersType = mTransactionParameters.getParametersType();
         }
 
         // 4. Get the Transaction Process Parameters
@@ -218,6 +220,8 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
         if (mHasSessionIdentifier) {
             mStatefulTransactionProviderProxy.startTransactionWithSessionIdentifier(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryParameters, mSessionIdentifier, mTransactionProcessParameters);
+        } else if (mTransactionParametersType == TransactionParameters.Type.CAPTURE || mTransactionParametersType == TransactionParameters.Type.REFUND) {
+            mStatefulTransactionProviderProxy.amendTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mTransactionParameters);
         } else {
             mStatefulTransactionProviderProxy.startTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryParameters, mTransactionParameters, mTransactionProcessParameters);
         }
@@ -390,6 +394,11 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     @Override
+    public void onSummaryCaptureButtonClicked(String transactionIdentifier) {
+        // NO -OP
+    }
+
+    @Override
     public void onErrorRetryButtonClicked() {
         mFormattedAmount = null;
         if (getUiState() == UiState.TRANSACTION_ERROR) {
@@ -485,7 +494,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         intent.putExtra(SignatureActivity.BUNDLE_KEY_AMOUNT, mFormattedAmount);
         PaymentDetailsScheme scheme = mStatefulTransactionProviderProxy.getCurrentTransaction().getPaymentDetails().getScheme();
         if (scheme != null) {
-            int resId = UiHelper.getDrawableIdImageForCreditCard(scheme);
+            int resId = UiHelper.getDrawableIdForCardScheme(scheme);
             intent.putExtra(SignatureActivity.BUNDLE_KEY_CARD_SCHEME_ID, resId);
         }
         startActivityForResult(intent, REQUEST_CODE_SIGNATURE);
@@ -497,9 +506,8 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     private void showSummaryFragment(Transaction transaction) {
-        TransactionDataHolder dataHolder = TransactionDataHolder.createTransactionDataHolder(transaction);
-        SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), false, dataHolder);
-
+        TransactionDataHolder dataHolder = new TransactionDataHolder(transaction);
+        SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), false, false, dataHolder);
         showFragment(summaryFragment, SummaryFragment.TAG, UiState.SUMMARY_DISPLAYING, true);
     }
 

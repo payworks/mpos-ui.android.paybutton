@@ -149,6 +149,13 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mTransactionIsOnGoing = true;
     }
 
+    public void amendTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, TransactionParameters transactionParameters) {
+        clearForNewTransaction();
+        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
+        mTransactionProvider.amendTransaction(transactionParameters, this);
+        mTransactionIsOnGoing = true;
+    }
+
     @Override
     public void onRegistered(TransactionProcess paymentProcess, Transaction transaction) {
         Log.d(TAG, "onRegistered");
@@ -250,20 +257,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     }
 
     public boolean paymentCanBeAborted() {
-        boolean stateIsAbortable = (mLastTransactionProcessDetails.getState() == TransactionProcessDetailsState.CONNECTING_TO_ACCESSORY);
-        boolean accessoryConnected = true;
-        if (mCurrentTransactionProcess != null && mCurrentTransactionProcess.getAccessory() != null) {
-            Accessory accessory = mCurrentTransactionProcess.getAccessory();
-            if (accessory.getConnectionState().equals(AccessoryConnectionState.UNKNOWN) || accessory.getConnectionState().equals(AccessoryConnectionState.DISCONNECTED)) {
-                accessoryConnected = false;
-            }
-        }
-
-        if (stateIsAbortable && !accessoryConnected) {
-            return true;
-        }
-
-        return mCurrentTransaction != null && mCurrentTransaction.canBeAborted();
+        return mCurrentTransactionProcess != null && mCurrentTransactionProcess.canBeAborted();
     }
 
     public void teardown() {

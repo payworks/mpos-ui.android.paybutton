@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/mpu_status_icon_view"
-            style="@style/MpuTransactionStatusIconView"
+            style="@style/MpuTransactionStatusIconStyle"
             android:layout_gravity="center"
             />
     </FrameLayout>

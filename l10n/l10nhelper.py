@@ -15,3 +15,4 @@ call(['mv', 'strings-es_ES.xml', '../mpos-ui/src/main/res/values-es/strings.xml'
 call(['mv', 'strings-nl_BE.xml', '../mpos-ui/src/main/res/values-nl/strings.xml'])
 call(['mv', 'strings-fi_FI.xml', '../mpos-ui/src/main/res/values-fi/strings.xml'])
 call(['mv', 'strings-pl_PL.xml', '../mpos-ui/src/main/res/values-pl/strings.xml'])
+call(['mv', 'strings-sv_SE.xml', '../mpos-ui/src/main/res/values-sv/strings.xml'])

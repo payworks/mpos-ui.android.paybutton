@@ -38,6 +38,7 @@ import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Transaction;
+import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.R;
 import io.mpos.ui.acquirer.MposUiAccountManager;
 import io.mpos.ui.acquirer.view.LoginFragment;
@@ -73,6 +74,11 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
 
     private final static String SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER = "io.mpos.ui.TRANSACTION_DATA_HOLDER";
     private final static String SAVED_INSTANCE_STATE_UI_STATE = "io.mpos.ui.UI_STATE";
+
+    public final static String SAVED_INSTANCE_STATE_MERCHANT_ID = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_ID";
+    public final static String SAVED_INSTANCE_STATE_MERCHANT_SECRET = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_SECRET";
+    public final static String SAVED_INSTANCE_STATE_PROVIDER_MODE = "io.mpos.ui.summarybutton.TransactionSummaryActivity.PROVIDER_MODE";
+
 
     private TransactionProvider mTransactionProvider;
     private Transaction mTransaction;
@@ -122,6 +128,10 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
             }
         } else {
             mTransactionDataHolder = savedInstanceState.getParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER);
+            mMerchantIdentifier = savedInstanceState.getString(SAVED_INSTANCE_STATE_MERCHANT_ID);
+            mMerchantSecretKey = savedInstanceState.getString(SAVED_INSTANCE_STATE_MERCHANT_SECRET);
+            mProviderMode = (ProviderMode) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_PROVIDER_MODE);
+            createMposProvider();
             setUiState((UiState) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_UI_STATE));
         }
     }
@@ -130,6 +140,9 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER, mTransactionDataHolder);
         outState.putSerializable(SAVED_INSTANCE_STATE_UI_STATE, getUiState());
+        outState.putString(SAVED_INSTANCE_STATE_MERCHANT_ID, mMerchantIdentifier);
+        outState.putString(SAVED_INSTANCE_STATE_MERCHANT_SECRET, mMerchantSecretKey);
+        outState.putSerializable(SAVED_INSTANCE_STATE_PROVIDER_MODE, mProviderMode);
         super.onSaveInstanceState(outState);
     }
 
@@ -159,8 +172,8 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     private void processErrorState() {
-        if (isAcquirerMode  &&
-                MposUi.getInitializedInstance().getError()!= null &&
+        if (isAcquirerMode &&
+                MposUi.getInitializedInstance().getError() != null &&
                 MposUi.getInitializedInstance().getError().getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
             showLoginFragment(MposUiAccountManager.getInitializedInstance().getApplicationData().getIdentifier());
         } else {
@@ -176,7 +189,7 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     @Override
     public void onTransactionLoaded(Transaction transaction) {
         mTransaction = transaction;
-        mTransactionDataHolder = TransactionDataHolder.createTransactionDataHolder(transaction);
+        mTransactionDataHolder = new TransactionDataHolder(transaction);
         showSummaryFragment();
     }
 
@@ -200,6 +213,14 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     @Override
+    public void onSummaryCaptureButtonClicked(String transactionIdentifier) {
+        TransactionParameters transactionParameters = new TransactionParameters.Builder().capture(transactionIdentifier).build();
+        Intent intent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public void onSendReceiptButtonClicked(String transactionIdentifier) {
         showSendReceiptFragment(transactionIdentifier);
     }
@@ -211,7 +232,8 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
 
     @Override
     public void onSummaryRefundButtonClicked(String transactionIdentifier) {
-        Intent intent = MposUi.getInitializedInstance().createRefundTransactionIntent(transactionIdentifier, null, null);
+        TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(transactionIdentifier).build();
+        Intent intent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
         startActivity(intent);
         finish();
     }
@@ -272,7 +294,7 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     private void showSummaryFragment() {
-        SummaryFragment fragment = SummaryFragment.newInstance(false, true, mTransactionDataHolder);
+        SummaryFragment fragment = SummaryFragment.newInstance(false, true, true, mTransactionDataHolder);
         showFragment(fragment, SummaryFragment.TAG, UiState.SUMMARY_DISPLAYING, true);
     }
 

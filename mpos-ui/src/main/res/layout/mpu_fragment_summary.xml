@@ -44,7 +44,6 @@
             android:id="@+id/mpu_summary_receipt_card_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/mpu_content_padding"
             card_view:cardCornerRadius="@dimen/mpu_card_radius"
             card_view:cardUseCompatPadding="true">
 
@@ -54,22 +53,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/mpu_summary_tx_status_view"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/mpu_content_padding"
-                    android:singleLine="true"
-                    android:textSize="@dimen/mpu_card_heading"
-                    tools:text="Payment successful."/>
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/mpu_divider"
-                    android:layout_marginLeft="@dimen/mpu_divider_padding"
-                    android:layout_marginRight="@dimen/mpu_divider_padding"
-                    android:background="@color/mpu_divider"/>
-
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -77,23 +60,35 @@
                     android:padding="@dimen/mpu_content_padding">
 
                     <TextView
-                        android:id="@+id/mpu_summary_tx_type_view"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/mpu_summary_status_view"
+                        style="@style/MpuCardHeaderTextStyle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="@dimen/mpu_card_body"
+                        android:layout_gravity="center_vertical"
                         tools:text="Sale"/>
 
                     <TextView
                         android:id="@+id/mpu_summary_amount_view"
+                        style="@style/MpuCardHeaderAmountTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/mpu_card_body"
-                        tools:text="12.34$"/>
+                        android:layout_gravity="center_vertical"
+                        tools:text="$12.34"/>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/mpu_summary_tx_history_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/mpu_history_background"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                </LinearLayout>
+
                 <View
+                    android:id="@+id/mpu_summary_divider_header_view"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/mpu_divider"
                     android:layout_marginLeft="@dimen/mpu_divider_padding"
@@ -107,23 +102,23 @@
 
                     <TextView
                         android:id="@+id/mpu_summary_scheme_view"
+                        style="@style/MpuCardBodyTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/mpu_issuer_card_icon_size"
                         android:gravity="center"
                         android:paddingLeft="@dimen/mpu_card_image_padding"
+                        android:paddingRight="@dimen/mpu_card_image_padding"
                         tools:drawableLeft="@drawable/mpu_visacard_image"
                         tools:text="Unknown"/>
 
                     <TextView
                         android:id="@+id/mpu_summary_account_number_view"
-                        android:layout_width="wrap_content"
+                        style="@style/MpuAccountNoTextStyle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
                         android:padding="@dimen/mpu_content_padding"
-                        android:textSize="@dimen/mpu_card_body"
-                        tools:text="****1234"/>
-
+                        tools:text="XXXX XXXX XXXX 1234"/>
                 </LinearLayout>
 
 
@@ -137,62 +132,69 @@
 
                 <TextView
                     android:id="@+id/mpu_summary_subject_view"
+                    style="@style/MpuCardBodyTextStyle"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/mpu_content_padding"
-                    android:textSize="@dimen/mpu_card_body"
-                    tools:text="White crisp bar"/>
+                    tools:text="How much wood would a woodchuck chuck if a woodchuck could chuck wood?"/>
 
                 <View
-                    android:id="@+id/mpu_summary_divider_subject_view"
+                    android:id="@+id/mpu_summary_divider_action_view"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/mpu_divider"
-                    android:layout_marginLeft="@dimen/mpu_divider_padding"
-                    android:layout_marginRight="@dimen/mpu_divider_padding"
                     android:background="@color/mpu_divider"/>
 
-
-                <TextView
-                    android:id="@+id/mpu_summary_datetime_view"
+                <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/mpu_content_padding"
-                    android:textSize="@dimen/mpu_card_body"
-                    tools:text="9:05 am / Today"/>
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/mpu_summary_capture_button"
+                        style="@style/mpos.ui.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/MPUCapture"/>
+
+                    <Button
+                        android:id="@+id/mpu_summary_refund_button"
+                        style="@style/mpos.ui.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignWithParentIfMissing="true"
+                        android:layout_toLeftOf="@id/mpu_summary_capture_button"
+                        android:text="@string/MPURefund"/>
+
+                    <Button
+                        android:id="@+id/mpu_summary_retry_button"
+                        style="@style/mpos.ui.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignWithParentIfMissing="true"
+                        android:layout_toLeftOf="@+id/mpu_summary_refund_button"
+                        android:text="@string/MPURetry"/>
+
+                    <Button
+                        android:id="@+id/mpu_summary_print_receipt_button"
+                        style="@style/mpos.ui.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/MPUPrint"/>
+
+                </RelativeLayout>
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <Button
-            android:id="@+id/mpu_summary_retry_button"
-            style="@style/mpos.ui.Button"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/mpu_summary_datetime_view"
+            style="@style/MpuTimestampTextStyle"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/MPURetry"/>
+            android:layout_marginTop="@dimen/mpu_card_timestamp_margin"
+            android:layout_marginBottom="@dimen/mpu_card_timestamp_margin"
+            android:gravity="center"
+            tools:text="9:05 am / Today"/>
 
-        <Button
-            android:id="@+id/mpu_summary_refund_button"
-            style="@style/mpos.ui.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/MPURefundPayment"/>
-
-        <Button
-            android:id="@+id/mpu_summary_send_receipt_button"
-            style="@style/mpos.ui.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/MPUSendReceipt"/>
-
-        <Button
-            android:id="@+id/mpu_summary_print_receipt_button"
-            style="@style/mpos.ui.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/MPUPrintReceipt"/>
     </LinearLayout>
 </ScrollView>

@@ -86,7 +86,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         initWithAmount(106);
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.mpu_summary_send_receipt_button))
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_send_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
     }
@@ -96,7 +96,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         MposUi.getInitializedInstance().getConfiguration().setSummaryFeatures(EnumSet.of(MposUiConfiguration.SummaryFeature.REFUND_TRANSACTION));
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.mpu_summary_send_receipt_button))
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_send_button))
                 .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())));
         Espresso.unregisterIdlingResources(idlingResource);
     }
@@ -105,13 +105,13 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         initWithAmount(106);
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.mpu_summary_send_receipt_button))
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_send_button))
                 .perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.mpu_email_address_view))
                 .perform(ViewActions.typeText("a@example.com"));
         Espresso.onView(ViewMatchers.withId(R.id.mpu_send_button))
                 .perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.mpu_summary_send_receipt_button))
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_send_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withText(R.string.MPUReceiptSent)).inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.is(getActivity().getWindow().getDecorView())))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.unregisterIdlingResources(idlingResource);
@@ -121,7 +121,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         initWithAmount(106);
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource();
         Espresso.registerIdlingResources(idlingResource);
-        Espresso.onView(ViewMatchers.withId(R.id.mpu_summary_send_receipt_button))
+        Espresso.onView(ViewMatchers.withId(R.id.mpu_send_button))
                 .perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.mpu_email_address_view))
                 .perform(ViewActions.typeText("aexample.com"));

@@ -32,8 +32,9 @@
         <item name="colorControlHighlight">@color/mpu_payment_button_pressed_state</item>
     </style>
 
-    <style name="mpos.ui.Button" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/mpu_payment_button</item>
-        <item name="android:textColor">@drawable/mpu_payment_button_textcolor</item>
+    <style name="mpos.ui.Button" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:paddingRight">@dimen/mpu_button_text_padding</item>
+        <item name="android:paddingLeft">@dimen/mpu_button_text_padding</item>
+        <item name="android:minWidth">0dp</item>
     </style>
 </resources>

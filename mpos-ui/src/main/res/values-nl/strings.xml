@@ -4,7 +4,7 @@
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Afbreken"</string>
 <string name="MPURetry">"Herhalen"</string>
@@ -32,15 +31,25 @@
 <string name="MPUResendReceipt">"Betalingsbewijs opnieuw sturen"</string>
 <string name="MPUClose">"Sluiten"</string>
 <string name="MPUPaymentSuccessful">"Betaling geslaagd."</string>
-<string name="MPUPaymentRefunded">"Betaling terugbetaald."</string>
-<string name="MPUPaymentDeclined">"Betaling geweigerd."</string>
-<string name="MPUPaymentAborted">"Betaling afgebroken."</string>
+<string name="MPURefunded">"Terugbetaald"</string>
+<string name="MPUDeclined">"Geweigerd"</string>
+<string name="MPUAborted">"Afgebroken"</string>
+<string name="MPUPreauthorized">"Vooraf geautoriseerd"</string>
+<string name="MPUTotal">"Totaal"</string>
+<string name="MPUSale">"Betaling"</string>
+<string name="MPUUnknown">"Onbekend"</string>
 <string name="MPURefundApproved">"Terugbetaling geslaagd."</string>
 <string name="MPURefundDeclined">"Terugbetaling geweigerd."</string>
 <string name="MPURefundAborted">"Terugbetaling afgebroken."</string>
 <string name="MPURefundPayment">"Terugbetaling transactie"</string>
+<string name="MPUCapturePayment">"Book betaling"</string>
 <string name="MPURefundPrompt">"Bent u zeker dat u wilt deze transactie terug te betalen?"</string>
+<string name="MPUCapturePrompt">"Weet u zeker dat u deze betaling wilt boeken?"</string>
+<string name="MPUTransactionTypeSale">"Betaling"</string>
+<string name="MPUTransactionTypeRefund">"Terugbetaling"</string>
+<string name="MPUTransactionTypePreauthorization">"Pre-autorisatie"</string>
 <string name="MPURefund">"Terugbetaling"</string>
+<string name="MPUCapture">"Boeken"</string>
 <string name="MPUSummary">"Overzicht"</string>
 <string name="MPUInvalidEmailAddress">"Ongeldig e-mailadres"</string>
 <string name="MPUEnterValidEmailAddress">"Vul een geldig e-mailadres in."</string>
@@ -48,9 +57,9 @@
 <string name="MPUCouldNotSendReceipt">"Kon Betalingsbewijs niet verzenden"</string>
 <string name="MPUPleaseTryAgain">"Probeer het nog eens."</string>
 <string name="MPUSelectAccount">"Selecteer rekening"</string>
-<string name="MPUSale">"Betaling"</string>
 <string name="MPUEnterEmailAddress">"E-mailadres invoeren"</string>
 <string name="MPUSend">"Sturen"</string>
+<string name="MPUResend">"Opnieuw sturen"</string>
 <string name="MPUContinue">"Verder"</string>
 <string name="MPUBackButtonDisabled">"De functie "Terug" is gedeactiveerd tijdens de betaalprocedure. Gebruik de functies hierboven."</string>
 <string name="MPUSignatureStatusLine">"Hiermee machtig ik de betaling van %1$s."</string>
@@ -80,7 +89,8 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUPrintReceipt">"Betalingsbewijs afdrukken"</string>
-<string name="MPUReprintReceipt">"Betalingsbewijs opnieuw afdrukken"</string>
+<string name="MPUReprint">"Opnieuw printen"</string>
 <string name="MPUPrinting">"Afdrukken..."</string>
+<string name="MPUPrint">"Print"</string>
+<string name="MPUPartiallyCaptured">"van Pre-autorisatie voor %1$s"</string>
 </resources>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ mpos-ui : http://www.payworksmobile.com
   ~
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2015 payworks GmbH
+  ~ Copyright (c) 2016 payworks GmbH
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Keskeytä"</string>
 <string name="MPURetry">"Yritä uudelleen"</string>
@@ -33,15 +31,25 @@
 <string name="MPUResendReceipt">"Lähetä kuitti uudelleen"</string>
 <string name="MPUClose">"Sulje"</string>
 <string name="MPUPaymentSuccessful">"Maksu onnistui."</string>
-<string name="MPUPaymentRefunded">"Maksu palautettu."</string>
-<string name="MPUPaymentDeclined">"Maksu hylätty."</string>
-<string name="MPUPaymentAborted">"Maksu keskeytetty."</string>
+<string name="MPURefunded">"Hyvitetty"</string>
+<string name="MPUDeclined">"Hylätty"</string>
+<string name="MPUAborted">"Keskeytetty"</string>
+<string name="MPUPreauthorized">"Katevaraus tehty"</string>
+<string name="MPUTotal">"Yhteensä"</string>
+<string name="MPUSale">"Myynti"</string>
+<string name="MPUUnknown">"Tuntematon"</string>
 <string name="MPURefundApproved">"Palautus onnistui."</string>
 <string name="MPURefundDeclined">"Palautus hylätty."</string>
 <string name="MPURefundAborted">"Palautus keskeytetty."</string>
 <string name="MPURefundPayment">"Palauta maksu"</string>
+<string name="MPUCapturePayment">"Veloita katevaraus"</string>
 <string name="MPURefundPrompt">"Haluatko varmasti palauttaa tämän maksun?"</string>
+<string name="MPUCapturePrompt">"Haluatko veloittaa katevarauksen?"</string>
+<string name="MPUTransactionTypeSale">"Myynti"</string>
+<string name="MPUTransactionTypeRefund">"Palauta"</string>
+<string name="MPUTransactionTypePreauthorization">"Katevaraus"</string>
 <string name="MPURefund">"Palauta"</string>
+<string name="MPUCapture">"Veloita"</string>
 <string name="MPUSummary">"Yhteenveto"</string>
 <string name="MPUInvalidEmailAddress">"Virheellinen sähköpostiosoite"</string>
 <string name="MPUEnterValidEmailAddress">"Syötä oikea sähköpostiosoite."</string>
@@ -49,9 +57,9 @@
 <string name="MPUCouldNotSendReceipt">"Kuitin lähetys ei onnistu"</string>
 <string name="MPUPleaseTryAgain">"Yritä uudelleen."</string>
 <string name="MPUSelectAccount">"Valitse tili"</string>
-<string name="MPUSale">"Myynti"</string>
 <string name="MPUEnterEmailAddress">"Anna sähköpostiosoite"</string>
 <string name="MPUSend">"Lähetä"</string>
+<string name="MPUResend">"Lähetä uudelleen"</string>
 <string name="MPUContinue">"Jatka"</string>
 <string name="MPUBackButtonDisabled">"Takaisin-painike ei ole käytössä maksamisen aikana. Käytä yllä olevia painikkeita."</string>
 <string name="MPUSignatureStatusLine">"Hyväksyn maksavani summan %1$s."</string>
@@ -81,7 +89,8 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUPrintReceipt">"Tulosta kuitti"</string>
-<string name="MPUReprintReceipt">"Tulosta kuitti uudelleen"</string>
+<string name="MPUReprint">"Tulosta uudelleen"</string>
 <string name="MPUPrinting">"Tulostetaan…"</string>
+<string name="MPUPrint">"Tulosta"</string>
+<string name="MPUPartiallyCaptured">"katevarauksesta kohteelle %1$s"</string>
 </resources>

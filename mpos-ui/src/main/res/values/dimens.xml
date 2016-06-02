@@ -41,9 +41,17 @@
     <dimen name="mpu_card_elevation">16dp</dimen>
 
     <dimen name="mpu_content_padding">16dp</dimen>
+    <dimen name="mpu_card_timestamp_margin">12dp</dimen>
     <dimen name="mpu_card_image_padding">8dp</dimen>
     <dimen name="mpu_card_heading">24sp</dimen>
+    <dimen name="mpu_card_amount_heading">30sp</dimen>
+    <dimen name="mpu_card_amount">30sp</dimen>
     <dimen name="mpu_card_body">16sp</dimen>
+    <dimen name="mpu_card_timestamp_text_size">12sp</dimen>
+
+    <dimen name="mpu_status_text">16sp</dimen>
+    <dimen name="mpu_button_text_padding">16sp</dimen>
+
     <dimen name="mpu_divider">1dp</dimen>
     <dimen name="mpu_divider_padding">8dp</dimen>
     <dimen name="mpu_issuer_card_icon_size">48dp</dimen>

@@ -99,6 +99,10 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
                 break;
             case SECURE_RETAIL:
                 init(context, R.array.mpu_acquirer_secure_retail, R.drawable.mpu_secure_retail_logo);
+                break;
+            case YOURBRAND:
+                init(context, R.array.mpu_acquirer_yourbrand, R.drawable.mpu_yourbrand_logo);
+                break;
         }
         mSharedPrefs = context.getSharedPreferences(SHARED_PREFERENCE_FILE_NAME_KEY, Context.MODE_PRIVATE);
         mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
@@ -214,6 +218,11 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
     }
 
     private AccessoryFamily resolveAccessoryFamily(String accessoryFamilyString) {
+
+        if(mProviderMode == ProviderMode.MOCK) {
+            return AccessoryFamily.MOCK;
+        }
+
         if (accessoryFamilyString.equalsIgnoreCase("Miura")) {
             return AccessoryFamily.MIURA_MPI;
         } else if (accessoryFamilyString.equalsIgnoreCase("Verifone")) {

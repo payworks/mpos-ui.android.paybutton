@@ -27,6 +27,7 @@
 <RelativeLayout
     android:id="@+id/payment_fragment_error"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -52,7 +53,7 @@
 
         <TextView
             android:id="@+id/mpu_status_icon_view"
-            style="@style/MpuTransactionStatusIconView"
+            style="@style/MpuTransactionStatusIconStyle"
             android:layout_gravity="center"
             android:gravity="center"
             android:singleLine="true"
@@ -61,9 +62,12 @@
 
     <TextView
         android:id="@+id/mpu_status_view"
-        style="@style/MpuTransactionStatusTextView"
+        style="@style/MpuTransactionStatusTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/mpu_status_icon_view_container"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        tools:text="Error Status"/>
 
     <Button
         android:id="@+id/mpu_retry_button"

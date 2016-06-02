@@ -31,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -152,7 +153,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         .addAskForTipStep()
                         .build();
 
-                startPayment(105, processParameters);
+                startPayment(105, true, processParameters);
             }
         });
 
@@ -166,7 +167,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 }
                 startPayment(13.37);
-
             }
         });
 
@@ -183,6 +183,19 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.transaction_miura_preauthorize).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mIsAcquirerMode) {
+                    MposUi mposUi = MposUi.getInitializedInstance();
+                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
+                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
+                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                }
+                startPayment(13.37, false);
+            }
+        });
+
         findViewById(R.id.transaction_miura_charge_with_tip).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +206,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 }
                 TransactionProcessParameters processParameters = new TransactionProcessParameters.Builder().addAskForTipStep().build();
-                startPayment(13.37, processParameters);
+                startPayment(13.37, true, processParameters);
             }
         });
 
@@ -208,11 +221,20 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.refund_last).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(mLastTransactionIdentifier).
-                        subject("subject-refund").
-                        build();
+                TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(mLastTransactionIdentifier)
+                        .subject("subject-refund")
+                        .build();
                 Intent refundIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
                 startActivity(refundIntent);
+            }
+        });
+
+        findViewById(R.id.capture_last).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransactionParameters transactionParameters = new TransactionParameters.Builder().capture(mLastTransactionIdentifier).build();
+                Intent captureIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
+                startActivity(captureIntent);
             }
         });
 
@@ -271,11 +293,20 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.init_with_yourbrand).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsAcquirerMode = true;
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, ApplicationName.YOURBRAND, "test-integrator");
+            }
+        });
+
         findViewById(R.id.init_with_provider).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mIsAcquirerMode = false;
-                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+                MposUi mposUi = MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
             }
         });
 
@@ -289,16 +320,21 @@ public class CheckoutActivity extends AppCompatActivity {
         mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
     }
 
-    void startPayment(double amount) {
-        startPayment(amount, null);
+    void startPayment(double amount, boolean autoCapture) {
+        startPayment(amount, autoCapture, null);
     }
 
-    void startPayment(double amount, TransactionProcessParameters processParameters) {
-        TransactionParameters params = new TransactionParameters.Builder().
-                charge(BigDecimal.valueOf(amount), Currency.EUR).
-                subject("subject").
-                customIdentifier("customId").
-                build();
+    void startPayment(double amount) {
+        startPayment(amount, true, null);
+    }
+
+    void startPayment(double amount, boolean autoCapture, TransactionProcessParameters processParameters) {
+        TransactionParameters params = new TransactionParameters.Builder()
+                .charge(BigDecimal.valueOf(amount), Currency.EUR)
+                .subject("How much wood would a woodchuck chuck if a woodchuck could chuck wood?")
+                .customIdentifier("customId")
+                .autoCapture(autoCapture)
+                .build();
         Intent intent = MposUi.getInitializedInstance().createTransactionIntent(params, processParameters);
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
     }
@@ -311,9 +347,11 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     void updateViews() {
-        findViewById(R.id.summary_last).setVisibility(mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE);
-        findViewById(R.id.refund_last).setVisibility(mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE);
-        findViewById(R.id.print_last).setVisibility(mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE);
+        int visibility = mLastTransactionIdentifier != null ? View.VISIBLE : View.GONE;
+        findViewById(R.id.summary_last).setVisibility(visibility);
+        findViewById(R.id.refund_last).setVisibility(visibility);
+        findViewById(R.id.print_last).setVisibility(visibility);
+        findViewById(R.id.capture_last).setVisibility(visibility);
     }
 
     @Override
@@ -382,6 +420,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
     public static class InfoDialog extends DialogFragment {
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Get app version
