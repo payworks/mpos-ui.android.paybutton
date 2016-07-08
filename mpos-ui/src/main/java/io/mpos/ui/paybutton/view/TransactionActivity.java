@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -37,13 +38,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import io.mpos.accessories.AccessoryFamily;
 import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
 import io.mpos.paymentdetails.PaymentDetailsScheme;
-import io.mpos.provider.ProviderMode;
+import io.mpos.platform.LocalizationToolbox;
 import io.mpos.shared.errors.DefaultMposError;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactionprovider.TransactionProcessDetailsState;
@@ -80,9 +80,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
     private final static String TAG = "TransactionActivity";
 
-    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.paybutton.view.TransactionActivity.MERCHANT_ID";
-    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.paybutton.view.TransactionActivity.MERCHANT_SECRET";
-    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.paybutton.view.TransactionActivity.PROVIDER_MODE";
     public final static String BUNDLE_EXTRA_SESSION_IDENTIFIER = "io.mpos.ui.paybutton.view.TransactionActivity.SESSION_IDENTIFIER";
     public final static String BUNDLE_EXTRA_TRANSACTION_PARAMETERS = "io.mpos.ui.paybutton.view.TransactionActivity.TRANSACTION_PARAMETERS";
     public final static String BUNDLE_EXTRA_TRANSACTION_PROCESS_PARAMETERS = "io.mpos.ui.paybutton.view.TransactionActivity.TRANSACTION_PROCESS_PARAMETERS";
@@ -101,9 +98,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     private String mTitleTransactionType;
 
     private MposUiAccountManager mMposUiAccountManager;
-    private String mMerchantIdentifier;
-    private String mMerchantSecretKey;
-    private ProviderMode mProviderMode;
     private TransactionParameters mTransactionParameters;
     private AccessoryParameters mAccessoryParameters;
     private TransactionProcessParameters mTransactionProcessParameters;
@@ -116,6 +110,9 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
     private TransactionType mTransactionType;
     private TransactionParameters.Type mTransactionParametersType;
+    private boolean mSummaryInteractionOccured;
+    private CountDownTimer mAutoCloseCountDownTimer;
+    private LocalizationToolbox mLocalizationToolbox;
 
     private StatefulTransactionProviderProxy mStatefulTransactionProviderProxy = StatefulTransactionProviderProxy.getInstance();
 
@@ -153,11 +150,8 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         if (!mStatefulTransactionProviderProxy.isTransactionOnGoing() && savedInstanceState == null) {
             if (mIsAcquirerMode) {
                 mMposUiAccountManager = MposUiAccountManager.getInitializedInstance();
-                mProviderMode = mMposUiAccountManager.getProviderMode();
                 if (mMposUiAccountManager.isLoggedIn()) {
                     // Already logged in. Proceed with the transaction.
-                    mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-                    mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
                     setTitle(constructTitle());
                     startTransaction();
                 } else {
@@ -166,9 +160,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
                     showLoginFragment(mApplicationIdentifier);
                 }
             } else {
-                mMerchantSecretKey = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
-                mMerchantIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
-                mProviderMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
                 startTransaction();
             }
         }
@@ -184,10 +175,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
         // 2. Get the Accessory Parameters.
         mAccessoryParameters = MposUi.getInitializedInstance().getConfiguration().getTerminalParameters();
-        if (mAccessoryParameters == null) {
-            AccessoryFamily accessoryFamily = MposUi.getInitializedInstance().getConfiguration().getAccessoryFamily();
-            mAccessoryParameters = ParametersHelper.getAccessoryParametersForAccessoryFamily(accessoryFamily);
-        }
 
         // 3. Get the Transaction Parameters / Session Identifier for the transaction.
         if (getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER)) {
@@ -211,22 +198,22 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     private void startTransaction() {
+        mLocalizationToolbox = MposUi.getInitializedInstance().getTransactionProvider().getLocalizationToolbox();
 
         if (mIsAcquirerMode) {
             String integratorIdentifier = MposUiAccountManager.getInitializedInstance().getIntegratorIdentifier();
             String modifiedCustomIdentifier = modifyCustomIdentifier(integratorIdentifier, mTransactionParameters.getCustomIdentifier());
-            mTransactionParameters = ParametersHelper.getTransactionParametersWithNewCustomerIdentifier(mTransactionParameters, modifiedCustomIdentifier);
+            mTransactionParameters = ParametersHelper.getTransactionParametersWithNewCustomIdentifier(mTransactionParameters, modifiedCustomIdentifier);
         }
 
         if (mHasSessionIdentifier) {
-            mStatefulTransactionProviderProxy.startTransactionWithSessionIdentifier(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryParameters, mSessionIdentifier, mTransactionProcessParameters);
+            mStatefulTransactionProviderProxy.startTransactionWithSessionIdentifier(mAccessoryParameters, mSessionIdentifier, mTransactionProcessParameters);
         } else if (mTransactionParametersType == TransactionParameters.Type.CAPTURE || mTransactionParametersType == TransactionParameters.Type.REFUND) {
-            mStatefulTransactionProviderProxy.amendTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mTransactionParameters);
+            mStatefulTransactionProviderProxy.amendTransaction(mTransactionParameters);
         } else {
-            mStatefulTransactionProviderProxy.startTransaction(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey, mAccessoryParameters, mTransactionParameters, mTransactionProcessParameters);
+            mStatefulTransactionProviderProxy.startTransaction(mAccessoryParameters, mTransactionParameters, mTransactionProcessParameters);
         }
     }
-
 
     private void constructTransactionTypeTitle() {
         mTitleTransactionType = getString(R.string.MPUSale);
@@ -320,12 +307,11 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         }
     }
 
-
     @Override
     public void onStatusChanged(TransactionProcessDetails details, Transaction transaction) {
         Log.d(TAG, "onStatusChanged=" + details);
         if (transaction != null) {
-            mFormattedAmount = UiHelper.formatAmountWithSymbol(transaction.getCurrency(), transaction.getAmount());
+            mFormattedAmount = mLocalizationToolbox.formatAmount(transaction.getAmount(), transaction.getCurrency());
             constructTransactionTypeTitle();
             setTitle(constructTitle());
         }
@@ -364,11 +350,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     @Override
-    public void onSummaryPrintReceiptButtonClicked(String transactionIdentifier) {
-        showPrintReceiptFragment(transactionIdentifier);
-    }
-
-    @Override
     public void onAbortTransactionButtonClicked() {
         boolean result = mStatefulTransactionProviderProxy.abortTransaction();
         if (!result) {
@@ -383,6 +364,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
     @Override
     public void onSummaryRetryButtonClicked() {
+        stopAutoCloseTimer();
         mFormattedAmount = null;
         setTitle(constructTitle());
         startTransaction();
@@ -399,18 +381,28 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     @Override
+    public void onSummarySendReceiptButtonClicked(String transactionIdentifier) {
+        mSummaryInteractionOccured = true;
+        stopAutoCloseTimer();
+        showSendReceiptFragment(transactionIdentifier);
+    }
+
+    @Override
+    public void onSummaryPrintReceiptButtonClicked(String transactionIdentifier) {
+        mSummaryInteractionOccured = true;
+        stopAutoCloseTimer();
+        showPrintReceiptFragment(transactionIdentifier);
+    }
+
+    @Override
     public void onErrorRetryButtonClicked() {
         mFormattedAmount = null;
         if (getUiState() == UiState.TRANSACTION_ERROR) {
+            stopAutoCloseTimer();
             startTransaction();
         } else if (getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
             showPrintReceiptFragment(mStatefulTransactionProviderProxy.getCurrentTransaction().getIdentifier());
         }
-    }
-
-    @Override
-    public void onSendReceiptButtonClicked(String transactionIdentifier) {
-        showSendReceiptFragment(transactionIdentifier);
     }
 
     @Override
@@ -438,8 +430,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
     @Override
     public void onLoginCompleted() {
-        mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-        mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
         setTitle(constructTitle());
         startTransaction();
     }
@@ -457,10 +447,11 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
     @Override
     public TransactionProvider getTransactionProvider() {
-        return mStatefulTransactionProviderProxy.getTransactionProvider();
+        return MposUi.getInitializedInstance().getTransactionProvider();
     }
 
     private void finishWithResult() {
+        stopAutoCloseTimer();
         Transaction transaction = mStatefulTransactionProviderProxy.getCurrentTransaction();
 
         int resultCode;
@@ -509,11 +500,13 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         TransactionDataHolder dataHolder = new TransactionDataHolder(transaction);
         SummaryFragment summaryFragment = SummaryFragment.newInstance(!getIntent().hasExtra(BUNDLE_EXTRA_SESSION_IDENTIFIER), false, false, dataHolder);
         showFragment(summaryFragment, SummaryFragment.TAG, UiState.SUMMARY_DISPLAYING, true);
+        handleResultDisplayBehavior();
     }
 
     private void showErrorFragment(UiState uiState, boolean retryEnabled, MposError error, TransactionProcessDetails transactionProcessDetails) {
         ErrorFragment fragment = ErrorFragment.newInstance(retryEnabled, error, transactionProcessDetails);
         showFragment(fragment, ErrorFragment.TAG, uiState, true);
+        handleResultDisplayBehavior();
     }
 
     private void showPrintReceiptFragment(String transactionIdentifier) {
@@ -540,5 +533,37 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(findViewById(R.id.mpu_fragment_container).getWindowToken(), 0);
+    }
+
+    private void handleResultDisplayBehavior() {
+        if (isAutoCloseSummary()) {
+            startAutoCloseTimer();
+        }
+    }
+
+    private boolean isAutoCloseSummary() {
+        MposUiConfiguration.ResultDisplayBehavior displayResultBehavior = MposUi.getInitializedInstance().getConfiguration().getDisplayResultBehavior();
+        return !mSummaryInteractionOccured && (displayResultBehavior == MposUiConfiguration.ResultDisplayBehavior.CLOSE_AFTER_TIMEOUT);
+    }
+
+    private void startAutoCloseTimer() {
+        mAutoCloseCountDownTimer = new CountDownTimer(MposUiConfiguration.RESULT_DISPLAY_BEHAVIOUR_TIMEOUT, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // NO-OP
+            }
+
+            @Override
+            public void onFinish() {
+                finishWithResult();
+            }
+        }.start();
+    }
+
+    private void stopAutoCloseTimer() {
+        if (mAutoCloseCountDownTimer != null) {
+            mAutoCloseCountDownTimer.cancel();
+            mAutoCloseCountDownTimer = null;
+        }
     }
 }

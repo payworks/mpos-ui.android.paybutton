@@ -36,6 +36,7 @@
     <string name="header_init">Initialization</string>
     <string name="header_acquirer">Acquirer</string>
     <string name="option_e105">Charge 13.37€ on a E105</string>
+    <string name="option_wisepad">Charge 13.37€ on a WisePad</string>
     <string name="option_miura">Charge 13.37€ on a MIURA</string>
     <string name="option_miura_preauthorize">Pre-Authorize 13.37€ on a MIURA</string>
     <string name="option_miura_with_tip">Charge 13.37€ on a MIURA\nAsk for tip</string>

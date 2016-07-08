@@ -32,10 +32,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import io.mpos.Mpos;
 import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
-import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.parameters.TransactionParameters;
@@ -65,9 +63,6 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     private final static String TAG = "TransactionSummaryActivity";
 
     public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.summarybutton.TransactionSummaryActivity.TRANSACTION_IDENTIFIER";
-    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_ID";
-    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_SECRET";
-    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.summarybutton.TransactionSummaryActivity.PROVIDER_MODE";
 
     public final static String BUNDLE_EXTRA_ACQUIRER_LOGIN = "io.mpos.ui.summarybutton.TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
     public final static String BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID = "io.mpos.ui.summarybutton.TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
@@ -75,19 +70,12 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     private final static String SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER = "io.mpos.ui.TRANSACTION_DATA_HOLDER";
     private final static String SAVED_INSTANCE_STATE_UI_STATE = "io.mpos.ui.UI_STATE";
 
-    public final static String SAVED_INSTANCE_STATE_MERCHANT_ID = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_ID";
-    public final static String SAVED_INSTANCE_STATE_MERCHANT_SECRET = "io.mpos.ui.summarybutton.TransactionSummaryActivity.MERCHANT_SECRET";
-    public final static String SAVED_INSTANCE_STATE_PROVIDER_MODE = "io.mpos.ui.summarybutton.TransactionSummaryActivity.PROVIDER_MODE";
-
 
     private TransactionProvider mTransactionProvider;
     private Transaction mTransaction;
     private TransactionDataHolder mTransactionDataHolder;
     private ViewGroup mContainer;
 
-    private String mMerchantIdentifier;
-    private String mMerchantSecretKey;
-    private ProviderMode mProviderMode;
     private MposUiAccountManager mMposUiAccountManager;
     private boolean isAcquirerMode;
 
@@ -107,11 +95,7 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
                 isAcquirerMode = true;
                 String applicationIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID);
                 mMposUiAccountManager = MposUiAccountManager.getInitializedInstance();
-                mProviderMode = mMposUiAccountManager.getProviderMode();
-
                 if (mMposUiAccountManager.isLoggedIn()) {
-                    mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-                    mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
                     createMposProvider();
                     showLoadingFragment();
                 } else {
@@ -119,18 +103,11 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
                     showLoginFragment(applicationIdentifier);
                 }
             } else {
-                mMerchantSecretKey = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
-                mMerchantIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
-                mProviderMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
-
                 createMposProvider();
                 showLoadingFragment();
             }
         } else {
             mTransactionDataHolder = savedInstanceState.getParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER);
-            mMerchantIdentifier = savedInstanceState.getString(SAVED_INSTANCE_STATE_MERCHANT_ID);
-            mMerchantSecretKey = savedInstanceState.getString(SAVED_INSTANCE_STATE_MERCHANT_SECRET);
-            mProviderMode = (ProviderMode) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_PROVIDER_MODE);
             createMposProvider();
             setUiState((UiState) savedInstanceState.getSerializable(SAVED_INSTANCE_STATE_UI_STATE));
         }
@@ -140,9 +117,6 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SAVED_INSTANCE_STATE_TRANSACTION_DATA_HOLDER, mTransactionDataHolder);
         outState.putSerializable(SAVED_INSTANCE_STATE_UI_STATE, getUiState());
-        outState.putString(SAVED_INSTANCE_STATE_MERCHANT_ID, mMerchantIdentifier);
-        outState.putString(SAVED_INSTANCE_STATE_MERCHANT_SECRET, mMerchantSecretKey);
-        outState.putSerializable(SAVED_INSTANCE_STATE_PROVIDER_MODE, mProviderMode);
         super.onSaveInstanceState(outState);
     }
 
@@ -221,7 +195,7 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     @Override
-    public void onSendReceiptButtonClicked(String transactionIdentifier) {
+    public void onSummarySendReceiptButtonClicked(String transactionIdentifier) {
         showSendReceiptFragment(transactionIdentifier);
     }
 
@@ -267,8 +241,6 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
 
     @Override
     public void onLoginCompleted() {
-        mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-        mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
         createMposProvider();
         showLoadingFragment();
     }
@@ -314,7 +286,7 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     private void createMposProvider() {
-        mTransactionProvider = Mpos.createTransactionProvider(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey);
+        mTransactionProvider = MposUi.getInitializedInstance().getTransactionProvider();
     }
 
     private void hideSoftKeyboard() {

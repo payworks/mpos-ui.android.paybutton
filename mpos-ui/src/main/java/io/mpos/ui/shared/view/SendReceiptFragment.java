@@ -155,7 +155,7 @@ public class SendReceiptFragment extends Fragment {
         mProgressView.setAnimation(animation);
         mProgressView.setVisibility(View.VISIBLE);
 
-        mInteractionActivity.getTransactionProvider().sendCustomerReceiptForTransaction(transactionIdentifier, email, new SendReceiptListener() {
+        mInteractionActivity.getTransactionProvider().getTransactionModule().sendCustomerReceiptForTransaction(transactionIdentifier, email, new SendReceiptListener() {
             @Override
             public void onCompleted(String transactionIdentifier, MposError error) {
                 sendReceiptCompleted(error);

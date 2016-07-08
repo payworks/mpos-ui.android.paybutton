@@ -38,6 +38,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.mpos.platform.LocalizationToolbox;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.RefundTransactionCode;
 import io.mpos.transactions.TransactionStatus;
@@ -60,6 +61,9 @@ public class TransactionHistoryHelperTest {
     @Mock
     TransactionDataHolder mMockTransaction;
 
+    @Mock
+    LocalizationToolbox mLocalizationToolbox;
+
     @Before
     public void setup() {
         //setup mock context
@@ -80,8 +84,9 @@ public class TransactionHistoryHelperTest {
         List<RefundTransactionDataHolder> mockRefundTransactions = new ArrayList<>();
         mockRefundTransactions.add(getPartiallyCapturedRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("12.00")), eq(Currency.EUR))).thenReturn("12.00€");
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items.size()).isEqualTo(1);
@@ -97,8 +102,10 @@ public class TransactionHistoryHelperTest {
         List<RefundTransactionDataHolder> mockRefundTransactions = new ArrayList<>();
         mockRefundTransactions.add(getRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("14.00")), eq(Currency.EUR))).thenReturn("14.00€");
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("2.00")), eq(Currency.EUR))).thenReturn("2.00€");
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items.size()).isEqualTo(2);
@@ -121,8 +128,10 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
         when(mMockTransaction.isCaptured()).thenReturn(false);
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("14.00")), eq(Currency.EUR))).thenReturn("14.00€");
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("2.00")), eq(Currency.EUR))).thenReturn("2.00€");
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items.size()).isEqualTo(2);
@@ -145,8 +154,10 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getPartiallyCapturedRefundTransaction());
         mockRefundTransactions.add(getRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("12.00")), eq(Currency.EUR))).thenReturn("12.00€");
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("2.00")), eq(Currency.EUR))).thenReturn("2.00€");
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items.size()).isEqualTo(2);
@@ -169,8 +180,10 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getRefundTransaction());
         mockRefundTransactions.add(getRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("14.00")), eq(Currency.EUR))).thenReturn("14.00€");
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("2.00")), eq(Currency.EUR))).thenReturn("2.00€");
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items.size()).isEqualTo(3);
@@ -199,7 +212,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getDeclinedRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items).isNull();
@@ -212,8 +225,10 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getRefundTransaction());
         mockRefundTransactions.add(getDeclinedRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("14.00")), eq(Currency.EUR))).thenReturn("14.00€");
+        when(mLocalizationToolbox.formatAmount(eq(new BigDecimal("2.00")), eq(Currency.EUR))).thenReturn("2.00€");
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items.size()).isEqualTo(3);
@@ -240,7 +255,7 @@ public class TransactionHistoryHelperTest {
     public void transactionHistoryItems_nullRefundTransactions() throws Exception {
         when(mMockTransaction.getRefundTransactions()).thenReturn(null);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         List<TransactionHistoryItem> items = victim.createTransactionHistoryItems(mMockContext);
 
         assertThat(items).isNull();
@@ -250,7 +265,7 @@ public class TransactionHistoryHelperTest {
     public void partiallyCapturedRefundTransaction_null() throws Exception {
         when(mMockTransaction.getRefundTransactions()).thenReturn(null);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder partiallyCapturedRefundTransaction = victim.getPartiallyCapturedRefundTransaction();
 
         assertThat(partiallyCapturedRefundTransaction).isNull();
@@ -262,7 +277,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getPartiallyCapturedRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder partiallyCapturedRefundTransaction = victim.getPartiallyCapturedRefundTransaction();
 
         assertThat(partiallyCapturedRefundTransaction).isNotNull();
@@ -274,7 +289,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(getRefundTransaction());
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder partiallyCapturedRefundTransaction = victim.getPartiallyCapturedRefundTransaction();
 
         assertThat(partiallyCapturedRefundTransaction).isNull();
@@ -294,7 +309,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(refundTransaction3);
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder latestRefund = victim.getLatestApprovedRefundTransaction();
 
         assertThat(latestRefund.getTransactionIdentifier()).isEqualTo("tx-id2");
@@ -311,7 +326,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(refundTransaction2);
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder latestRefund = victim.getLatestApprovedRefundTransaction();
 
         assertThat(latestRefund.getTransactionIdentifier()).isEqualTo("tx-id2");
@@ -331,7 +346,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(refundTransaction3);
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder latestRefund = victim.getLatestApprovedRefundTransaction();
 
         assertThat(latestRefund.getTransactionIdentifier()).isEqualTo("tx-id2");
@@ -351,7 +366,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(refundTransaction3);
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder latestRefund = victim.getLatestApprovedRefundTransaction();
 
         assertThat(latestRefund).isNull();
@@ -371,7 +386,7 @@ public class TransactionHistoryHelperTest {
         mockRefundTransactions.add(refundTransaction3);
         when(mMockTransaction.getRefundTransactions()).thenReturn(mockRefundTransactions);
 
-        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction);
+        TransactionHistoryHelper victim = new TransactionHistoryHelper(mMockTransaction, mLocalizationToolbox);
         RefundTransactionDataHolder latestRefund = victim.getLatestApprovedRefundTransaction();
 
         assertThat(latestRefund).isNull();

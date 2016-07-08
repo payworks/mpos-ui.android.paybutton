@@ -34,8 +34,10 @@ import android.support.annotation.DrawableRes;
 import java.util.EnumSet;
 import java.util.Locale;
 
+import io.mpos.Mpos;
 import io.mpos.accessories.AccessoryFamily;
 import io.mpos.provider.ProviderMode;
+import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.model.MposUiAppearance;
 import io.mpos.ui.shared.model.MposUiConfiguration;
@@ -68,6 +70,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
     private String mMerchantSecretKey;
     private String mUsername;
     private String mIntegratorIdentifier;
+    private TransactionProvider mTransactionProvider;
 
     private SharedPreferences mSharedPrefs;
 
@@ -107,6 +110,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         mSharedPrefs = context.getSharedPreferences(SHARED_PREFERENCE_FILE_NAME_KEY, Context.MODE_PRIVATE);
         mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
         resolveCredentials();
+        createTransactionProvider(context);
         if (mApplicationId != null && !mApplicationId.equals(mApplicationData.getIdentifier())) {
             // Initialized with new application without logging out from the older one.
             clearCredentials(true);
@@ -125,6 +129,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         mMerchantSecretKey = null;
         mIntegratorIdentifier = null;
         mApplicationId = null;
+        mTransactionProvider = null;
         SharedPreferences.Editor sharedPrefsEditor = mSharedPrefs.edit();
         sharedPrefsEditor.remove(PREFERENCE_KEY_MERCHANT_IDENTIFIER);
         sharedPrefsEditor.remove(PREFERENCE_KEY_MERCHANT_SECRET_KEY);
@@ -144,8 +149,15 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         clearCredentials(clearUsername);
     }
 
-    public void loginWithCredentials(String username, String merchantId, String merchantSecret) {
+    public void loginWithCredentials(Context context, String username, String merchantId, String merchantSecret) {
         storeCredentials(username, merchantId, merchantSecret, mApplicationData.getIdentifier());
+        createTransactionProvider(context);
+    }
+
+    private void createTransactionProvider(Context context) {
+        if (isLoggedIn()) {
+            mTransactionProvider = Mpos.createTransactionProvider(context, mProviderMode, mMerchantIdentifier, mMerchantSecretKey);
+        }
     }
 
     private void storeCredentials(String username, String merchantId, String merchantSecret, String applicationId) {
@@ -155,6 +167,8 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         sharedPrefsEditor.putString(PREFERENCE_KEY_USERNAME, username);
         sharedPrefsEditor.putString(PREFERENCE_KEY_APPLICATION_ID, applicationId);
         sharedPrefsEditor.apply();
+        mMerchantIdentifier = merchantId;
+        mMerchantSecretKey = merchantSecret;
     }
 
     private void init(Context context, @ArrayRes int acquirerArrayResourceId, @DrawableRes int acquirerImageResourceId) {
@@ -168,8 +182,6 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         AccessoryFamily printerAccessoryFamily = resolveAccessoryFamily(applicationData[INDEX_PRINTER_FAMILY]);
 
         MposUiConfiguration mposUiConfiguration = new MposUiConfiguration();
-        mposUiConfiguration.setAccessoryFamily(accessoryFamily);
-        mposUiConfiguration.setPrinterAccessoryFamily(printerAccessoryFamily);
 
         mposUiConfiguration.setTerminalParameters(ParametersHelper.getAccessoryParametersForAccessoryFamily(accessoryFamily));
         mposUiConfiguration.setPrinterParameters(ParametersHelper.getAccessoryParametersForAccessoryFamily(printerAccessoryFamily));
@@ -219,7 +231,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
 
     private AccessoryFamily resolveAccessoryFamily(String accessoryFamilyString) {
 
-        if(mProviderMode == ProviderMode.MOCK) {
+        if (mProviderMode == ProviderMode.MOCK) {
             return AccessoryFamily.MOCK;
         }
 
@@ -242,14 +254,6 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         return mApplicationData;
     }
 
-    public String getMerchantIdentifier() {
-        return mMerchantIdentifier;
-    }
-
-    public String getMerchantSecretKey() {
-        return mMerchantSecretKey;
-    }
-
     public String getUsername() {
         return mUsername;
     }
@@ -262,4 +266,7 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         return mProviderMode;
     }
 
+    public TransactionProvider getTransactionProvider() {
+        return mTransactionProvider;
+    }
 }

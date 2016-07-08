@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.mpos.platform.LocalizationToolbox;
 import io.mpos.transactions.RefundTransactionCode;
 import io.mpos.transactions.TransactionStatus;
 import io.mpos.ui.R;
@@ -40,12 +41,13 @@ import io.mpos.ui.shared.model.TransactionHistoryItem;
 
 public class TransactionHistoryHelper {
 
-
     private TransactionDataHolder mTransaction;
     private List<RefundTransactionDataHolder> mRefundTransactions;
+    private LocalizationToolbox mLocalizationToolbox;
 
-    public TransactionHistoryHelper(TransactionDataHolder transaction) {
+    public TransactionHistoryHelper(TransactionDataHolder transaction, LocalizationToolbox localizationToolbox) {
         mTransaction = transaction;
+        mLocalizationToolbox = localizationToolbox;
         mRefundTransactions = transaction.getRefundTransactions();
     }
 
@@ -73,33 +75,31 @@ public class TransactionHistoryHelper {
         RefundTransactionDataHolder partiallyCapturedRefundTx = getPartiallyCapturedRefundTransaction();
         if (partiallyCapturedRefundTx != null) {
             BigDecimal partiallyCapturedAmount = TransactionAmountUtil.calculatePartiallyCapturedAmount(mTransaction, partiallyCapturedRefundTx);
-
+            String amountText = mLocalizationToolbox.formatAmount(partiallyCapturedAmount, partiallyCapturedRefundTx.getCurrency());
+            String reservedAmountText = mLocalizationToolbox.formatAmount(mTransaction.getAmount(), partiallyCapturedRefundTx.getCurrency());
             return TransactionHistoryItem.createPartialCaptureItem(context,
                     R.string.MPUTransactionTypeSale,
-                    partiallyCapturedAmount,
-                    partiallyCapturedRefundTx.getCurrency(),
+                    amountText,
                     partiallyCapturedRefundTx.getCreatedTimestamp(),
-                    mTransaction.getAmount(),
-                    partiallyCapturedRefundTx.getCurrency());
+                    reservedAmountText);
         }
 
         return null;
     }
 
     private TransactionHistoryItem generateSaleItem(Context context) {
+        String amountText = mLocalizationToolbox.formatAmount(mTransaction.getAmount(), mTransaction.getCurrency());
         if (mTransaction.isCaptured()) {
             return TransactionHistoryItem.createItem(context,
                     TransactionHistoryItem.Type.CHARGE,
                     R.string.MPUTransactionTypeSale,
-                    mTransaction.getAmount(),
-                    mTransaction.getCurrency(),
+                    amountText,
                     mTransaction.getCreatedTimestamp());
         } else {
             return TransactionHistoryItem.createItem(context,
                     TransactionHistoryItem.Type.PREAUTHORIZED,
                     R.string.MPUTransactionTypePreauthorization,
-                    mTransaction.getAmount(),
-                    mTransaction.getCurrency(),
+                    amountText,
                     mTransaction.getCreatedTimestamp());
         }
     }
@@ -109,10 +109,10 @@ public class TransactionHistoryHelper {
         for (RefundTransactionDataHolder refundTransaction : mTransaction.getRefundTransactions()) {
             if (refundTransaction.getStatus() == TransactionStatus.APPROVED  // Approved
                     && refundTransaction.getRefundTransactionCode() != RefundTransactionCode.PARTIAL_CAPTURE) { // Not partial capture
+                String amountText = mLocalizationToolbox.formatAmount(refundTransaction.getAmount(), refundTransaction.getCurrency());
                 TransactionHistoryItem refundItem = TransactionHistoryItem.createRefundItem(context,
                         R.string.MPUTransactionTypeRefund,
-                        refundTransaction.getAmount(),
-                        refundTransaction.getCurrency(),
+                        amountText,
                         refundTransaction.getCreatedTimestamp());
                 refundItems.add(refundItem);
             }

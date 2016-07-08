@@ -29,10 +29,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import io.mpos.Mpos;
 import io.mpos.errors.ErrorType;
 import io.mpos.errors.MposError;
-import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.ui.R;
 import io.mpos.ui.acquirer.MposUiAccountManager;
@@ -54,10 +52,6 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
     private final static String TAG = "PrintReceiptActivity";
 
     public final static String BUNDLE_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.printbutton.view.PrintReceiptActivity.TRANSACTION_IDENTIFIER";
-    public final static String BUNDLE_EXTRA_MERCHANT_ID = "io.mpos.ui.printbutton.view.PrintReceiptActivity.MERCHANT_ID";
-    public final static String BUNDLE_EXTRA_MERCHANT_SECRET = "io.mpos.ui.printbutton.view.PrintReceiptActivity.MERCHANT_SECRET";
-    public final static String BUNDLE_EXTRA_PROVIDER_MODE = "io.mpos.ui.printbutton.view.PrintReceiptActivity.PROVIDER_MODE";
-
     public final static String BUNDLE_EXTRA_ACQUIRER_LOGIN = "io.mpos.ui.printbutton.PrintReceiptActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN";
     public final static String BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID = "io.mpos.ui.printbutton.PrintReceiptActivity.BUNDLE_EXTRA_APPLICATION_ID";
 
@@ -66,9 +60,6 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
     private TransactionProvider mTransactionProvider;
     private String mTransactionIdentifier;
 
-    private String mMerchantIdentifier;
-    private String mMerchantSecretKey;
-    private ProviderMode mProviderMode;
     private MposUiAccountManager mMposUiAccountManager;
     private boolean isAcquirerMode;
 
@@ -92,12 +83,7 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
                 isAcquirerMode = true;
                 String applicationIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID);
                 mMposUiAccountManager = MposUiAccountManager.getInitializedInstance();
-                mProviderMode = mMposUiAccountManager.getProviderMode();
-
                 if (mMposUiAccountManager.isLoggedIn()) {
-                    mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-                    mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
-
                     createMposProvider();
                     showPrintReceiptFragment();
                 } else {
@@ -105,10 +91,6 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
                     showLoginFragment(applicationIdentifier);
                 }
             } else {
-                mMerchantSecretKey = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_SECRET);
-                mMerchantIdentifier = getIntent().getStringExtra(BUNDLE_EXTRA_MERCHANT_ID);
-                mProviderMode = (ProviderMode) getIntent().getSerializableExtra(BUNDLE_EXTRA_PROVIDER_MODE);
-
                 createMposProvider();
                 showPrintReceiptFragment();
             }
@@ -123,7 +105,7 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
     }
 
     private void createMposProvider() {
-        mTransactionProvider = Mpos.createTransactionProvider(getApplicationContext(), mProviderMode, mMerchantIdentifier, mMerchantSecretKey);
+        mTransactionProvider = MposUi.getInitializedInstance().getTransactionProvider();
     }
 
     @Override
@@ -158,9 +140,6 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
 
     @Override
     public void onLoginCompleted() {
-        mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-        mMerchantSecretKey = mMposUiAccountManager.getMerchantSecretKey();
-        mProviderMode = ProviderMode.MOCK;
         createMposProvider();
         showPrintReceiptFragment();
     }
@@ -201,8 +180,8 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
     }
 
     private void processErrorState() {
-        if (isAcquirerMode  &&
-                MposUi.getInitializedInstance().getError()!= null &&
+        if (isAcquirerMode &&
+                MposUi.getInitializedInstance().getError() != null &&
                 MposUi.getInitializedInstance().getError().getErrorType() == ErrorType.SERVER_AUTHENTICATION_FAILED) {
             showLoginFragment(MposUiAccountManager.getInitializedInstance().getApplicationData().getIdentifier());
         } else {

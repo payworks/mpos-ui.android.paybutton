@@ -119,7 +119,7 @@ public class LoadTransactionSummaryFragment extends Fragment {
 
     private void startLoading() {
         TransactionProvider transactionProvider = mInteractionActivity.getTransactionProvider();
-        transactionProvider.lookupTransaction(mTransactionIdentifier, new LookupTransactionListener() {
+        transactionProvider.getTransactionModule().lookupTransaction(mTransactionIdentifier, new LookupTransactionListener() {
             @Override
             public void onCompleted(String identifier, Transaction transaction, MposError error) {
                 if (mInteractionActivity != null) {

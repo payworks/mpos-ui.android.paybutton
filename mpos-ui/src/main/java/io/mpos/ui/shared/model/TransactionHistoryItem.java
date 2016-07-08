@@ -29,10 +29,7 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.text.format.DateUtils;
 
-import java.math.BigDecimal;
-
-import io.mpos.transactions.Currency;
-import io.mpos.ui.shared.util.UiHelper;
+import io.mpos.ui.R;
 
 public class TransactionHistoryItem {
 
@@ -53,24 +50,25 @@ public class TransactionHistoryItem {
     private TransactionHistoryItem() {
     }
 
-    public static TransactionHistoryItem createPartialCaptureItem(Context context, @StringRes int statusStringResource, BigDecimal amount, Currency currency, long timestamp, BigDecimal reservedAmount, Currency reservedCurrency) {
-        TransactionHistoryItem item = TransactionHistoryItem.createItem(context, Type.PARTIAL_CAPTURE, statusStringResource, amount, currency, timestamp);
-        item.setPartialCaptureHintText(UiHelper.getPartialCaptureHintText(context, reservedAmount, reservedCurrency));
+    public static TransactionHistoryItem createPartialCaptureItem(Context context, @StringRes int statusStringResource, String amountText, long timestamp, String reservedAmountText) {
+        TransactionHistoryItem item = TransactionHistoryItem.createItem(context, Type.PARTIAL_CAPTURE, statusStringResource, amountText, timestamp);
+        String partialCaptureHintText = context.getString(R.string.MPUPartiallyCaptured, reservedAmountText);
+        item.setPartialCaptureHintText(partialCaptureHintText);
         return item;
     }
 
-    public static TransactionHistoryItem createRefundItem(Context context, @StringRes int statusStringResource, BigDecimal amount, Currency currency, long timestamp) {
-        TransactionHistoryItem item = TransactionHistoryItem.createItem(context, Type.REFUND, statusStringResource, amount, currency, timestamp);
+    public static TransactionHistoryItem createRefundItem(Context context, @StringRes int statusStringResource, String amountText, long timestamp) {
+        TransactionHistoryItem item = TransactionHistoryItem.createItem(context, Type.REFUND, statusStringResource, amountText, timestamp);
         item.setAmountText("-" + item.getAmountText());
         return item;
     }
 
-    public static TransactionHistoryItem createItem(Context context, Type type, @StringRes int statusStringResource, BigDecimal amount, Currency currency, long timestamp) {
+    public static TransactionHistoryItem createItem(Context context, Type type, @StringRes int statusStringResource, String amountText, long timestamp) {
         TransactionHistoryItem item = new TransactionHistoryItem();
         item.setType(type);
         item.setStatusText(context.getString(statusStringResource));
         item.setTimestampText(DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
-        item.setAmountText(UiHelper.formatAmountWithSymbol(currency, amount));
+        item.setAmountText(amountText);
         return item;
     }
 

@@ -48,6 +48,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import io.mpos.paymentdetails.PaymentDetailsScheme;
+import io.mpos.platform.LocalizationToolbox;
 import io.mpos.transactions.RefundDetailsStatus;
 import io.mpos.transactions.TransactionStatus;
 import io.mpos.transactions.TransactionType;
@@ -67,7 +68,7 @@ public class SummaryFragment extends Fragment {
 
         void onSummaryCaptureButtonClicked(String transactionIdentifier);
 
-        void onSendReceiptButtonClicked(String transactionIdentifier);
+        void onSummarySendReceiptButtonClicked(String transactionIdentifier);
 
         void onSummaryRetryButtonClicked();
 
@@ -85,6 +86,7 @@ public class SummaryFragment extends Fragment {
 
     private TransactionDataHolder mTransactionDataHolder;
     private TransactionHistoryHelper mTransactionHistoryHelper;
+    private LocalizationToolbox mLocalizationToolbox;
     private boolean mRetryEnabled;
     private boolean mRefundEnabled;
     private boolean mCaptureEnabled;
@@ -193,7 +195,8 @@ public class SummaryFragment extends Fragment {
             mCaptureEnabled = savedInstanceState.getBoolean(SAVED_INSTANCE_STATE_CAPTURE_ENABLED);
         }
 
-        mTransactionHistoryHelper = new TransactionHistoryHelper(mTransactionDataHolder);
+        mLocalizationToolbox = MposUi.getInitializedInstance().getTransactionProvider().getLocalizationToolbox();
+        mTransactionHistoryHelper = new TransactionHistoryHelper(mTransactionDataHolder, mLocalizationToolbox);
         showTransactionStatusAndAmount();
         showSchemeAndAccountNumber();
         showSubject();
@@ -289,7 +292,7 @@ public class SummaryFragment extends Fragment {
 
     private void setEffectiveTotalAmountText() {
         BigDecimal effectiveTotalAmount = TransactionAmountUtil.calculateEffectiveTotalAmount(mTransactionDataHolder);
-        mAmountView.setText(UiHelper.formatAmountWithSymbol(mTransactionDataHolder.getCurrency(), effectiveTotalAmount));
+        mAmountView.setText(mLocalizationToolbox.formatAmount(effectiveTotalAmount, mTransactionDataHolder.getCurrency()));
     }
 
     private void showSchemeAndAccountNumber() {
@@ -408,14 +411,6 @@ public class SummaryFragment extends Fragment {
         mRetryEnabled = retryEnabled;
     }
 
-    public boolean isRetryEnabled() {
-        return mRetryEnabled;
-    }
-
-    public boolean isCaptureEnabled() {
-        return mCaptureEnabled;
-    }
-
     public void setCaptureEnabled(boolean captureEnabled) {
         mCaptureEnabled = captureEnabled;
     }
@@ -532,7 +527,7 @@ public class SummaryFragment extends Fragment {
             mSendReceiptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mInteractionActivity.onSendReceiptButtonClicked(getTransactionIdentifierForSendingAndPrinting());
+                    mInteractionActivity.onSummarySendReceiptButtonClicked(getTransactionIdentifierForSendingAndPrinting());
                 }
             });
         }
@@ -547,4 +542,5 @@ public class SummaryFragment extends Fragment {
             return mTransactionDataHolder.getTransactionIdentifier();
         }
     }
+
 }

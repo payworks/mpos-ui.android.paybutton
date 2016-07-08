@@ -40,10 +40,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 
-import java.math.BigDecimal;
-
 import io.mpos.paymentdetails.PaymentDetailsScheme;
-import io.mpos.transactions.Currency;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 
@@ -62,14 +59,6 @@ public class UiHelper {
         }
 
         return retVal.trim();
-    }
-
-    public static String formatAmountWithSymbol(Currency currency, BigDecimal amount) {
-        if (currency == null) {
-            return null;
-        } else {
-            return currency.formatAmountWithSymbol(amount);
-        }
     }
 
     public static Typeface createAwesomeFontTypeface(Context context) {
@@ -148,10 +137,6 @@ public class UiHelper {
         view.setBackgroundDrawable(wrappedDrawable);
     }
 
-    public static String getPartialCaptureHintText(Context context, BigDecimal amount, Currency currency) {
-        String amountText = formatAmountWithSymbol(currency, amount);
-        return context.getString(R.string.MPUPartiallyCaptured, amountText);
-    }
 
     public static String formatAccountNumber(String accountNumber) {
         if (accountNumber == null) {

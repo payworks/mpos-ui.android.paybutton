@@ -27,18 +27,14 @@ package io.mpos.ui.shared;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import java.math.BigDecimal;
-
+import io.mpos.Mpos;
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
-import io.mpos.transactionprovider.FetchReceiptListener;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
-import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.BuildConfig;
@@ -55,16 +51,16 @@ import io.mpos.ui.summarybutton.view.TransactionSummaryActivity;
 
 /**
  * Entry point for the Payworks SDK and paybutton UI.
- * <p>
+ * <p/>
  * Used to create intents to start activities for:
  * <ul>
  * <li>creating a charge/refund transaction,</li>
  * <li>showing a summary of a transaction,</li>
  * <li>printing a receipt of a transaction.</li>
  * </ul>
- * <p>
+ * <p/>
  * Can be also used for getting the information about the last processed transaction.
- * <p>
+ * <p/>
  * Implemented as a singleton, make sure to initialize it using {@link #initialize(android.content.Context, io.mpos.provider.ProviderMode, String, String)}.
  */
 public final class MposUi {
@@ -95,9 +91,6 @@ public final class MposUi {
     private static MposUi INSTANCE;
 
     private Context mContext;
-    private ProviderMode mProviderMode;
-    private String mMerchantIdentifier;
-    private String mMerchantSecret;
     private TransactionProvider mTransactionProvider;
 
     private MposUiMode mMposUiMode = MposUiMode.PROVIDER;
@@ -122,36 +115,6 @@ public final class MposUi {
     public static MposUi initialize(Context context, ProviderMode mode, String merchantIdentifier, String merchantSecret) {
         INSTANCE = new MposUi(context.getApplicationContext(), mode, merchantIdentifier, merchantSecret);
         return INSTANCE;
-    }
-
-    /**
-     * Initialization method for this singleton class.
-     * Deprecated alias for {@link #initialize(android.content.Context, io.mpos.provider.ProviderMode, String, String)}, use that method instead.
-     *
-     * @param context            Android context of your application.
-     * @param mode               Enum value specifying which backend environment to use.
-     * @param merchantIdentifier Identifier of the merchant which should be used for transactions.
-     * @param merchantSecret     Secret (authentication token) of the merchant which should be used for transactions.
-     * @return Initialized singleton object.
-     */
-    @Deprecated
-    public static MposUi initializeController(Context context, ProviderMode mode, String merchantIdentifier, String merchantSecret) {
-        return initialize(context, mode, merchantIdentifier, merchantSecret);
-    }
-
-    /**
-     * Initialization using an application for this singleton class.
-     * ProviderMode is set to LIVE by default
-     *
-     * @param context              Android context of your application.
-     * @param applicationName      Enum value specifying which Application to use.
-     * @param integratorIdentifier Identifier of the integrator.
-     * @return Initialized singleton object.
-     * @deprecated 2.6.0
-     */
-    @Deprecated
-    public static MposUi initialize(Context context, ApplicationName applicationName, String integratorIdentifier) {
-        return initialize(context.getApplicationContext(), ProviderMode.LIVE, applicationName, integratorIdentifier);
     }
 
     /**
@@ -243,7 +206,7 @@ public final class MposUi {
     /**
      * Creates an intent for a new transaction from a session identifier
      * (this identifier is created after registering the transaction on the backend).
-     * <p>
+     * <p/>
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
      * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
      * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
@@ -260,9 +223,6 @@ public final class MposUi {
             intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
         }
 
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_SESSION_IDENTIFIER, sessionIdentifier);
         return intent;
     }
@@ -288,9 +248,6 @@ public final class MposUi {
             intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
         }
 
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_SESSION_IDENTIFIER, sessionIdentifier);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_TRANSACTION_PROCESS_PARAMETERS, transactionProcessParameters);
         return intent;
@@ -298,7 +255,7 @@ public final class MposUi {
 
     /**
      * Creates an intent for a new transaction from the supplied transaction parameters
-     * <p>
+     * <p/>
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
      * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
      * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
@@ -315,9 +272,6 @@ public final class MposUi {
             intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
         }
 
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_TRANSACTION_PARAMETERS, transactionParameters);
         return intent;
     }
@@ -331,7 +285,7 @@ public final class MposUi {
      * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
      * using {@link #RESULT_EXTRA_TRANSACTION_IDENTIFIER} key.
      *
-     * @param transactionParameters Transaction parameters for the transaction.
+     * @param transactionParameters        Transaction parameters for the transaction.
      * @param transactionProcessParameters Transaction process parameters for the transaction process.
      * @return The intent which can be used to start a new activity.
      * @since 2.7.0
@@ -344,69 +298,14 @@ public final class MposUi {
             intent.putExtra(TransactionActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
         }
 
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
-        intent.putExtra(TransactionActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_TRANSACTION_PARAMETERS, transactionParameters);
         intent.putExtra(TransactionActivity.BUNDLE_EXTRA_TRANSACTION_PROCESS_PARAMETERS, transactionProcessParameters);
         return intent;
     }
 
     /**
-     * Creates an intent for a new charge transaction from the transaction data.
-     * <p>
-     * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
-     * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
-     * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
-     * using {@link #RESULT_EXTRA_TRANSACTION_IDENTIFIER} key.
-     *
-     * @param amount           The transaction amount.
-     * @param currency         The transaction currency.
-     * @param subject          The subject of the transaction.
-     * @param customIdentifier The subject of the transaction.
-     * @return The intent which can be used to start a new activity for result.
-     * @deprecated 2.5.0
-     */
-    @Deprecated
-    public Intent createChargeTransactionIntent(BigDecimal amount, Currency currency, @Nullable String subject, @Nullable String customIdentifier) {
-
-        TransactionParameters transactionParameters = new TransactionParameters.Builder().charge(amount, currency).
-                subject(subject).
-                customIdentifier(customIdentifier).
-                build();
-
-        return createTransactionIntent(transactionParameters);
-    }
-
-    /**
-     * Creates an intent for a new refund transaction from the identifier of the transaction
-     * which is to be refunded.
-     * <p>
-     * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PAYMENT}.
-     * The result code will be either {@link #RESULT_CODE_APPROVED} if the transaction was successfully processed and approved
-     * or {@link #RESULT_CODE_FAILED} otherwise. The identifier of the transaction can be retrieved from the resulting intent
-     * using {@link #RESULT_EXTRA_TRANSACTION_IDENTIFIER} key.
-     *
-     * @param transactionIdentifier The identifier of the old transaction which is to be refunded.
-     * @param subject               The subject of the new transaction.
-     * @param customIdentifier      The subject of the new transaction.
-     * @return The intent which can be used to start a new activity.
-     * @deprecated 2.5.0
-     */
-    @Deprecated
-    public Intent createRefundTransactionIntent(String transactionIdentifier, @Nullable String subject, @Nullable String customIdentifier) {
-
-        TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(transactionIdentifier).
-                subject(subject).
-                customIdentifier(customIdentifier).
-                build();
-
-        return createTransactionIntent(transactionParameters);
-    }
-
-    /**
      * Creates an intent for showing the summary screen of a transaction.
-     * <p>
+     * <p/>
      * You should use the returned intent with {@code startActivity()} or {@code startActivityForResult()} using request code {@link #REQUEST_CODE_SHOW_SUMMARY}
      * if you want to be notified when the transaction summary screen is closed. The result code will always be {@link #RESULT_CODE_SUMMARY_CLOSED}.
      *
@@ -421,16 +320,13 @@ public final class MposUi {
             intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
         }
 
-        intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
-        intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
-        intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
         intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_TRANSACTION_IDENTIFIER, transactionIdentifier);
         return intent;
     }
 
     /**
      * Creates an intent for printing a receipt of a transaction.
-     * <p>
+     * <p/>
      * Use only when MposUi is initialized with an Application.
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_PRINT_RECEIPT}.
      * The result code will be either {@link #RESULT_CODE_PRINT_SUCCESS} if the receipt data was successfully sent to the printer
@@ -447,19 +343,16 @@ public final class MposUi {
             intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
         }
 
-        intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_MERCHANT_ID, mMerchantIdentifier);
-        intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_MERCHANT_SECRET, mMerchantSecret);
-        intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_PROVIDER_MODE, mProviderMode);
         intent.putExtra(PrintReceiptActivity.BUNDLE_EXTRA_TRANSACTION_IDENTIFIER, transactionIdentifier);
         return intent;
     }
 
     /**
      * Creates an intent for the login screen
-     * <p>
+     * <p/>
      * Use only when MposUi is initialized with an Application.
      * The user is logged out forcefully before showing the login screen
-     * <p>
+     * <p/>
      * You should use the returned intent with {@code startActivityForResult()} using request code {@link #REQUEST_CODE_LOGIN}.
      * The result code will be either {@link #RESULT_CODE_LOGIN_SUCCESS} if the login was successful or {@link #RESULT_CODE_LOGIN_FAILED} otherwise.
      *
@@ -479,7 +372,7 @@ public final class MposUi {
 
     /**
      * Creates an intent for the settings screen
-     * <p>
+     * <p/>
      * Use only when MposUi is initialized with an Application.
      * You should use the returned intent with {@code startActivity()} or {@code startActivityForResult()} using request code {@link #REQUEST_CODE_SETTINGS}
      * if you want to be notified when the settings screen is closed. The result code will always be {@link #RESULT_CODE_SETTINGS_CLOSED}.
@@ -526,20 +419,20 @@ public final class MposUi {
     /**
      * Returns the transaction provider used for the previous transaction.
      * Returns null if the transaction hasn't been processed before.
-     * This can be used to query receipts, see {@link io.mpos.transactionprovider.TransactionProvider#fetchCustomerReceiptForTransaction(String, FetchReceiptListener)}
      *
      * @return TransactionProvider
      */
     public TransactionProvider getTransactionProvider() {
-        TransactionProvider provider = StatefulTransactionProviderProxy.getInstance().getTransactionProvider();
-        return provider;
+        if (mMposUiMode == MposUiMode.PROVIDER) {
+            return mTransactionProvider;
+        } else {
+            return mMposUiAccountManager.getTransactionProvider();
+        }
     }
 
     private MposUi(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret) {
         mContext = context;
-        mProviderMode = providerMode;
-        mMerchantIdentifier = merchantIdentifier;
-        mMerchantSecret = merchantSecret;
+        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
         mMposUiMode = MposUiMode.PROVIDER;
     }
 
@@ -554,9 +447,7 @@ public final class MposUi {
         mMposUiAccountManager = MposUiAccountManager.initialize(context, providerMode, applicationName, integratorIdentifier);
         mConfiguration = mMposUiAccountManager.getApplicationData().getMposUiConfiguration();
         if (mMposUiAccountManager.isLoggedIn()) {
-            mMerchantIdentifier = mMposUiAccountManager.getMerchantIdentifier();
-            mMerchantSecret = mMposUiAccountManager.getMerchantSecretKey();
-            mProviderMode = mMposUiAccountManager.getProviderMode();
+            mTransactionProvider = mMposUiAccountManager.getTransactionProvider();
         }
     }
 

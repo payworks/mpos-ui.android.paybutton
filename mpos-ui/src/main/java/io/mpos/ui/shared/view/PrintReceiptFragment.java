@@ -38,7 +38,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.mpos.accessories.AccessoryFamily;
 import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.transactionprovider.PrintingProcess;
@@ -48,7 +47,6 @@ import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.controller.StatefulPrintingProcessProxy;
-import io.mpos.ui.shared.util.ParametersHelper;
 import io.mpos.ui.shared.util.UiHelper;
 
 public class PrintReceiptFragment extends Fragment implements StatefulPrintingProcessProxy.Callback {
@@ -88,10 +86,6 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
 
         mTransactionProvider = mInteractionActivity.getTransactionProvider();
         AccessoryParameters accessoryParameters = MposUi.getInitializedInstance().getConfiguration().getPrinterParameters();
-        if (accessoryParameters == null) {
-            AccessoryFamily accessoryFamily = MposUi.getInitializedInstance().getConfiguration().getPrinterAccessoryFamily();
-            accessoryParameters = ParametersHelper.getAccessoryParametersForAccessoryFamily(accessoryFamily);
-        }
 
         mStatefulPrintingProcess.printReceipt(mTransactionIdentifier, mTransactionProvider, accessoryParameters);
     }

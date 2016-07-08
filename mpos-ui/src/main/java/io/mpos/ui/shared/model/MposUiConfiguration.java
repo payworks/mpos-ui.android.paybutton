@@ -27,13 +27,14 @@ package io.mpos.ui.shared.model;
 
 import java.util.EnumSet;
 
-import io.mpos.accessories.AccessoryFamily;
 import io.mpos.accessories.parameters.AccessoryParameters;
 
 /**
  * Configuration class used for tweaking appearance and features.
  */
 public class MposUiConfiguration {
+
+    public static final int RESULT_DISPLAY_BEHAVIOUR_TIMEOUT = 5000; //ms
 
     /**
      * Methods of capturing a signature from the customer (if needed).
@@ -48,6 +49,13 @@ public class MposUiConfiguration {
          * Have customer sign elsewhere, e.g. on printed receipt.
          */
         ON_RECEIPT
+    }
+
+    public enum ResultDisplayBehavior {
+
+        DISPLAY_INDEFINITELY,
+
+        CLOSE_AFTER_TIMEOUT
     }
 
     /**
@@ -80,11 +88,11 @@ public class MposUiConfiguration {
     private EnumSet<SummaryFeature> mSummaryFeatures = EnumSet.noneOf(SummaryFeature.class);
     private SignatureCapture mSignatureCapture = SignatureCapture.ON_SCREEN;
 
-    private AccessoryFamily mAccessoryFamily = AccessoryFamily.MOCK;
     private AccessoryParameters mTerminalParameters = null;
-    private AccessoryFamily mPrinterAccessoryFamily = AccessoryFamily.MOCK;
     private AccessoryParameters mPrinterParameters = null;
     private String mApplicationIdentifier;
+
+    private ResultDisplayBehavior mDisplayResultBehavior = ResultDisplayBehavior.DISPLAY_INDEFINITELY;
 
     /**
      * Set appearance of the MposUi.
@@ -147,30 +155,6 @@ public class MposUiConfiguration {
     }
 
     /**
-     * Set the accessory family which will be used for transactions.
-     *
-     * @param accessoryFamily Enum value representing the accessory family.
-     * @return Self, to allow chaining of calls.
-     * @deprecated 2.5.0
-     */
-    @Deprecated
-    public MposUiConfiguration setAccessoryFamily(AccessoryFamily accessoryFamily) {
-        mAccessoryFamily = accessoryFamily;
-        return this;
-    }
-
-    /**
-     * Get the accessory family which will be used for transactions.
-     *
-     * @return Enum value representing the accessory family.
-     * @deprecated 2.5.0
-     */
-    @Deprecated
-    public AccessoryFamily getAccessoryFamily() {
-        return mAccessoryFamily;
-    }
-
-    /**
      * Set the accessory parameters which will be used for transactions.
      *
      * @param accessoryParameters AccessoryParameters for the transaction.
@@ -191,28 +175,6 @@ public class MposUiConfiguration {
     }
 
     /**
-     * Set the accessory family which will be used for printing.
-     *
-     * @param printerAccessoryFamily Enum value representing the accessory family.
-     * @return Self, to allow chaining of calls.
-     * @deprecated 2.5.0
-     */
-    @Deprecated
-    public MposUiConfiguration setPrinterAccessoryFamily(AccessoryFamily printerAccessoryFamily) {
-        mPrinterAccessoryFamily = printerAccessoryFamily;
-        return this;
-    }
-
-    /**
-     * Get the accessory family which will be used for printing.
-     *
-     * @return Enum value representing the accessory family.
-     */
-    public AccessoryFamily getPrinterAccessoryFamily() {
-        return mPrinterAccessoryFamily;
-    }
-
-    /**
      * Set the accessory parameters which will be used for printing.
      *
      * @param printerAccessoryParameters AccessoryParameters for printing.
@@ -230,5 +192,23 @@ public class MposUiConfiguration {
      */
     public AccessoryParameters getPrinterParameters() {
         return mPrinterParameters;
+    }
+
+    /**
+     * Get the behavior of displaying the result
+     *
+     * @return Enum value representing the display result behavior
+     */
+    public ResultDisplayBehavior getDisplayResultBehavior() {
+        return mDisplayResultBehavior;
+    }
+
+    /**
+     * Set the behaviour for displaying the result.
+     *
+     * @param displayResultBehavior Enum value representing the display result behavior
+     */
+    public void setDisplayResultBehavior(ResultDisplayBehavior displayResultBehavior) {
+        mDisplayResultBehavior = displayResultBehavior;
     }
 }

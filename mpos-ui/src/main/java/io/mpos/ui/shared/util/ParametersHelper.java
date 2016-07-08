@@ -32,7 +32,7 @@ import io.mpos.transactions.parameters.TransactionParameters;
 
 public class ParametersHelper {
 
-    public static TransactionParameters getTransactionParametersWithNewCustomerIdentifier(TransactionParameters params, String customIdentifier) {
+    public static TransactionParameters getTransactionParametersWithNewCustomIdentifier(TransactionParameters params, String customIdentifier) {
 
         if (params.getType() == TransactionType.CHARGE) {
             return new TransactionParameters.Builder().
@@ -65,8 +65,8 @@ public class ParametersHelper {
                 return new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
             case VERIFONE_E105:
                 return new AccessoryParameters.Builder(AccessoryFamily.VERIFONE_E105).audioJack().build();
-            case BBPOS_WISE:
-                return new AccessoryParameters.Builder(AccessoryFamily.BBPOS_WISE).bluetooth().build();
+            case BBPOS_WISEPAD:
+                return new AccessoryParameters.Builder(AccessoryFamily.BBPOS_WISEPAD).bluetooth().build();
             case BBPOS_CHIPPER:
                 return new AccessoryParameters.Builder(AccessoryFamily.BBPOS_CHIPPER).audioJack().build();
             case SEWOO:
@@ -76,4 +76,5 @@ public class ParametersHelper {
         }
         return null;
     }
+
 }

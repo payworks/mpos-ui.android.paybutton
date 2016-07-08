@@ -176,7 +176,7 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void run() {
                                 enableUi(true);
-                                mMposUiAccountManager.loginWithCredentials(username, merchantId, merchantSecret);
+                                mMposUiAccountManager.loginWithCredentials(getActivity().getApplicationContext(), username, merchantId, merchantSecret);
                                 mInteractionActivity.onLoginCompleted();
                             }
                         });

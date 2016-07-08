@@ -61,7 +61,9 @@ import io.mpos.ui.shared.model.MposUiConfiguration;
 
 import static android.view.View.OnClickListener;
 
+@SuppressWarnings("ConstantConditions")
 public class CheckoutActivity extends AppCompatActivity {
+
     private final static String MERCHANT_ID = "<create a test merchant in the gateway manager>";
     private final static String MERCHANT_SECRET = "<create a test merchant in the gateway manager>";
 
@@ -307,6 +309,9 @@ public class CheckoutActivity extends AppCompatActivity {
                 mIsAcquirerMode = false;
                 MposUi mposUi = MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
                 mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                AccessoryParameters printerAccessoryParams = new AccessoryParameters.Builder(AccessoryFamily.SEWOO).bluetooth().build();
+                MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(printerAccessoryParams);
+
             }
         });
 
@@ -317,6 +322,7 @@ public class CheckoutActivity extends AppCompatActivity {
         MposUi mposUi = MposUi.initialize(this, ProviderMode.MOCK, "mock", "mock");
         AccessoryParameters mockAccessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MOCK).mocked().build();
         mposUi.getConfiguration().setTerminalParameters(mockAccessoryParameters);
+        MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(mockAccessoryParameters);
         mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
     }
 
@@ -440,5 +446,4 @@ public class CheckoutActivity extends AppCompatActivity {
                     }).create();
         }
     }
-
 }

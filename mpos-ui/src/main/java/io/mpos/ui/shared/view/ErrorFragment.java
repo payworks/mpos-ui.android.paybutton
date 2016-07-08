@@ -35,8 +35,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.Serializable;
-
 import io.mpos.errors.MposError;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.ui.R;
@@ -48,7 +46,6 @@ public class ErrorFragment extends Fragment {
     public interface Interaction {
 
         void onErrorRetryButtonClicked();
-
     }
 
     public static final String TAG = "ErrorFragment";
@@ -59,7 +56,7 @@ public class ErrorFragment extends Fragment {
     private Interaction mInteractionActivity;
     private MposError mError;
     private TransactionProcessDetails mTransactionProcessDetails;
-    boolean mRetryEnabled;
+    private boolean mRetryEnabled;
 
     public static ErrorFragment newInstance(boolean retryEnabled, MposError error, TransactionProcessDetails details) {
         ErrorFragment fragment = new ErrorFragment();

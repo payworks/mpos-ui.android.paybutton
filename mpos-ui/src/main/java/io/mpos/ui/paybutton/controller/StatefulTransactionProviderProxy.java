@@ -26,32 +26,24 @@
 
 package io.mpos.ui.paybutton.controller;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import io.mpos.Mpos;
-import io.mpos.accessories.Accessory;
-import io.mpos.accessories.AccessoryConnectionState;
-import io.mpos.accessories.AccessoryFamily;
 import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
-import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProcess;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactionprovider.TransactionProcessDetailsState;
 import io.mpos.transactionprovider.TransactionProcessWithRegistrationListener;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
-import io.mpos.transactions.Currency;
 import io.mpos.transactions.Transaction;
-import io.mpos.transactions.TransactionTemplate;
 import io.mpos.transactions.parameters.TransactionParameters;
+import io.mpos.ui.shared.MposUi;
 
 /**
  * StatefulTransactionProviderProxy keeps the state of the ongoing transaction independent of the Fragment/Activity's lifecycle.
@@ -85,7 +77,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     private boolean mTransactionIsOnGoing;
     private TransactionProcessDetails mLastTransactionProcessDetails;
-    private TransactionProvider mTransactionProvider;
 
     private boolean mCustomerVerificationRequired = false;
 
@@ -101,58 +92,27 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     }
 
 
-    @Deprecated
-    public void startChargeTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, BigDecimal amount, Currency currency, String subject, String customIdentifier) {
+    public void startTransactionWithSessionIdentifier(AccessoryParameters accessoryParameters, String sessionIdentifier, TransactionProcessParameters transactionProcessParameters) {
         clearForNewTransaction();
-
-        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-
-        TransactionTemplate template = mTransactionProvider.createChargeTransactionTemplate(amount, currency, subject, customIdentifier);
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(template, accessoryFamily, this);
-        mTransactionIsOnGoing = true;
-    }
-
-    @Deprecated
-    public void startRefundTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, String transactionIdentifier, String subject, String customIdentifier) {
-        clearForNewTransaction();
-        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-
-        TransactionTemplate template = mTransactionProvider.createRefundTransactionTemplate(transactionIdentifier, subject, customIdentifier);
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(template, accessoryFamily, this);
-        mTransactionIsOnGoing = true;
-    }
-
-    @Deprecated
-    public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryFamily accessoryFamily, String sessionIdentifier) {
-        clearForNewTransaction();
-        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryFamily, this);
-        mTransactionIsOnGoing = true;
-        mTransactionSessionLookup = true;
-    }
-
-    public void startTransactionWithSessionIdentifier(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, String sessionIdentifier, TransactionProcessParameters transactionProcessParameters) {
-        clearForNewTransaction();
-        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(sessionIdentifier, accessoryParameters, transactionProcessParameters, this);
+        TransactionProvider transactionProvider = MposUi.getInitializedInstance().getTransactionProvider();
+        mCurrentTransactionProcess = transactionProvider.startTransaction(sessionIdentifier, accessoryParameters, transactionProcessParameters, this);
 
         mTransactionIsOnGoing = true;
         mTransactionSessionLookup = true;
     }
 
-    public void startTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, AccessoryParameters accessoryParameters, TransactionParameters transactionParameters, TransactionProcessParameters transactionProcessParameters) {
+    public void startTransaction(AccessoryParameters accessoryParameters, TransactionParameters transactionParameters, TransactionProcessParameters transactionProcessParameters) {
         clearForNewTransaction();
-        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-        mCurrentTransactionProcess = mTransactionProvider.startTransaction(transactionParameters, accessoryParameters, transactionProcessParameters, this);
+        TransactionProvider transactionProvider = MposUi.getInitializedInstance().getTransactionProvider();
+        mCurrentTransactionProcess = transactionProvider.startTransaction(transactionParameters, accessoryParameters, transactionProcessParameters, this);
 
         mTransactionIsOnGoing = true;
     }
 
-    public void amendTransaction(Context context, ProviderMode providerMode, String merchantIdentifier, String merchantSecret, TransactionParameters transactionParameters) {
+    public void amendTransaction(TransactionParameters transactionParameters) {
         clearForNewTransaction();
-        mTransactionProvider = Mpos.createTransactionProvider(context, providerMode, merchantIdentifier, merchantSecret);
-        mTransactionProvider.amendTransaction(transactionParameters, this);
+        TransactionProvider transactionProvider = MposUi.getInitializedInstance().getTransactionProvider();
+        transactionProvider.amendTransaction(transactionParameters, this);
         mTransactionIsOnGoing = true;
     }
 
@@ -281,10 +241,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         return mCurrentTransaction;
     }
 
-    public TransactionProvider getTransactionProvider() {
-        return mTransactionProvider;
-    }
-
     public TransactionProcessDetails getLastTransactionProcessDetails() {
         return mLastTransactionProcessDetails;
     }
@@ -302,7 +258,6 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     }
 
     public void clearForNewTransaction() {
-        mTransactionProvider = null;
         mLastTransactionProcessDetails = null;
         mCurrentTransactionProcess = null;
         mCurrentTransaction = null;

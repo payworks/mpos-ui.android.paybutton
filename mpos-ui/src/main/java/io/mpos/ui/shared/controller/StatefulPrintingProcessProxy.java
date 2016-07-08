@@ -25,7 +25,6 @@
  */
 package io.mpos.ui.shared.controller;
 
-import io.mpos.accessories.AccessoryFamily;
 import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.transactionprovider.PrintingProcess;
 import io.mpos.transactionprovider.PrintingProcessDetails;
@@ -60,15 +59,6 @@ public class StatefulPrintingProcessProxy {
     private Callback mCallback;
     private PrintingProcessDetails mlastPrintingProcessDetails;
     private boolean mPrintingProcessOngoing;
-
-    @Deprecated
-    public void printReceipt(String transactionIdentifier, TransactionProvider transactionProvider, AccessoryFamily accessoryFamily) {
-        mTransactionProvider = transactionProvider;
-        mTransactionIdentifier = transactionIdentifier;
-        mPrintingProcessOngoing = true;
-        mPrintingProcess = mTransactionProvider.printCustomerReceiptForTransaction(transactionIdentifier, accessoryFamily, mPrintingProcessListenerProxy);
-    }
-
 
     public void printReceipt(String transactionIdentifier, TransactionProvider transactionProvider, AccessoryParameters accessoryParameters) {
         mTransactionProvider = transactionProvider;
