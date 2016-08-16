@@ -1,9 +1,7 @@
 /*
- * mpos-ui : http://www.payworksmobile.com
+ * Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
  *
  * The MIT License (MIT)
- *
- * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +24,13 @@
 package io.mpos.ui.acquirer.view;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import io.mpos.ui.R;
-import io.mpos.ui.acquirer.MposUiAccountManager;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.util.UiHelper;
 import io.mpos.ui.shared.util.UiState;
 import io.mpos.ui.shared.view.AbstractBaseActivity;
-import io.mpos.ui.shared.view.PrintReceiptFragment;
 
-/**
- * Created by Abhijith Srivatsav<abhijith.srivatsav@payworksmobile.com> on 14/10/15.
- */
 public class LoginActivity extends AbstractBaseActivity implements LoginFragment.Interaction {
 
     public static final String TAG = "LoginActivity";

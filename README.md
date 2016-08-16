@@ -1,31 +1,31 @@
-## payworks Pay Button(BETA) for Android
+## Payworks Pay Button for Android
 
 <img src="http://www.payworks.mpymnt.com/sites/default/files/paybutton_android_2.png"/>
 
-The payworks Pay Button makes the integration of card acceptance into your app insanely easy.
+The Payworks Pay Button makes the integration of card acceptance into your app insanely easy.
 
-Learn more about the payworks Pay Button [here][1].
+Learn more about the Payworks Pay Button [here][1].
 
-The `mpos-ui.paybutton` project contains the source code for the payworks Pay Button. The pay button uses the [payworks mPOS SDK][4] for Android to process payments.
+The `mpos-ui.paybutton` project contains the source code for the Payworks Pay Button. The pay button uses the [Payworks mPOS SDK][4] for Android to process payments.
 
-The `mpos-ui.paybutton-sample` project contains the sample on how to integrate the payworks Pay Button in your Android app.
+The `mpos-ui.paybutton-sample` project contains the sample on how to integrate the Payworks Pay Button in your Android app.
 
-Visit us at [www.payworksmobile.com][3] to learn more about what we do.
+Visit us at [www.payworks.com][3] to learn more about what we do.
 
 
 Installation and Documentation
 ------------------------------
 
-A precompiled(aar) version of this library can be installed through the payworks maven repository.
+A precompiled(aar) version of this library can be installed through the Payworks maven repository.
 
 Detailed installation instructions and documentation for the Pay Button can be found [here][2].
 
 License
 -------
 
-    The MIT License (MIT)
+    Copyright (C) 2016 Payworks GmbH (www.payworks.com)
 
-    Copyright (c) 2015 payworks GmbH
+    The MIT License (MIT)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,8 @@ License
     THE SOFTWARE.
 
 
- [1]: http://payworksmobile.com/blog/2015/02/23/hashtag-shipped-the-pay-button/
+ [1]: http://www.payworks.com/blog/2015/02/23/hashtag-shipped-the-pay-button/
  [2]: http://www.payworks.mpymnt.com/paybutton#android
- [3]: http://payworksmobile.com/
+ [3]: http://www.payworks.com/
  [4]: http://www.payworks.mpymnt.com/node/101#android
  [5]: http://www.payworks.mpymnt.com/sites/default/files/paybutton_android_2.png

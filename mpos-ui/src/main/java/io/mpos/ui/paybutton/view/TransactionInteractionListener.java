@@ -1,9 +1,7 @@
 /*
- * mpos-ui : http://www.payworksmobile.com
+ * Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
  *
  * The MIT License (MIT)
- *
- * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +23,7 @@
  */
 package io.mpos.ui.paybutton.view;
 
-import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
-import io.mpos.transactions.Transaction;
 
 public interface TransactionInteractionListener {
 

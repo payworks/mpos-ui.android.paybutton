@@ -1,9 +1,7 @@
 /*
- * mpos-ui : http://www.payworksmobile.com
+ * Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
  *
  * The MIT License (MIT)
- *
- * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,9 +26,6 @@ package io.mpos.ui.shared.util;
 
 import io.mpos.errors.MposError;
 
-/**
- * Created by jakub on 27/07/15.
- */
 public class ErrorHolder {
 
     private static final ErrorHolder INSTANCE = new ErrorHolder();

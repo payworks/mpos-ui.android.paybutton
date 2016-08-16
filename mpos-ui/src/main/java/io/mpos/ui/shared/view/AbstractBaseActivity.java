@@ -1,9 +1,7 @@
 /*
- * mpos-ui : http://www.payworksmobile.com
+ * Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
  *
  * The MIT License (MIT)
- *
- * Copyright (c) 2015 payworks GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +26,9 @@ package io.mpos.ui.shared.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import io.mpos.Mpos;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
 import io.mpos.ui.shared.util.UiState;
@@ -67,7 +63,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
         getFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.mpu_fade_in, R.anim.mpu_fade_out)
+                .setCustomAnimations(R.animator.mpu_fade_in, R.animator.mpu_fade_out)
                 .replace(R.id.mpu_fragment_container, fragment, tag)
                 .commitAllowingStateLoss();
 
