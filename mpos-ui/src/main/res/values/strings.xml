@@ -92,4 +92,5 @@
 <string name="MPUPrinting">"Printing..."</string>
 <string name="MPUPrint">"Print"</string>
 <string name="MPUPartiallyCaptured">"of Pre-Authorization for %1$s"</string>
+<string name="MPUReadCard">"Read Card"</string>
 </resources>

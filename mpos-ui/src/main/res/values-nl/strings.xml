@@ -91,4 +91,5 @@
 <string name="MPUPrinting">"Afdrukken..."</string>
 <string name="MPUPrint">"Print"</string>
 <string name="MPUPartiallyCaptured">"van Pre-autorisatie voor %1$s"</string>
+<string name="MPUReadCard">"Kaart lezen"</string>
 </resources>

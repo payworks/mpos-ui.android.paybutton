@@ -50,6 +50,7 @@ import io.mpos.ui.shared.util.UiHelper;
 public class PrintReceiptFragment extends Fragment implements StatefulPrintingProcessProxy.Callback {
 
     public interface Interaction {
+
         void onReceiptPrintCompleted(MposError error);
 
         void onAbortPrintingClicked();

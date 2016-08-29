@@ -91,4 +91,5 @@
 <string name="MPUPrinting">"Skriver ut..."</string>
 <string name="MPUPrint">"Skriv ut"</string>
 <string name="MPUPartiallyCaptured">"Av reserverat för %1$s"</string>
+<string name="MPUReadCard">"Avläs kort"</string>
 </resources>

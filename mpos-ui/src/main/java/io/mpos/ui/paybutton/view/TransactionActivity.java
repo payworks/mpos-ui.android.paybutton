@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -530,7 +531,10 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(findViewById(R.id.mpu_fragment_container).getWindowToken(), 0);
+        View containerView = findViewById(R.id.mpu_fragment_container);
+        if (containerView != null) {
+            imm.hideSoftInputFromWindow(containerView.getWindowToken(), 0);
+        }
     }
 
     private void handleResultDisplayBehavior() {

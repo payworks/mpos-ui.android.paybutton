@@ -91,4 +91,5 @@
 <string name="MPUPrinting">"Tulostetaan…"</string>
 <string name="MPUPrint">"Tulosta"</string>
 <string name="MPUPartiallyCaptured">"katevarauksesta kohteelle %1$s"</string>
+<string name="MPUReadCard">"Lue kortti"</string>
 </resources>

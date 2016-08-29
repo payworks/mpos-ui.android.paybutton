@@ -34,6 +34,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import org.hamcrest.CoreMatchers;
 
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.provider.ProviderMode;
 import io.mpos.ui.R;
 import io.mpos.ui.paybutton.view.SignatureActivity;
@@ -54,7 +55,7 @@ public class SignatureActivityTest extends ActivityInstrumentationTestCase2<Sign
 
         MposUi controller = MposUi.initialize(getInstrumentation().getContext(), ProviderMode.MOCK, "mock", "mock");
         MposUiConfiguration config = controller.getConfiguration();
-        config.setAccessoryFamily(AccessoryFamily.MOCK);
+        config.setTerminalParameters(new AccessoryParameters.Builder(AccessoryFamily.MOCK).bluetooth().build());
 
         Intent intent = new Intent();
         intent.putExtra(SignatureActivity.BUNDLE_KEY_AMOUNT, "12.34$");

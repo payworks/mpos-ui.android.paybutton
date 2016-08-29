@@ -136,6 +136,15 @@
             android:textColor="@android:color/white"/>
 
         <TextView
+            android:id="@+id/read_card"
+            style="@style/CheckoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#456D58"
+            android:text="@string/option_read_card"
+            android:textColor="@android:color/white"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

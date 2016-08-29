@@ -51,6 +51,7 @@ import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
+import io.mpos.transactions.CardDetails;
 import io.mpos.transactions.Currency;
 import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.acquirer.ApplicationName;
@@ -313,6 +314,16 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.read_card).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MposUi mposUi = MposUi.getInitializedInstance();
+                AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
+                mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
+                readCard();
+            }
+        });
+
         updateViews();
     }
 
@@ -330,6 +341,11 @@ public class CheckoutActivity extends AppCompatActivity {
 
     void startPayment(double amount) {
         startPayment(amount, true, null);
+    }
+
+    void readCard() {
+        Intent intent = MposUi.getInitializedInstance().createReadCardIntent();
+        startActivityForResult(intent, MposUi.REQUEST_CODE_READ_CARD);
     }
 
     void startPayment(double amount, boolean autoCapture, TransactionProcessParameters processParameters) {
@@ -393,6 +409,19 @@ public class CheckoutActivity extends AppCompatActivity {
         } else if (requestCode == MposUi.REQUEST_CODE_SETTINGS) {
             // resultCode is always MposUi.RESULT_CODE_SETTINGS_CLOSED
             Toast.makeText(this, "Summary Closed", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == MposUi.REQUEST_CODE_READ_CARD) {
+            if (resultCode == MposUi.RESULT_CODE_READ_CARD_SUCCESS) {
+                // Results of the read card is available on the MposUi instance
+                CardDetails cardDetails = MposUi.getInitializedInstance().getCardDetails();
+                Toast.makeText(this, "Reading card success", Toast.LENGTH_SHORT).show();
+            } else {
+                MposError error = MposUi.getInitializedInstance().getError();
+                if (error == null) {
+                    Toast.makeText(this, "Read card aborted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Read card failed" + error.getErrorType().name(), Toast.LENGTH_SHORT).show();
+                }
+            }
         }
 
         // an error could have occurred regardless of the main outcome

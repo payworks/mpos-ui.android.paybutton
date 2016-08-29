@@ -33,6 +33,7 @@ import io.mpos.provider.ProviderMode;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
+import io.mpos.transactions.CardDetails;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.BuildConfig;
@@ -40,7 +41,9 @@ import io.mpos.ui.acquirer.ApplicationName;
 import io.mpos.ui.acquirer.MposUiAccountManager;
 import io.mpos.ui.acquirer.view.LoginActivity;
 import io.mpos.ui.acquirer.view.SettingsActivity;
+import io.mpos.ui.paybutton.controller.StatefulReadCardProcessProxy;
 import io.mpos.ui.paybutton.controller.StatefulTransactionProviderProxy;
+import io.mpos.ui.paybutton.view.ReadCardActivity;
 import io.mpos.ui.paybutton.view.TransactionActivity;
 import io.mpos.ui.printbutton.view.PrintReceiptActivity;
 import io.mpos.ui.shared.model.MposUiConfiguration;
@@ -68,6 +71,7 @@ public final class MposUi {
     public static final int REQUEST_CODE_SHOW_SUMMARY = 1005;
     public static final int REQUEST_CODE_LOGIN = 1007;
     public static final int REQUEST_CODE_SETTINGS = 1009;
+    public static final int REQUEST_CODE_READ_CARD = 1011;
 
 
     public static final int RESULT_CODE_APPROVED = 2001;
@@ -83,6 +87,8 @@ public final class MposUi {
 
     public static final int RESULT_CODE_SETTINGS_CLOSED = 6001;
 
+    public static final int RESULT_CODE_READ_CARD_SUCCESS = 7001;
+    public static final int RESULT_CODE_READ_CARD_FAILED = 7002;
 
     public static final String RESULT_EXTRA_TRANSACTION_IDENTIFIER = "io.mpos.ui.shared.MposUiController.TRANSACTION_IDENTIFIER";
 
@@ -199,6 +205,15 @@ public final class MposUi {
      */
     public MposError getError() {
         return ErrorHolder.getInstance().getError();
+    }
+
+    /**
+     * Returns the card details if the read card process was successful.
+     *
+     * @return the card details of the last read card process.
+     */
+    public CardDetails getCardDetails() {
+        return StatefulReadCardProcessProxy.getInstance().getCardDetails();
     }
 
     /**
@@ -321,6 +336,27 @@ public final class MposUi {
         intent.putExtra(TransactionSummaryActivity.BUNDLE_EXTRA_TRANSACTION_IDENTIFIER, transactionIdentifier);
         return intent;
     }
+
+
+    /**
+     * Creates an intent for reading a card.
+     * <p/>
+     * You should use the returned intent with {{@code startActivityForResult()} using request code {@link #REQUEST_CODE_READ_CARD}
+     * The result code will be either {@link #RESULT_CODE_READ_CARD_SUCCESS} if the card reading was successful
+     * or {@link #RESULT_CODE_READ_CARD_FAILED} if it was aborted/ failed.
+     * <p/>
+     * The card details can be accessed from {@link #getCardDetails()}
+     */
+    public Intent createReadCardIntent() {
+        Intent intent = new Intent(mContext, ReadCardActivity.class);
+
+        if (mMposUiMode == MposUiMode.ACQUIRER) {
+            intent.putExtra(ReadCardActivity.BUNDLE_EXTRA_ACQUIRER_LOGIN, true);
+            intent.putExtra(ReadCardActivity.BUNDLE_EXTRA_ACQUIRER_APPLICATION_ID, mMposUiAccountManager.getApplicationData().getIdentifier());
+        }
+        return intent;
+    }
+
 
     /**
      * Creates an intent for printing a receipt of a transaction.

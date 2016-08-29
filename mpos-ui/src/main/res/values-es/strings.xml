@@ -91,4 +91,5 @@
 <string name="MPUPrinting">"Imprimiendo..."</string>
 <string name="MPUPrint">"Imprimir"</string>
 <string name="MPUPartiallyCaptured">"de la preautorización para %1$s"</string>
+<string name="MPUReadCard">"Leer tarjeta"</string>
 </resources>

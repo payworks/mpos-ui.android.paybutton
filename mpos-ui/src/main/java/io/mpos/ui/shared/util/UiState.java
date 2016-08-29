@@ -91,6 +91,16 @@ public enum UiState {
     /**
      * Settings screen is displayed
      */
-    SETTINGS_DISPLAYING
+    SETTINGS_DISPLAYING,
+
+    /**
+     * Reading card screen is displayed
+     */
+    READING_CARD,
+
+    /**
+     * Error reading card
+     */
+    READING_CARD_ERROR
 
 }
