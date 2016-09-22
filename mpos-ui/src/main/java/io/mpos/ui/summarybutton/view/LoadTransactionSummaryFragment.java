@@ -82,7 +82,7 @@ public class LoadTransactionSummaryFragment extends Fragment {
 
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
 
-        ImageView progressView = (ImageView)view.findViewById(R.id.mpu_progress_view);
+        ImageView progressView = (ImageView) view.findViewById(R.id.mpu_progress_view);
         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.mpu_rotation);
         progressView.startAnimation(animation);
 
@@ -90,6 +90,9 @@ public class LoadTransactionSummaryFragment extends Fragment {
         iconView.setTypeface(UiHelper.createAwesomeFontTypeface(view.getContext()));
         iconView.setTextColor(color);
         iconView.setText(R.string.mpu_fa_history);
+
+        TextView statusView = (TextView) view.findViewById(R.id.mpu_status_view);
+        statusView.setVisibility(View.GONE);
 
         return view;
     }

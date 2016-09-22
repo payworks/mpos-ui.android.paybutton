@@ -23,8 +23,8 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <string name="app_name">PayButton Sample</string>
-    <string name="title_activity_checkout">PayButton Sample</string>
+    <string name="app_name">Pay Button Sample</string>
+    <string name="title_activity_checkout">Pay Button Sample</string>
     <string name="option_signature_required">Charge 108.20€\nSignature required</string>
     <string name="header_mock">MOCK: Simulated internet and card reader</string>
     <string name="option_application_selection">Charge 113.73€\nApplication selection required</string>
@@ -45,11 +45,11 @@
     <string name="option_last_capture">Capture last transaction</string>
     <string name="option_last_print">Print last transaction</string>
     <string name="info">Info</string>
-    <string name="info_pw_paybutton">payworks Pay Button (BETA)</string>
+    <string name="info_pw_paybutton">Payworks Pay Button</string>
     <string name="info_body"><![CDATA[
-        The payworks Pay Button makes the integration of card acceptance into your app insanely easy!<br/><br/>
+        The Payworks Pay Button makes the integration of card acceptance into your app insanely easy!<br/><br/>
         <a href=\'http://www.payworks.mpymnt.com/paybutton#android\'>Pay Button</a>&nbsp;&nbsp;
-        <a href=\'http://payworksmobile.com\'>Website</a>&nbsp;&nbsp;
+        <a href=\'http://payworks.com\'>Website</a>&nbsp;&nbsp;
         <a href=\'https://github.com/payworks\'>GitHub</a>
     ]]></string>
     <string name="init_with_concardis">Initialize with ConCardis</string>

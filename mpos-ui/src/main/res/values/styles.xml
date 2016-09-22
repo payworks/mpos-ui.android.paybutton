@@ -54,6 +54,10 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <style name="MpuCardHeaderInformationStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/mpu_card_heading</item>
+    </style>
+
     <style name="MpuCardHeaderAmountTextStyle" parent="TextAppearance.AppCompat.Large">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

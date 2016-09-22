@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.mpos.errors.MposError;
@@ -44,6 +45,8 @@ public class ErrorFragment extends Fragment {
     public interface Interaction {
 
         void onErrorRetryButtonClicked();
+
+        void onErrorCloseButtonClicked();
     }
 
     public static final String TAG = "ErrorFragment";
@@ -96,13 +99,25 @@ public class ErrorFragment extends Fragment {
             retryButton.setVisibility(View.GONE);
         }
 
+        Button closeButton = (Button) view.findViewById(R.id.mpu_close_button);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInteractionActivity.onErrorCloseButtonClicked();
+            }
+        });
+
         if ("SERVER_AUTHENTICATION_FAILED".equals(mError.getErrorType())) {
             retryButton.setVisibility(View.GONE);
         }
 
+        ImageView progressView = (ImageView) view.findViewById(R.id.mpu_progress_view);
+        progressView.setVisibility(View.GONE);
+
         TextView iconView = (TextView) view.findViewById(R.id.mpu_status_icon_view);
         iconView.setTypeface(UiHelper.createAwesomeFontTypeface(getActivity()));
         iconView.setTextColor(MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary());
+        iconView.setText(R.string.mpu_fa_times_circle);
 
         TextView errorView = (TextView) view.findViewById(R.id.mpu_status_view);
 

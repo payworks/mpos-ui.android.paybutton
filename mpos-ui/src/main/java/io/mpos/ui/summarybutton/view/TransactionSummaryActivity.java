@@ -185,6 +185,11 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     }
 
     @Override
+    public void onErrorCloseButtonClicked() {
+        finishWithResult();
+    }
+
+    @Override
     public void onSummaryCaptureButtonClicked(String transactionIdentifier) {
         TransactionParameters transactionParameters = new TransactionParameters.Builder().capture(transactionIdentifier).build();
         Intent intent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
@@ -213,6 +218,11 @@ public class TransactionSummaryActivity extends AbstractBaseActivity implements
     @Override
     public void onSummaryPrintReceiptButtonClicked(String transactionIdentifier) {
         showPrintReceiptFragment(transactionIdentifier);
+    }
+
+    @Override
+    public void onSummaryCloseButtonClicked() {
+        finishWithResult();
     }
 
     @Override

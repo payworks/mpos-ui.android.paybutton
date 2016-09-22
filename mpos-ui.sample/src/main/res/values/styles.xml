@@ -29,13 +29,35 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="CheckoutButton" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:minHeight">48dp</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">#000</item>
-        <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:background">#CCC</item>
+    <style name="MPUBaseButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:minHeight">54dp</item>
+        <item name="android:padding">14dp</item>
+    </style>
+
+    <style name="MPUButtonStyle1" parent="MPUBaseButtonStyle">
+        <item name="backgroundTint">@color/mpu_pw_brand_color2</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="MPUButtonStyle2" parent="MPUBaseButtonStyle">
+        <item name="backgroundTint">@color/mpu_pw_brand_color3</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MPUButtonStyle3" parent="MPUBaseButtonStyle">
+        <item name="backgroundTint">@color/mpu_pw_brand_color4</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MPUButtonStyle4" parent="MPUBaseButtonStyle">
+        <item name="backgroundTint">@color/mpu_pw_brand_color5</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="MPUButtonStyle5" parent="MPUBaseButtonStyle">
+        <item name="backgroundTint">@color/mpu_pw_brand_color1</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

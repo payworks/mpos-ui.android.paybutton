@@ -31,6 +31,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -89,18 +90,11 @@ public class CheckoutActivity extends AppCompatActivity {
 
         MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
 
+        // MOCK mode
         findViewById(R.id.transaction_signature).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                initMockPaymentController();
-
-                //Styling the Payment Controller.
-                MposUi.getInitializedInstance()
-                        .getConfiguration().getAppearance()
-                        .setColorPrimary(Color.parseColor("#ff9800"))
-                        .setColorPrimaryDark(Color.parseColor("#f57c00"))
-                        .setBackgroundColor(Color.parseColor("#FFF3E0"))
-                        .setTextColorPrimary(Color.BLACK);
+                initMockMode();
                 startPayment(108.20);
             }
         });
@@ -108,15 +102,7 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.transaction_application_selection).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                initMockPaymentController();
-
-                //Styling the Payment Controller.
-                MposUi.getInitializedInstance()
-                        .getConfiguration().getAppearance()
-                        .setColorPrimary(Color.parseColor("#7cb342"))
-                        .setColorPrimaryDark(Color.parseColor("#689f38"))
-                        .setBackgroundColor(Color.parseColor("#E8F5E9"))
-                        .setTextColorPrimary(Color.WHITE);
+                initMockMode();
                 startPayment(113.73);
             }
         });
@@ -124,15 +110,7 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.transaction_declined).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                initMockPaymentController();
-
-                //Styling the Payment Controller.
-                MposUi.getInitializedInstance()
-                        .getConfiguration().getAppearance()
-                        .setColorPrimary(Color.parseColor("#F4511E"))
-                        .setColorPrimaryDark(Color.parseColor("#D84315"))
-                        .setBackgroundColor(Color.parseColor("#FFEBEE"))
-                        .setTextColorPrimary(Color.WHITE);
+                initMockMode();
                 startPayment(110.40);
             }
         });
@@ -140,16 +118,7 @@ public class CheckoutActivity extends AppCompatActivity {
         findViewById(R.id.transaction_ask_for_tip).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                initMockPaymentController();
-
-                //Styling the Payment Controller.
-                MposUi.getInitializedInstance()
-                        .getConfiguration().getAppearance()
-                        .setColorPrimary(Color.parseColor("#ffbb00"))
-                        .setColorPrimaryDark(Color.parseColor("#D49B00"))
-                        .setBackgroundColor(Color.parseColor("#FFF3E0"))
-                        .setTextColorPrimary(Color.BLACK);
-
+                initMockMode();
                 TransactionProcessParameters processParameters = new TransactionProcessParameters.Builder()
                         .addAskForTipStep()
                         .build();
@@ -158,14 +127,15 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        // TEST mode
         findViewById(R.id.transaction_e105_charge).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mIsAcquirerMode) {
+                    initTestMode();
                     MposUi mposUi = MposUi.getInitializedInstance();
                     AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.VERIFONE_E105).audioJack().build();
                     mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
-                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
                 }
                 startPayment(13.37);
             }
@@ -175,10 +145,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mIsAcquirerMode) {
-                    MposUi mposUi = MposUi.getInitializedInstance();
-                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
-                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
-                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                    initTestMode();
                 }
                 startPayment(13.37);
             }
@@ -188,10 +155,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mIsAcquirerMode) {
-                    MposUi mposUi = MposUi.getInitializedInstance();
-                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
-                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
-                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                    initTestMode();
                 }
                 startPayment(13.37, false);
             }
@@ -201,75 +165,24 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mIsAcquirerMode) {
-                    MposUi mposUi = MposUi.getInitializedInstance();
-                    AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
-                    mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
-                    mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+                    initTestMode();
                 }
                 TransactionProcessParameters processParameters = new TransactionProcessParameters.Builder().addAskForTipStep().build();
                 startPayment(13.37, true, processParameters);
             }
         });
 
-        findViewById(R.id.summary_last).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.read_card).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent summaryIntent = MposUi.getInitializedInstance().createTransactionSummaryIntent(mLastTransactionIdentifier);
-                startActivityForResult(summaryIntent, MposUi.REQUEST_CODE_SHOW_SUMMARY);
+                if (!mIsAcquirerMode) {
+                    initTestMode();
+                }
+                readCard();
             }
         });
 
-        findViewById(R.id.refund_last).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(mLastTransactionIdentifier)
-                        .subject("subject-refund")
-                        .build();
-                Intent refundIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
-                startActivity(refundIntent);
-            }
-        });
-
-        findViewById(R.id.capture_last).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TransactionParameters transactionParameters = new TransactionParameters.Builder().capture(mLastTransactionIdentifier).build();
-                Intent captureIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
-                startActivity(captureIntent);
-            }
-        });
-
-        findViewById(R.id.print_last).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                printReceipt(mLastTransactionIdentifier);
-            }
-        });
-
-
-        findViewById(R.id.show_login).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = MposUi.getInitializedInstance().createLoginIntent();
-                startActivityForResult(intent, MposUi.REQUEST_CODE_LOGIN);
-            }
-        });
-
-        findViewById(R.id.show_settings).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = MposUi.getInitializedInstance().createSettingsIntent();
-                startActivityForResult(intent, MposUi.REQUEST_CODE_SETTINGS);
-            }
-        });
-
-        findViewById(R.id.logout).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MposUi.getInitializedInstance().logout();
-            }
-        });
-
+        // Initialization
         findViewById(R.id.init_with_concardis).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -306,33 +219,108 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mIsAcquirerMode = false;
-                MposUi mposUi = MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
-                mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
-                AccessoryParameters printerAccessoryParams = new AccessoryParameters.Builder(AccessoryFamily.SEWOO).bluetooth().build();
-                MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(printerAccessoryParams);
-
+                initTestMode();
             }
         });
 
-        findViewById(R.id.read_card).setOnClickListener(new OnClickListener() {
+        // Acquirer
+        findViewById(R.id.show_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                MposUi mposUi = MposUi.getInitializedInstance();
-                AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
-                mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
-                readCard();
+                Intent intent = MposUi.getInitializedInstance().createLoginIntent();
+                startActivityForResult(intent, MposUi.REQUEST_CODE_LOGIN);
+            }
+        });
+
+        findViewById(R.id.show_settings).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = MposUi.getInitializedInstance().createSettingsIntent();
+                startActivityForResult(intent, MposUi.REQUEST_CODE_SETTINGS);
+            }
+        });
+
+        findViewById(R.id.logout).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MposUi.getInitializedInstance().logout();
+            }
+        });
+
+        // Last transaction action
+        findViewById(R.id.summary_last).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent summaryIntent = MposUi.getInitializedInstance().createTransactionSummaryIntent(mLastTransactionIdentifier);
+                startActivityForResult(summaryIntent, MposUi.REQUEST_CODE_SHOW_SUMMARY);
+            }
+        });
+
+        findViewById(R.id.refund_last).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransactionParameters transactionParameters = new TransactionParameters.Builder().refund(mLastTransactionIdentifier)
+                        .subject("subject-refund")
+                        .build();
+                Intent refundIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
+                startActivity(refundIntent);
+            }
+        });
+
+        findViewById(R.id.capture_last).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransactionParameters transactionParameters = new TransactionParameters.Builder().capture(mLastTransactionIdentifier).build();
+                Intent captureIntent = MposUi.getInitializedInstance().createTransactionIntent(transactionParameters);
+                startActivity(captureIntent);
+            }
+        });
+
+        findViewById(R.id.print_last).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = MposUi.getInitializedInstance().createPrintReceiptIntent(mLastTransactionIdentifier);
+                startActivityForResult(intent, MposUi.REQUEST_CODE_PRINT_RECEIPT);
             }
         });
 
         updateViews();
     }
 
-    void initMockPaymentController() {
-        MposUi mposUi = MposUi.initialize(this, ProviderMode.MOCK, "mock", "mock");
+    void initMockMode() {
+        MposUi mposUi = MposUi.initialize(CheckoutActivity.this, ProviderMode.MOCK, "mock", "mock");
         AccessoryParameters mockAccessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MOCK).mocked().build();
         mposUi.getConfiguration().setTerminalParameters(mockAccessoryParameters);
         MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(mockAccessoryParameters);
         mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+
+//        // Styling the summary screen.
+//        MposUi.getInitializedInstance().
+//                getConfiguration().getAppearance().
+//                setApprovedBackgroundColor(ContextCompat.getColor(this, R.color.mpu_pw_brand_color3)).
+//                setPreAuthorizedBackgroundColor(ContextCompat.getColor(this, R.color.mpu_pw_brand_color4)).
+//                setDeclinedBackgroundColor(ContextCompat.getColor(this, R.color.mpu_pw_brand_color5)).
+//                setRefundedBackgroundColor(ContextCompat.getColor(this, R.color.mpu_pw_brand_color2)).
+//                setApprovedTextColor(ContextCompat.getColor(this, android.R.color.black)).
+//                setPreAuthorizedTextColor(ContextCompat.getColor(this, android.R.color.black)).
+//                setDeclinedTextColor(ContextCompat.getColor(this, android.R.color.black)).
+//                setRefundedTextColor(ContextCompat.getColor(this, android.R.color.black));
+    }
+
+    void initTestMode() {
+        MposUi mposUi = MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, MERCHANT_ID, MERCHANT_SECRET);
+        mposUi.getConfiguration().setSummaryFeatures(EnumSet.allOf(MposUiConfiguration.SummaryFeature.class));
+        AccessoryParameters accessoryParameters = new AccessoryParameters.Builder(AccessoryFamily.MIURA_MPI).bluetooth().build();
+        mposUi.getConfiguration().setTerminalParameters(accessoryParameters);
+        AccessoryParameters printerAccessoryParams = new AccessoryParameters.Builder(AccessoryFamily.SEWOO).bluetooth().build();
+        MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(printerAccessoryParams);
+
+        //Styling the MposUI
+        MposUi.getInitializedInstance().
+                getConfiguration().getAppearance().
+                setColorPrimary(ContextCompat.getColor(this, R.color.mpu_pw_brand_color3)).
+                setColorPrimaryDark(ContextCompat.getColor(this, R.color.mpu_pw_brand_color3_dark)).
+                setTextColorPrimary(Color.WHITE);
     }
 
     void startPayment(double amount, boolean autoCapture) {
@@ -341,11 +329,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
     void startPayment(double amount) {
         startPayment(amount, true, null);
-    }
-
-    void readCard() {
-        Intent intent = MposUi.getInitializedInstance().createReadCardIntent();
-        startActivityForResult(intent, MposUi.REQUEST_CODE_READ_CARD);
     }
 
     void startPayment(double amount, boolean autoCapture, TransactionProcessParameters processParameters) {
@@ -359,11 +342,9 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, MposUi.REQUEST_CODE_PAYMENT);
     }
 
-    void printReceipt(String transactionIdentifier) {
-        AccessoryParameters printerAccessoryParams = new AccessoryParameters.Builder(AccessoryFamily.SEWOO).bluetooth().build();
-        MposUi.getInitializedInstance().getConfiguration().setPrinterParameters(printerAccessoryParams);
-        Intent intent = MposUi.getInitializedInstance().createPrintReceiptIntent(transactionIdentifier);
-        startActivityForResult(intent, MposUi.REQUEST_CODE_PRINT_RECEIPT);
+    void readCard() {
+        Intent intent = MposUi.getInitializedInstance().createReadCardIntent();
+        startActivityForResult(intent, MposUi.REQUEST_CODE_READ_CARD);
     }
 
     void updateViews() {

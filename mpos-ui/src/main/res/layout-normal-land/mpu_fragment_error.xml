@@ -22,15 +22,18 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:paddingBottom="@dimen/mpu_activity_vertical_margin"
-                android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
-                android:paddingRight="@dimen/mpu_activity_horizontal_margin"
-                android:paddingTop="@dimen/mpu_activity_vertical_margin">
+<RelativeLayout
+    android:id="@+id/payment_fragment_error"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:paddingBottom="@dimen/mpu_activity_vertical_margin"
+    android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
+    android:paddingRight="@dimen/mpu_activity_horizontal_margin"
+    android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
     <FrameLayout android:id="@+id/mpu_status_container"
                  android:layout_width="match_parent"
@@ -39,14 +42,27 @@
         <include layout="@layout/mpu_layout_status_view"/>
     </FrameLayout>
 
-    <Button
-        android:id="@+id/mpu_abort_button"
-        style="@style/mpos.ui.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/mpu_status_container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/mpu_payment_action_button_margin_top"
-        android:text="@string/MPUAbort"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/mpu_close_button"
+
+            style="@style/mpos.ui.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/MPUClose"
+            tools:ignore="RelativeOverlap"/>
+
+        <Button
+            android:id="@+id/mpu_retry_button"
+            style="@style/mpos.ui.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:text="@string/MPURetry"/>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -162,6 +162,10 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
                 startTransaction();
             }
         }
+
+        if (MposUi.getInitializedInstance().getTransactionProvider() != null) {
+            mLocalizationToolbox = MposUi.getInitializedInstance().getTransactionProvider().getLocalizationToolbox();
+        }
     }
 
     private void parseExtras() {
@@ -197,7 +201,6 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     private void startTransaction() {
-        mLocalizationToolbox = MposUi.getInitializedInstance().getTransactionProvider().getLocalizationToolbox();
 
         if (mIsAcquirerMode) {
             String integratorIdentifier = MposUiAccountManager.getInitializedInstance().getIntegratorIdentifier();
@@ -245,7 +248,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SIGNATURE) {
             if (resultCode == RESULT_CANCELED) {
-                mStatefulTransactionProviderProxy.continueWithSignature(null, false);
+                mStatefulTransactionProviderProxy.abortTransaction();
             } else {
                 byte[] byteArraySignature = data.getByteArrayExtra(SignatureActivity.BUNDLE_KEY_SIGNATURE_IMAGE);
                 Bitmap signature = BitmapFactory.decodeByteArray(byteArraySignature, 0, byteArraySignature.length);
@@ -330,7 +333,10 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
 
         if (transaction == null && error == null) {
             MposError e = new DefaultMposError(ErrorType.TRANSACTION_ABORTED);
-            showErrorFragment(UiState.TRANSACTION_ERROR, false, e, details);
+            showErrorFragment(UiState.TRANSACTION_ERROR, true, e, details);
+        } else if (transaction != null && transaction.getStatus() == TransactionStatus.ABORTED) {
+            MposError e = new DefaultMposError(ErrorType.TRANSACTION_ABORTED);
+            showErrorFragment(UiState.TRANSACTION_ERROR, true, e, details);
         } else if (error == null) {
             showSummaryFragment(transaction);
         } else {
@@ -394,6 +400,11 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     @Override
+    public void onSummaryCloseButtonClicked() {
+        finishWithResult();
+    }
+
+    @Override
     public void onErrorRetryButtonClicked() {
         mFormattedAmount = null;
         if (getUiState() == UiState.TRANSACTION_ERROR) {
@@ -402,6 +413,11 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         } else if (getUiState() == UiState.RECEIPT_PRINTING_ERROR) {
             showPrintReceiptFragment(mStatefulTransactionProviderProxy.getCurrentTransaction().getIdentifier());
         }
+    }
+
+    @Override
+    public void onErrorCloseButtonClicked() {
+        finishWithResult();
     }
 
     @Override

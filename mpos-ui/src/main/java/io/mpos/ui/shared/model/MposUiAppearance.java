@@ -31,13 +31,24 @@ import android.graphics.Color;
  */
 public class MposUiAppearance {
 
-    private int mColorPrimary = Color.parseColor("#03a9f4");
-    private int mColorPrimaryDark = Color.parseColor("#039be5");
-    private int mTextColorPrimary = Color.WHITE;
-    private int mBackgroundColor = Color.parseColor("#eeeeee");
+    private int mColorPrimary = Color.parseColor("#0D2048");
+    private int mColorPrimaryDark = Color.parseColor("#071025");
+    private int mTextColorPrimary = Color.parseColor("#FFFFFF");
+    private int mBackgroundColor = Color.parseColor("#EEEEEE");
+
+    private int mApprovedBackgroundColor = Color.parseColor("#638D31");
+    private int mDeclinedBackgroundColor = Color.parseColor("#B03B3B");
+    private int mPreAuthorizedBackgroundColor = Color.parseColor("#DCA54C");
+    private int mRefundedBackgroundColor = Color.parseColor("#3F6CA1");
+    private int mApprovedTextColor = Color.parseColor("#FFFFFF");
+    private int mDeclinedTextColor = Color.parseColor("#FFFFFF");
+    private int mPreAuthorizedTextColor = Color.parseColor("#FFFFFF");
+    private int mRefundedTextColor = Color.parseColor("#FFFFFF");
+
 
     /**
      * Get the primary color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
+     *
      * @return The primary color
      */
     public int getColorPrimary() {
@@ -46,6 +57,7 @@ public class MposUiAppearance {
 
     /**
      * Set the primary color used by MposUi.
+     *
      * @param colorPrimary The color to be set.
      * @return Self, to allow chaining of calls.
      */
@@ -56,6 +68,7 @@ public class MposUiAppearance {
 
     /**
      * Get the primary dark color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
+     *
      * @return The primary dark color.
      */
     public int getColorPrimaryDark() {
@@ -64,6 +77,7 @@ public class MposUiAppearance {
 
     /**
      * Set the primary dark color used by MposUi.
+     *
      * @param colorPrimaryDark The color to be set.
      * @return Self, to allow chaining of calls.
      */
@@ -74,6 +88,7 @@ public class MposUiAppearance {
 
     /**
      * Get the primary text color used by MposUi. See <a href="https://developer.android.com/training/material/images/ThemeColors.png">the Material theme</a>.
+     *
      * @return The primary text color.
      */
     public int getTextColorPrimary() {
@@ -82,6 +97,7 @@ public class MposUiAppearance {
 
     /**
      * Set the primary text color used by MposUi.
+     *
      * @param textColorPrimary The color to be set.
      * @return Self, to allow chaining of calls.
      */
@@ -92,6 +108,7 @@ public class MposUiAppearance {
 
     /**
      * Get the window background color used by MposUi.
+     *
      * @return The primary text color.
      */
     public int getBackgroundColor() {
@@ -100,11 +117,172 @@ public class MposUiAppearance {
 
     /**
      * Set the window background color used by MposUi.
+     *
      * @param backgroundColor The color to be set.
      * @return Self, to allow chaining of calls.
      */
     public MposUiAppearance setBackgroundColor(int backgroundColor) {
         mBackgroundColor = backgroundColor;
+        return this;
+    }
+
+    /**
+     * Get the color for approved transactions in the summary screen.
+     *
+     * @return The color of the approved transactions.
+     */
+    public int getApprovedBackgroundColor() {
+        return mApprovedBackgroundColor;
+    }
+
+    /**
+     * Set the color for approved transactions in the summary screen.
+     *
+     * @param approvedBackgroundColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setApprovedBackgroundColor(int approvedBackgroundColor) {
+        mApprovedBackgroundColor = approvedBackgroundColor;
+        return this;
+    }
+
+    /**
+     * Get the color for declined transactions in the summary screen.
+     *
+     * @return The color of the declined transactions.
+     */
+    public int getDeclinedBackgroundColor() {
+        return mDeclinedBackgroundColor;
+    }
+
+    /**
+     * Set the color for declined transactions in the summary screen.
+     *
+     * @param declinedBackgroundColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setDeclinedBackgroundColor(int declinedBackgroundColor) {
+        mDeclinedBackgroundColor = declinedBackgroundColor;
+        return this;
+    }
+
+    /**
+     * Get the color for pre-authorized transactions in the summary screen.
+     *
+     * @return The color of the pre-authorized transactions.
+     */
+    public int getPreAuthorizedBackgroundColor() {
+        return mPreAuthorizedBackgroundColor;
+    }
+
+    /**
+     * Set the color for pre-authorized transactions in the summary screen.
+     *
+     * @param preAuthorizedBackgroundColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setPreAuthorizedBackgroundColor(int preAuthorizedBackgroundColor) {
+        mPreAuthorizedBackgroundColor = preAuthorizedBackgroundColor;
+        return this;
+    }
+
+    /**
+     * Get the color for refunded transactions in the summary screen.
+     *
+     * @return The color of the refunded transactions.
+     */
+    public int getRefundedBackgroundColor() {
+        return mRefundedBackgroundColor;
+    }
+
+    /**
+     * Set the color for refunded transactions in the summary screen.
+     *
+     * @param refundedBackgroundColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setRefundedBackgroundColor(int refundedBackgroundColor) {
+        mRefundedBackgroundColor = refundedBackgroundColor;
+        return this;
+    }
+
+    /**
+     * Get the color for the header text for Approved transactions in the summary screen.
+     *
+     * @return The color of the header text.
+     */
+    public int getApprovedTextColor() {
+        return mApprovedTextColor;
+    }
+
+    /**
+     * Set the color of the header text for Approved transactions in the summary screen.
+     *
+     * @param approvedTextColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setApprovedTextColor(int approvedTextColor) {
+        mApprovedTextColor = approvedTextColor;
+        return this;
+    }
+
+    /**
+     * Get the color for the header text for Declined transactions in the summary screen.
+     *
+     * @return The color of the header text.
+     */
+    public int getDeclinedTextColor() {
+        return mDeclinedTextColor;
+    }
+
+    /**
+     * Set the color of the header text for Declined transactions in the summary screen.
+     *
+     * @param declinedTextColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setDeclinedTextColor(int declinedTextColor) {
+        mDeclinedTextColor = declinedTextColor;
+        return this;
+    }
+
+    /**
+     * Get the color for the header text for PreAuthorized transactions in the summary screen.
+     *
+     * @return The color of the header text.
+     */
+    public int getPreAuthorizedTextColor() {
+        return mPreAuthorizedTextColor;
+    }
+
+    /**
+     * Set the color of the header text for PreAuthorized transactions in the summary screen.
+     *
+     * @param preAuthorizedTextColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setPreAuthorizedTextColor(int preAuthorizedTextColor) {
+        mPreAuthorizedTextColor = preAuthorizedTextColor;
+        return this;
+    }
+
+    /**
+     * Get the color for the header text for Refunded transactions in the summary screen.
+     *
+     * @return The color of the header text.
+     */
+    public int getRefundedTextColor() {
+        return mRefundedTextColor;
+    }
+
+    /**
+     * Set the color of the header text for Refunded transactions in the summary screen.
+     *
+     * @param refundedTextColor the color to be set.
+     * @return Self, to allow chaining of calls.
+     */
+    public MposUiAppearance setRefundedTextColor(int refundedTextColor) {
+        mRefundedTextColor = refundedTextColor;
         return this;
     }
 }

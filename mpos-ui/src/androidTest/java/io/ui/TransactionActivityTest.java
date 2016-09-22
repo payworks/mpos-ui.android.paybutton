@@ -44,8 +44,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 import io.mpos.accessories.AccessoryFamily;
+import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.provider.ProviderMode;
 import io.mpos.transactions.Currency;
+import io.mpos.transactions.parameters.TransactionParameters;
 import io.mpos.ui.R;
 import io.mpos.ui.paybutton.view.TransactionActivity;
 import io.mpos.ui.shared.MposUi;
@@ -69,7 +71,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         super.tearDown();
 
         List<IdlingResource> idlingResources = Espresso.getIdlingResources();
-        for(IdlingResource resource : idlingResources) {
+        for (IdlingResource resource : idlingResources) {
             Espresso.unregisterIdlingResources(resource);
         }
     }
@@ -175,11 +177,12 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
     private void initWithAmount(double amount) {
         MposUi controller = MposUi.initialize(getInstrumentation().getContext(), ProviderMode.MOCK, "mock", "mock");
         MposUiConfiguration config = controller.getConfiguration();
-        config.setAccessoryFamily(AccessoryFamily.MOCK);
+        config.setTerminalParameters(new AccessoryParameters.Builder(AccessoryFamily.MOCK).mocked().build());
         config.setSummaryFeatures(EnumSet.of(MposUiConfiguration.SummaryFeature.SEND_RECEIPT_VIA_EMAIL));
-        Intent transactionIntent = controller.createChargeTransactionIntent(BigDecimal.valueOf(amount), Currency.EUR, "subject", null);
+        TransactionParameters params = new TransactionParameters.Builder().charge(BigDecimal.valueOf(amount), Currency.EUR).subject("subject").build();
+        Intent transactionIntent = controller.createTransactionIntent(params);
         setActivityIntent(transactionIntent);
-        //Espresso.registerIdlingResources(new TransactionProviderControllerIdlingResource());
+        Espresso.registerIdlingResources(new StatefulTransactionProviderProxyIdlingResource());
         getActivity();
     }
 

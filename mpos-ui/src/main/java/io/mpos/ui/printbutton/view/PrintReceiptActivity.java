@@ -112,6 +112,11 @@ public class PrintReceiptActivity extends AbstractBaseActivity implements
     }
 
     @Override
+    public void onErrorCloseButtonClicked() {
+        finishWithResult(false);
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(SAVED_INSTANCE_STATE_UI_STATE, getUiState());
         super.onSaveInstanceState(outState);

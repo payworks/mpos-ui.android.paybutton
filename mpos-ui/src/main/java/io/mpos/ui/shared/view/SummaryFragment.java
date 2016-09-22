@@ -28,14 +28,11 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -49,9 +46,11 @@ import io.mpos.paymentdetails.PaymentDetailsScheme;
 import io.mpos.platform.LocalizationToolbox;
 import io.mpos.transactions.RefundDetailsStatus;
 import io.mpos.transactions.TransactionStatus;
+import io.mpos.transactions.TransactionStatusDetailsCodes;
 import io.mpos.transactions.TransactionType;
 import io.mpos.ui.R;
 import io.mpos.ui.shared.MposUi;
+import io.mpos.ui.shared.model.MposUiAppearance;
 import io.mpos.ui.shared.model.MposUiConfiguration;
 import io.mpos.ui.shared.model.RefundTransactionDataHolder;
 import io.mpos.ui.shared.model.TransactionDataHolder;
@@ -73,6 +72,8 @@ public class SummaryFragment extends Fragment {
         void onSummaryRefundButtonClicked(String transactionIdentifier);
 
         void onSummaryPrintReceiptButtonClicked(String transactionIdentifier);
+
+        void onSummaryCloseButtonClicked();
     }
 
     public final static String TAG = "SummaryFragment";
@@ -85,6 +86,7 @@ public class SummaryFragment extends Fragment {
     private TransactionDataHolder mTransactionDataHolder;
     private TransactionHistoryHelper mTransactionHistoryHelper;
     private LocalizationToolbox mLocalizationToolbox;
+    private MposUiAppearance mMposUiAppearance;
     private boolean mRetryEnabled;
     private boolean mRefundEnabled;
     private boolean mCaptureEnabled;
@@ -106,6 +108,7 @@ public class SummaryFragment extends Fragment {
     private Interaction mInteractionActivity;
 
     private TextView mTransactionStatusView;
+    private TextView mTransactionStatusInformationView;
     private TextView mAmountView;
     private TextView mSubjectView;
     private TextView mAccountNumberView;
@@ -116,18 +119,20 @@ public class SummaryFragment extends Fragment {
     private Button mCaptureButton;
     private Button mPrintReceiptButton;
     private Button mSendReceiptButton;
+    private Button mCloseButton;
+    private View mHeaderViewContainer;
 
     private LinearLayout mTransactionHistoryContainer;
     //Dividers
     private View mSchemeAccNoViewDivider;
     private View mHeaderViewDivider;
-    private View mActionViewDivider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+        mMposUiAppearance = MposUi.getInitializedInstance().getConfiguration().getAppearance();
     }
 
     @Override
@@ -135,6 +140,7 @@ public class SummaryFragment extends Fragment {
         View view = inflater.inflate(R.layout.mpu_fragment_summary, container, false);
 
         mTransactionStatusView = (TextView) view.findViewById(R.id.mpu_summary_status_view);
+        mTransactionStatusInformationView = (TextView) view.findViewById(R.id.mpu_summary_status_information_view);
         mAmountView = (TextView) view.findViewById(R.id.mpu_summary_amount_view);
         mSubjectView = (TextView) view.findViewById(R.id.mpu_summary_subject_view);
         mAccountNumberView = (TextView) view.findViewById(R.id.mpu_summary_account_number_view);
@@ -144,10 +150,12 @@ public class SummaryFragment extends Fragment {
         mRefundButton = (Button) view.findViewById(R.id.mpu_summary_refund_button);
         mRetryButton = (Button) view.findViewById(R.id.mpu_summary_retry_button);
         mPrintReceiptButton = (Button) view.findViewById(R.id.mpu_summary_print_receipt_button);
+        mSendReceiptButton = (Button) view.findViewById(R.id.mpu_summary_send_receipt_button);
+        mCloseButton = (Button) view.findViewById(R.id.mpu_summary_close_button);
         mTransactionHistoryContainer = (LinearLayout) view.findViewById(R.id.mpu_summary_tx_history_container);
         mSchemeAccNoViewDivider = view.findViewById(R.id.mpu_summary_divider_scheme_accno_view);
         mHeaderViewDivider = view.findViewById(R.id.mpu_summary_divider_header_view);
-        mActionViewDivider = view.findViewById(R.id.mpu_summary_divider_action_view);
+        mHeaderViewContainer = view.findViewById(R.id.mpu_summary_header_container_view);
         return view;
     }
 
@@ -245,7 +253,7 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.MPUCapturePayment)
+                        .setTitle(R.string.MPUCaptureTransaction)
                         .setMessage(R.string.MPUCapturePrompt)
                         .setPositiveButton(R.string.MPUCapture, new DialogInterface.OnClickListener() {
                             @Override
@@ -262,7 +270,7 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.MPURefundPayment)
+                        .setTitle(R.string.MPURefundTransaction)
                         .setMessage(R.string.MPURefundPrompt)
                         .setPositiveButton(R.string.MPURefund, new DialogInterface.OnClickListener() {
                             @Override
@@ -275,10 +283,24 @@ public class SummaryFragment extends Fragment {
             }
         });
 
+        mSendReceiptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mInteractionActivity.onSummarySendReceiptButtonClicked(getTransactionIdentifierForSendingAndPrinting());
+            }
+        });
+
         mPrintReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mInteractionActivity.onSummaryPrintReceiptButtonClicked(getTransactionIdentifierForSendingAndPrinting());
+            }
+        });
+
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInteractionActivity.onSummaryCloseButtonClicked();
             }
         });
     }
@@ -354,11 +376,11 @@ public class SummaryFragment extends Fragment {
     private void showTransactionHistory() {
         if (mTransactionDataHolder.getRefundTransactions() == null) {
             mTransactionHistoryContainer.setVisibility(View.GONE);
-            mHeaderViewDivider.setVisibility(View.VISIBLE);
+            mHeaderViewDivider.setVisibility(View.GONE);
             return;
         }
         mTransactionHistoryContainer.setVisibility(View.VISIBLE);
-        mHeaderViewDivider.setVisibility(View.GONE);
+        mHeaderViewDivider.setVisibility(View.VISIBLE);
         List<TransactionHistoryItem> transactionHistoryItems = mTransactionHistoryHelper.createTransactionHistoryItems(getActivity().getApplicationContext());
         for (TransactionHistoryItem transactionHistoryItem : transactionHistoryItems) {
             mTransactionHistoryContainer.addView(createTransactionHistoryItemView(transactionHistoryItem));
@@ -381,20 +403,20 @@ public class SummaryFragment extends Fragment {
         switch (item.getType()) {
             case CHARGE:
                 partialCaptureView.setVisibility(View.GONE);
-                amountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_approved));
+                amountView.setTextColor(mMposUiAppearance.getApprovedBackgroundColor());
                 break;
             case PREAUTHORIZED:
                 partialCaptureView.setVisibility(View.GONE);
-                amountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_preauthorized));
+                amountView.setTextColor(mMposUiAppearance.getPreAuthorizedBackgroundColor());
                 break;
             case REFUND:
                 partialCaptureView.setVisibility(View.GONE);
-                amountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_refunded));
+                amountView.setTextColor(mMposUiAppearance.getRefundedBackgroundColor());
                 break;
             case PARTIAL_CAPTURE:
                 partialCaptureView.setVisibility(View.VISIBLE);
                 partialCaptureView.setText(item.getPartialCaptureHintText());
-                amountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_approved));
+                amountView.setTextColor(mMposUiAppearance.getApprovedBackgroundColor());
                 break;
         }
 
@@ -455,38 +477,52 @@ public class SummaryFragment extends Fragment {
         switch (mTransactionDataHolder.getTransactionStatus()) {
             case APPROVED:
                 if (mTransactionDataHolder.getRefundTransactions() != null) {
-                    mTransactionStatusView.setText(R.string.MPUTotal);
-                    mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_approved));
+                    setHeaderStatusText(R.string.MPUTotal, mMposUiAppearance.getApprovedBackgroundColor(), mMposUiAppearance.getApprovedTextColor(), false);
                 } else if (mTransactionDataHolder.isCaptured()) {
-                    mTransactionStatusView.setText(R.string.MPUSale);
-                    mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_approved));
+                    setHeaderStatusText(R.string.MPUApproved, mMposUiAppearance.getApprovedBackgroundColor(), mMposUiAppearance.getApprovedTextColor(), false);
                 } else {
-                    mTransactionStatusView.setText(R.string.MPUPreauthorized);
-                    mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_preauthorized));
+                    setHeaderStatusText(R.string.MPUPreauthorized, mMposUiAppearance.getPreAuthorizedBackgroundColor(), mMposUiAppearance.getPreAuthorizedTextColor(), false);
                 }
 
                 if (mTransactionDataHolder.getTransactionType() == TransactionType.REFUND) {
-                    mTransactionStatusView.setText(R.string.MPURefunded);
-                    mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_refunded));
+                    setHeaderStatusText(R.string.MPURefunded, mMposUiAppearance.getRefundedBackgroundColor(), mMposUiAppearance.getRefundedTextColor(), false);
                 }
                 break;
             case DECLINED:
-                mTransactionStatusView.setText(R.string.MPUDeclined);
-                mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_declined_aborted));
+                setHeaderStatusText(R.string.MPUDeclined, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), true);
                 break;
             case ABORTED:
-                mTransactionStatusView.setText(R.string.MPUAborted);
-                mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_declined_aborted));
+                setHeaderStatusText(R.string.MPUAborted, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), false);
                 break;
             case ERROR:
-                mTransactionStatusView.setText(R.string.MPUError);
-                mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_declined_aborted));
+                setHeaderStatusText(R.string.MPUError, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), false);
                 break;
             default:
-                mTransactionStatusView.setText(R.string.MPUUnknown);
-                mAmountView.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.mpu_transaction_state_declined_aborted));
+                setHeaderStatusText(R.string.MPUUnknown, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), false);
                 break;
         }
+    }
+
+    private void setHeaderStatusText(@StringRes int statusTextResource, int backgroundColor, int textColor, boolean showInformationText) {
+        mTransactionStatusView.setText(statusTextResource);
+        mHeaderViewContainer.setBackgroundColor(backgroundColor);
+        mTransactionStatusView.setTextColor(textColor);
+        mTransactionStatusInformationView.setTextColor(textColor);
+        mAmountView.setTextColor(textColor);
+        if (showInformationText) {
+            showTransactionStatusInformation();
+        }
+    }
+
+
+    private void showTransactionStatusInformation() {
+        TransactionStatusDetailsCodes code = mTransactionDataHolder.getTransactionStatusDetailsCode();
+        String information = mLocalizationToolbox.informationForTransactionStatusDetailsCode(code);
+        if (information == null) {
+            return;
+        }
+        mTransactionStatusInformationView.setVisibility(View.VISIBLE);
+        mTransactionStatusInformationView.setText(information);
     }
 
     private void setupDividers() {
@@ -498,38 +534,6 @@ public class SummaryFragment extends Fragment {
         if (mSchemeView.getVisibility() == View.GONE && mSubjectView.getVisibility() == View.GONE) {
             mHeaderViewDivider.setVisibility(View.GONE);
         }
-
-        if (mRefundButton.getVisibility() == View.GONE &&
-                mCaptureButton.getVisibility() == View.GONE &&
-                mPrintReceiptButton.getVisibility() == View.GONE &&
-                mRetryButton.getVisibility() == View.GONE) {
-            mActionViewDivider.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (showSendReceiptButton()) {
-            menu.add(Menu.NONE, R.id.mpu_send_receipt_action_id, Menu.NONE, R.string.MPUSend).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem sendItem = menu.findItem(R.id.mpu_send_receipt_action_id);
-        if (sendItem != null) {
-            sendItem.setActionView(R.layout.mpu_send_action_view);
-            mSendReceiptButton = (Button) sendItem.getActionView().findViewById(R.id.mpu_menu_send_button);
-            mSendReceiptButton.setTextColor(MposUi.getInitializedInstance().getConfiguration().getAppearance().getTextColorPrimary());
-            mSendReceiptButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mInteractionActivity.onSummarySendReceiptButtonClicked(getTransactionIdentifierForSendingAndPrinting());
-                }
-            });
-        }
-        super.onPrepareOptionsMenu(menu);
     }
 
     private String getTransactionIdentifierForSendingAndPrinting() {

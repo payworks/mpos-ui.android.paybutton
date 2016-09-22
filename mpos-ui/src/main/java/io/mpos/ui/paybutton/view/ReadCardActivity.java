@@ -193,6 +193,11 @@ public class ReadCardActivity extends AbstractBaseActivity implements ReadCardFr
     }
 
     @Override
+    public void onErrorCloseButtonClicked() {
+        finishWithResult(false);
+    }
+
+    @Override
     public void onLoginCompleted() {
         startReadCard();
     }

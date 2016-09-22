@@ -101,6 +101,7 @@ public class PrintReceiptFragment extends Fragment implements StatefulPrintingPr
         int color = MposUi.getInitializedInstance().getConfiguration().getAppearance().getColorPrimary();
         mIconView.setTypeface(UiHelper.createAwesomeFontTypeface(rootView.getContext()));
         mIconView.setTextColor(color);
+        mIconView.setText(R.string.mpu_fa_print);
 
         mProgressView.setAnimation(null);
 

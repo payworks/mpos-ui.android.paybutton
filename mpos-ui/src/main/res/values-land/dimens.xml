@@ -23,5 +23,6 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <dimen name="mpu_payment_status_icon_view_margin_top">30dp</dimen>
+    <dimen name="mpu_payment_status_icon_view_margin_top">12dp</dimen>
+    <dimen name="mpu_payment_action_button_margin_top">12dp</dimen>
 </resources>

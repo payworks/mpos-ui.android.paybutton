@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
@@ -23,6 +24,6 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <style name="MpuActionButtonStyle" parent="mpos.ui.Button">
-    </style>
+    <dimen name="mpu_payment_status_icon_view_margin_top">100dp</dimen>
+    <dimen name="mpu_payment_action_button_margin_top">70dp</dimen>
 </resources>

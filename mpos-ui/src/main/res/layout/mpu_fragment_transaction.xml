@@ -32,40 +32,21 @@
                 android:paddingRight="@dimen/mpu_activity_horizontal_margin"
                 android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
-    <FrameLayout
-        android:id="@+id/mpu_status_icon_view_container"
-        android:layout_width="@dimen/mpu_payment_status_icon_container"
-        android:layout_height="@dimen/mpu_payment_status_icon_container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
-
-        <ImageView
-            android:id="@+id/mpu_progress_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/mpu_transaction_progress_drawable"/>
-
-        <TextView
-            android:id="@+id/mpu_status_icon_view"
-            style="@style/MpuTransactionStatusIconStyle"
-            android:layout_gravity="center"/>
+    <FrameLayout android:id="@+id/mpu_status_container"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
+        <include layout="@layout/mpu_layout_status_view"/>
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/mpu_status_view"
-        style="@style/MpuTransactionStatusTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mpu_status_icon_view_container"
-        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/mpu_abort_button"
         style="@style/mpos.ui.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_below="@id/mpu_status_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/mpu_payment_action_button_margin_top"
         android:text="@string/MPUAbort"/>
 
 </RelativeLayout>

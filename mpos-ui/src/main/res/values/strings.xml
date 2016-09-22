@@ -22,33 +22,35 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
 <string name="MPUAbort">"Abort"</string>
 <string name="MPURetry">"Retry"</string>
 <string name="MPUSendReceipt">"Send Receipt"</string>
 <string name="MPUResendReceipt">"Resend Receipt"</string>
 <string name="MPUClose">"Close"</string>
-<string name="MPUPaymentSuccessful">"Payment successful."</string>
+<string name="MPUApproved">"Approved"</string>
+<string name="MPUInconclusive">"Inconclusive"</string>
 <string name="MPURefunded">"Refunded"</string>
 <string name="MPUDeclined">"Declined"</string>
 <string name="MPUAborted">"Aborted"</string>
 <string name="MPUPreauthorized">"Pre-Authorized"</string>
+<string name="MPUPartiallyCaptured">"of Pre-Authorization for %1$s"</string>
 <string name="MPUTotal">"Total"</string>
 <string name="MPUSale">"Sale"</string>
+<string name="MPURefund">"Refund"</string>
 <string name="MPUUnknown">"Unknown"</string>
-<string name="MPURefundApproved">"Refund successful."</string>
-<string name="MPURefundDeclined">"Refund declined."</string>
-<string name="MPURefundAborted">"Refund aborted."</string>
-<string name="MPURefundPayment">"Refund payment"</string>
-<string name="MPUCapturePayment">"Capture payment"</string>
-<string name="MPURefundPrompt">"Are you sure that you want to refund this payment?"</string>
-<string name="MPUCapturePrompt">"Are you sure that you want to capture this payment?"</string>
 <string name="MPUTransactionTypeSale">"Sale"</string>
 <string name="MPUTransactionTypeRefund">"Refund"</string>
 <string name="MPUTransactionTypePreauthorization">"Pre-Authorization"</string>
-<string name="MPURefund">"Refund"</string>
-<string name="MPUCapture">"Capture"</string>
+<string name="MPUPaymentSuccessful">"Payment successful."</string>
+<string name="MPURefundApproved">"Refund successful."</string>
+<string name="MPURefundDeclined">"Refund declined."</string>
+<string name="MPURefundAborted">"Refund aborted."</string>
+<string name="MPURefundTransaction">"Refund Transaction"</string>
+<string name="MPUCaptureTransaction">"Capture Transaction"</string>
+<string name="MPUAbortTransaction">"Abort Transaction"</string>
+<string name="MPURefundPrompt">"Are you sure that you want to refund this payment?"</string>
+<string name="MPUCapturePrompt">"Are you sure that you want to capture this payment?"</string>
 <string name="MPUSummary">"Summary"</string>
 <string name="MPUInvalidEmailAddress">"Invalid email address"</string>
 <string name="MPUEnterValidEmailAddress">"Please enter a valid email address."</string>
@@ -88,9 +90,13 @@
 <string name="MPUMastercard">"Mastercard"</string>
 <string name="MPUMaestro">"Maestro"</string>
 <string name="MPUAmericanExpress">"American Express"</string>
-<string name="MPUReprint">"Reprint"</string>
+<string name="MPUUnionPay">"UnionPay"</string>
+<string name="MPUDiners">"Diners"</string>
+<string name="MPUDiscover">"Discover"</string>
+<string name="MPUJcb">"JCB"</string>
 <string name="MPUPrinting">"Printing..."</string>
-<string name="MPUPrint">"Print"</string>
-<string name="MPUPartiallyCaptured">"of Pre-Authorization for %1$s"</string>
 <string name="MPUReadCard">"Read Card"</string>
+<string name="MPUPrintReceipt">"Print Receipt"</string>
+<string name="MPUReprintReceipt">"Reprint Receipt"</string>
+<string name="MPUCapture">"Capture"</string>
 </resources>

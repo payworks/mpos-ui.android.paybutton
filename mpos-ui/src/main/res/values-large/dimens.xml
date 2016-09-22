@@ -22,7 +22,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
 <resources>
-    <item name="mpu_send_receipt_action_id" type="id"/>
+    <dimen name="mpu_payment_status_icon_view_margin_top">60dp</dimen>
+    <dimen name="mpu_payment_action_button_margin_top">40dp</dimen>
 </resources>

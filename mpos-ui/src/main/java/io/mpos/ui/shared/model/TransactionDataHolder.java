@@ -41,6 +41,7 @@ import io.mpos.transactions.RefundDetailsStatus;
 import io.mpos.transactions.RefundTransaction;
 import io.mpos.transactions.Transaction;
 import io.mpos.transactions.TransactionStatus;
+import io.mpos.transactions.TransactionStatusDetailsCodes;
 import io.mpos.transactions.TransactionType;
 
 public class TransactionDataHolder implements Parcelable {
@@ -48,6 +49,7 @@ public class TransactionDataHolder implements Parcelable {
     private String mTransactionIdentifier;
     private String mReferencedTransactionIdentifier;
     private TransactionStatus mTransactionStatus;
+    private TransactionStatusDetailsCodes mTransactionStatusDetailsCode;
     private Currency mCurrency;
     private String mSubject;
     private BigDecimal mAmount;
@@ -65,6 +67,7 @@ public class TransactionDataHolder implements Parcelable {
         mTransactionIdentifier = transaction.getIdentifier();
         mReferencedTransactionIdentifier = transaction.getReferencedTransactionIdentifier();
         mTransactionStatus = (transaction.getStatus() != null) ? transaction.getStatus() : TransactionStatus.UNKNOWN;
+        mTransactionStatusDetailsCode = (transaction.getStatusDetails() != null && transaction.getStatusDetails().getDescription() != null) ? transaction.getStatusDetails().getCode(): null;
         mCurrency = (transaction.getCurrency() != null) ? transaction.getCurrency() : Currency.UNKNOWN;
         mSubject = transaction.getSubject();
         mAmount = transaction.getAmount();
@@ -107,6 +110,7 @@ public class TransactionDataHolder implements Parcelable {
         dest.writeString(this.mTransactionIdentifier);
         dest.writeString(this.mReferencedTransactionIdentifier);
         dest.writeInt(this.mTransactionStatus == null ? -1 : this.mTransactionStatus.ordinal());
+        dest.writeInt(this.mTransactionStatusDetailsCode == null ? -1 : this.mTransactionStatusDetailsCode.ordinal());
         dest.writeInt(this.mCurrency == null ? -1 : this.mCurrency.ordinal());
         dest.writeString(this.mSubject);
         dest.writeSerializable(this.mAmount);
@@ -129,6 +133,8 @@ public class TransactionDataHolder implements Parcelable {
         this.mReferencedTransactionIdentifier = in.readString();
         int tmpTransactionStatus = in.readInt();
         this.mTransactionStatus = (tmpTransactionStatus == -1) ? TransactionStatus.UNKNOWN : TransactionStatus.values()[tmpTransactionStatus];
+        int tmpTransactionStatusDetailsCode = in.readInt();
+        this.mTransactionStatusDetailsCode = (tmpTransactionStatusDetailsCode == -1) ? TransactionStatusDetailsCodes.NONE : TransactionStatusDetailsCodes.values()[tmpTransactionStatusDetailsCode];
         int tmpCurrency = in.readInt();
         this.mCurrency = (tmpCurrency == -1) ? Currency.UNKNOWN : Currency.values()[tmpCurrency];
         this.mSubject = in.readString();
@@ -220,4 +226,9 @@ public class TransactionDataHolder implements Parcelable {
     public List<RefundTransactionDataHolder> getRefundTransactions() {
         return mRefundTransactions;
     }
+
+    public TransactionStatusDetailsCodes getTransactionStatusDetailsCode() {
+        return mTransactionStatusDetailsCode;
+    }
+
 }

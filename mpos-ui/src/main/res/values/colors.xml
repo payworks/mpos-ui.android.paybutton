@@ -23,26 +23,34 @@
   ~ THE SOFTWARE.
   -->
 <resources>
-    <color name="mpu_transaction_state_approved">#417505</color>
-    <color name="mpu_transaction_state_declined_aborted">#BD041A</color>
-    <color name="mpu_transaction_state_refunded">#0058BF</color>
-    <color name="mpu_transaction_state_preauthorized">#E39C03</color>
+    <color name="mpu_transaction_state_approved">#638D31</color>
+    <color name="mpu_transaction_state_declined_aborted">#B03B3B</color>
+    <color name="mpu_transaction_state_refunded">#3F6CA1</color>
+    <color name="mpu_transaction_state_preauthorized">#DCA54C</color>
 
-    <color name="mpu_card_heading">#B3000000</color>
+    <color name="mpu_card_heading">#FFFFFF</color>
     <color name="mpu_card_body">#B3000000</color>
     <color name="mpu_card_timestamp">#8C000000</color>
     <color name="mpu_card_history_title">#8C000000</color>
     <color name="mpu_status_text">#B3000000</color>
     <color name="mpu_history_background">#E7E7E7</color>
+    <color name="mpu_divider">#33000000</color>
 
-    <color name="mpu_divider">#1A000000</color>
-    <color name="mpu_payment_progress_bar_default_color">#616161</color>
-    <color name="mpu_payment_button_pressed_state">#12000000</color>
-    <color name="mpu_payment_button_focused_state">#12000000</color>
+    <color name="mpu_payment_progress_bar_start_color">#12000000</color>
+    <color name="mpu_payment_progress_bar_end_color">#616161</color>
+
+    <color name="mpu_payment_button_pressed_state">#56000000</color>
+    <color name="mpu_payment_button_focused_state">#56000000</color>
     <color name="mpu_payment_button_normal_state">@android:color/transparent</color>
     <color name="mpu_payment_button_textcolor_disabled">#33000000</color>
     <color name="mpu_payment_button_textcolor">#000</color>
     <color name="mpu_payment_button_negative_textcolor">#424242</color>
     <color name="mpu_login_button_tint">#4caf50</color>
     <color name="mpu_deactivate_background">#AAFFFFFF</color>
+
+    <color name="mpu_default_color_primary">#0D2048</color>
+    <color name="mpu_default_color_primary_dark">#071025</color>
+    <color name="mpu_default_color_background">#EEEEEE</color>
+    <color name="mpu_default_color_text">#FFFFFF</color>
+
 </resources>

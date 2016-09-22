@@ -22,6 +22,22 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
+
 <resources>
-    <dimen name="mpu_payment_status_icon_view_margin_top">40dp</dimen>
+
+    <color name="mpu_pw_brand_color1">#0d2048</color>
+    <color name="mpu_pw_brand_color1_dark">#071025</color>
+
+    <color name="mpu_pw_brand_color2">#753e91</color>
+    <color name="mpu_pw_brand_color2_dark">#582F6E</color>
+
+    <color name="mpu_pw_brand_color3">#52C0A7</color>
+    <color name="mpu_pw_brand_color3_dark">#3E917E</color>
+
+    <color name="mpu_pw_brand_color4">#EECD17</color>
+    <color name="mpu_pw_brand_color4_dark">#CFB214</color>
+
+    <color name="mpu_pw_brand_color5">#F2665E</color>
+    <color name="mpu_pw_brand_color5_dark">#F2665E</color>
+
 </resources>

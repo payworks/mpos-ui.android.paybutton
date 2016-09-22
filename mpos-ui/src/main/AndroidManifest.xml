@@ -60,7 +60,6 @@
             android:name=".paybutton.view.ReadCardActivity"
             android:theme="@style/Theme.mpos.ui">
         </activity>
-
     </application>
 
 </manifest>

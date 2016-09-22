@@ -24,8 +24,9 @@
   -->
 <resources>
     <style name="Theme.mpos.ui" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#bbdefb</item>
-        <item name="colorPrimaryDark">#1565c0</item>
+        <item name="colorPrimary">@color/mpu_default_color_primary</item>
+        <item name="colorPrimaryDark">@color/mpu_default_color_primary_dark</item>
+        <item name="android:windowBackground">@color/mpu_default_color_background</item>
         <item name="android:buttonStyle">@style/mpos.ui.Button</item>
         <item name="colorControlHighlight">@color/mpu_payment_button_pressed_state</item>
     </style>
@@ -33,6 +34,5 @@
     <style name="mpos.ui.Button" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:paddingRight">@dimen/mpu_button_text_padding</item>
         <item name="android:paddingLeft">@dimen/mpu_button_text_padding</item>
-        <item name="android:minWidth">0dp</item>
     </style>
 </resources>
