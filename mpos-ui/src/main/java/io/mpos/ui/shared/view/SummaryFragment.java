@@ -497,7 +497,11 @@ public class SummaryFragment extends Fragment {
             case ERROR:
                 setHeaderStatusText(R.string.MPUError, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), false);
                 break;
-            default:
+            case INCONCLUSIVE:
+                setHeaderStatusText(R.string.MPUInconclusive, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), false);
+                break;
+            case INITIALIZED:
+            case PENDING:
                 setHeaderStatusText(R.string.MPUUnknown, mMposUiAppearance.getDeclinedBackgroundColor(), mMposUiAppearance.getDeclinedTextColor(), false);
                 break;
         }

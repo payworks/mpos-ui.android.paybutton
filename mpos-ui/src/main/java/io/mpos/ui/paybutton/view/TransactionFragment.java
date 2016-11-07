@@ -159,6 +159,7 @@ public class TransactionFragment extends AbstractTransactionFragment {
         switch (state) {
             case CREATED:
             case INITIALIZING_TRANSACTION:
+            case CONNECTING_TO_ACCESSORY:
                 return getString(R.string.mpu_fa_lock);
             case PREPARING:
                 return getString(R.string.mpu_fa_info);
@@ -172,6 +173,7 @@ public class TransactionFragment extends AbstractTransactionFragment {
             case ABORTED:
                 return getString(R.string.mpu_fa_bank);
             case FAILED:
+            case INCONCLUSIVE:
                 return getString(R.string.mpu_fa_times_circle);
         }
 
