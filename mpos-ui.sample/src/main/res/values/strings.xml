@@ -60,5 +60,6 @@
     <string name="login">Login</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
+    <string name="init_with_barclaycard">Initialize with Barclaycard</string>
 
 </resources>

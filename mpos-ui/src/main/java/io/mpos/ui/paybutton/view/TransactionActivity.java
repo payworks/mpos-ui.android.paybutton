@@ -312,7 +312,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     @Override
     public void onStatusChanged(TransactionProcessDetails details, Transaction transaction) {
         Log.d(TAG, "onStatusChanged=" + details);
-        if (transaction != null) {
+        if (transaction != null && mLocalizationToolbox != null) {
             mFormattedAmount = mLocalizationToolbox.formatAmount(transaction.getAmount(), transaction.getCurrency());
             constructTransactionTypeTitle();
             setTitle(constructTitle());
@@ -446,6 +446,7 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     @Override
     public void onLoginCompleted() {
         setTitle(constructTitle());
+        mLocalizationToolbox = MposUi.getInitializedInstance().getTransactionProvider().getLocalizationToolbox();
         startTransaction();
     }
 

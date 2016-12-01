@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
   ~ The MIT License (MIT)
@@ -36,6 +35,14 @@
         <item>colorPrimaryDark</item>
         <item>textColorPrimary</item>
         <item>backgroundColor</item>
+        <item>approvedColor</item>              <!-- Optional -->
+        <item>declinedColor</item>              <!-- Optional -->
+        <item>preauthorizedColor</item>         <!-- Optional -->
+        <item>refundedColor</item>              <!-- Optional -->
+        <item>approvedTextColor</item>          <!-- Optional -->
+        <item>declinedTextColor</item>          <!-- Optional -->
+        <item>preauthorizedTextColor</item>     <!-- Optional -->
+        <item>refundedTextColor</item>          <!-- Optional -->
     </string-array>
 
     <!-- Make sure the data for each acquirer is in the order as in the index -->
@@ -89,6 +96,27 @@
         <item>#000000</item>
         <item>#FFFFFF</item>
         <item>#EEEEEE</item>
+    </string-array>
+
+    <string-array name="mpu_acquirer_barclaycard">
+        <item>barclaycard.terminal</item>
+        <item>Miura</item>
+        <item>Sewoo</item>
+        <item>false</item>
+        <item>true</item>
+        <item>true</item>
+        <item>#018fd0</item>
+        <item>#016491</item>
+        <item>#FFFFFF</item>
+        <item>#EEEEEE</item>
+        <item>#72bf44</item>
+        <item>#e03030</item>
+        <item>#e9b319</item>
+        <item>#085DA9</item>
+        <item>#ffffff</item>
+        <item>#ffffff</item>
+        <item>#ffffff</item>
+        <item>#ffffff</item>
     </string-array>
 
 </resources>

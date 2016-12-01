@@ -220,6 +220,7 @@ public class SummaryFragment extends Fragment {
             mCaptureButton.setVisibility(showCaptureButton() ? View.VISIBLE : View.GONE);
             mRefundButton.setVisibility(showRefundButton() ? View.VISIBLE : View.GONE);
             mPrintReceiptButton.setVisibility(showPrintReceiptButton() ? View.VISIBLE : View.GONE);
+            mSendReceiptButton.setVisibility(showSendReceiptButton() ? View.VISIBLE : View.GONE);
 
         } else if (TransactionStatus.DECLINED == transactionStatus || TransactionStatus.ABORTED == transactionStatus) {
             mCaptureButton.setVisibility(View.GONE);
@@ -227,16 +228,17 @@ public class SummaryFragment extends Fragment {
 
             mRetryButton.setVisibility(mRetryEnabled ? View.VISIBLE : View.GONE);
             mPrintReceiptButton.setVisibility(showPrintReceiptButton() ? View.VISIBLE : View.GONE);
+            mSendReceiptButton.setVisibility(showSendReceiptButton() ? View.VISIBLE : View.GONE);
 
         } else {
+            mRetryButton.setVisibility(mRetryEnabled ? View.VISIBLE : View.GONE);
             mCaptureButton.setVisibility(View.GONE);
             mRefundButton.setVisibility(View.GONE);
             mPrintReceiptButton.setVisibility(View.GONE);
-
-            mRetryButton.setVisibility(mRetryEnabled ? View.VISIBLE : View.GONE);
+            mPrintReceiptButton.setVisibility(View.GONE);
+            mSendReceiptButton.setVisibility(View.GONE);
 
             mSendEnabled = false;
-            getActivity().invalidateOptionsMenu();
         }
     }
 

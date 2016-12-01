@@ -27,5 +27,6 @@ public enum ApplicationName {
     MCASHIER,
     CONCARDIS,
     SECURE_RETAIL,
-    YOURBRAND
+    YOURBRAND,
+    BARCLAYCARD
 }

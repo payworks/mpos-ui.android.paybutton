@@ -215,6 +215,14 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.init_with_barclaycard).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsAcquirerMode = true;
+                MposUi.initialize(CheckoutActivity.this, ProviderMode.TEST, ApplicationName.BARCLAYCARD, "test-integrator");
+            }
+        });
+
         findViewById(R.id.init_with_provider).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

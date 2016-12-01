@@ -54,6 +54,14 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
     private static final int INDEX_TEXT_COLOR_PRIMARY = 8;
     private static final int INDEX_BACKGROUND_COLOR = 9;
 
+    private static final int INDEX_APPROVED_COLOR = 10;
+    private static final int INDEX_DECLINED_COLOR = 11;
+    private static final int INDEX_PREAUTHORIZED_COLOR = 12;
+    private static final int INDEX_REFUNDED_COLOR = 13;
+    private static final int INDEX_APPROVED_TEXT_COLOR = 14;
+    private static final int INDEX_DECLINED_TEXT_COLOR = 15;
+    private static final int INDEX_PREAUTHORIZED_TEXT_COLOR = 16;
+    private static final int INDEX_REFUNDED_TEXT_COLOR = 17;
 
     private static final String SHARED_PREFERENCE_FILE_NAME_KEY = "io.mpos.ui.account.credentials";
     private static final String PREFERENCE_KEY_MERCHANT_IDENTIFIER = "io.mpos.ui.account.merchant.identifier";
@@ -103,6 +111,9 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
                 break;
             case YOURBRAND:
                 init(context, R.array.mpu_acquirer_yourbrand, R.drawable.mpu_yourbrand_logo);
+                break;
+            case BARCLAYCARD:
+                init(context, R.array.mpu_acquirer_barclaycard, R.drawable.mpu_barclaycard_logo);
                 break;
         }
         mSharedPrefs = context.getSharedPreferences(SHARED_PREFERENCE_FILE_NAME_KEY, Context.MODE_PRIVATE);
@@ -193,6 +204,31 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         mposUiAppearance.setTextColorPrimary(Color.parseColor(applicationData[INDEX_TEXT_COLOR_PRIMARY]));
         mposUiAppearance.setBackgroundColor(Color.parseColor(applicationData[INDEX_BACKGROUND_COLOR]));
 
+        if (indexExists(applicationData, INDEX_APPROVED_COLOR)) {
+            mposUiAppearance.setApprovedBackgroundColor(Color.parseColor(applicationData[INDEX_APPROVED_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_DECLINED_COLOR)) {
+            mposUiAppearance.setDeclinedBackgroundColor(Color.parseColor(applicationData[INDEX_DECLINED_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_PREAUTHORIZED_COLOR)) {
+            mposUiAppearance.setPreAuthorizedBackgroundColor(Color.parseColor(applicationData[INDEX_PREAUTHORIZED_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_REFUNDED_COLOR)) {
+            mposUiAppearance.setRefundedBackgroundColor(Color.parseColor(applicationData[INDEX_REFUNDED_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_APPROVED_TEXT_COLOR)) {
+            mposUiAppearance.setApprovedTextColor(Color.parseColor(applicationData[INDEX_APPROVED_TEXT_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_DECLINED_TEXT_COLOR)) {
+            mposUiAppearance.setDeclinedTextColor(Color.parseColor(applicationData[INDEX_DECLINED_TEXT_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_PREAUTHORIZED_TEXT_COLOR)) {
+            mposUiAppearance.setPreAuthorizedTextColor(Color.parseColor(applicationData[INDEX_PREAUTHORIZED_TEXT_COLOR]));
+        }
+        if (indexExists(applicationData, INDEX_REFUNDED_TEXT_COLOR)) {
+            mposUiAppearance.setRefundedTextColor(Color.parseColor(applicationData[INDEX_REFUNDED_TEXT_COLOR]));
+        }
+
         mposUiConfiguration.setAppearance(mposUiAppearance);
 
         String applicationId = applicationData[INDEX_APPLICATION_ID];
@@ -200,6 +236,10 @@ public class MposUiAccountManager implements SharedPreferences.OnSharedPreferenc
         mApplicationData.setImageResourceId(acquirerImageResourceId);
         mApplicationData.setIdentifier(applicationId);
         mApplicationData.setHelpUrl(resolveHelpUrl(applicationId));
+    }
+
+    private boolean indexExists(String[] array, int index) {
+        return array.length > index && array[index] != null;
     }
 
 

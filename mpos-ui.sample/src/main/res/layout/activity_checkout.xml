@@ -166,6 +166,13 @@
             android:layout_height="wrap_content"
             android:text="@string/init_with_yourbrand"/>
 
+        <Button
+            android:id="@+id/init_with_barclaycard"
+            style="@style/MPUButtonStyle3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/init_with_barclaycard"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
