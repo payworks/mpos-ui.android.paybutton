@@ -33,6 +33,7 @@ public class StatefulTransactionProviderProxyIdlingResource implements IdlingRes
 
     boolean mIsWaitingForSignature;
     boolean mIsWaitingForAppSelection;
+    boolean mIsWaitingForCreditDebitSelection;
 
     boolean mNotified = false;
 
@@ -54,17 +55,19 @@ public class StatefulTransactionProviderProxyIdlingResource implements IdlingRes
     public boolean isIdleNow() {
         boolean idle = false;
 
-        if(mNotified) {
+        if (mNotified) {
             idle = true;
-        } else if(mIsWaitingForSignature) {
+        } else if (mIsWaitingForSignature) {
             idle = StatefulTransactionProviderProxy.getInstance().isAwaitingSignature();
-        } else if(mIsWaitingForAppSelection) {
+        } else if (mIsWaitingForAppSelection) {
             idle = StatefulTransactionProviderProxy.getInstance().isAwaitingApplicationSelection();
+        } else if (mIsWaitingForCreditDebitSelection) {
+            idle = StatefulTransactionProviderProxy.getInstance().isAwaitingCreditDebitSelection();
         } else {
             idle = !StatefulTransactionProviderProxy.getInstance().isTransactionOnGoing();
         }
 
-        if(idle && mCallback != null) {
+        if (idle && mCallback != null) {
             mCallback.onTransitionToIdle();
             mNotified = true;
         }

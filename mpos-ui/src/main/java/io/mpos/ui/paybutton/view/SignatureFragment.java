@@ -89,9 +89,8 @@ public class SignatureFragment extends Fragment implements SignatureView.Signatu
             }
         });
 
-        Button button = (Button) view.findViewById(R.id.mpu_clear_button);
-        button.setTypeface(UiHelper.createAwesomeFontTypeface(view.getContext()));
-        button.setOnClickListener(new View.OnClickListener() {
+        Button clearButton = (Button) view.findViewById(R.id.mpu_clear_button);
+        clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SignatureView signatureView = (SignatureView) view.findViewById(R.id.mpu_signature_view);

@@ -37,6 +37,10 @@ public class AbstractTransactionFragment extends Fragment {
 
         void onApplicationSelected(ApplicationInformation applicationInformation);
 
+        void onCreditSelected();
+
+        void onDebitSelected();
+
     }
 
     private Interaction mInteractionActivity;

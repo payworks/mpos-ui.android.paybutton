@@ -35,7 +35,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
         android:paddingRight="@dimen/mpu_activity_horizontal_margin"
-        android:text="@string/MPUSelectAccount"
+        android:text="@string/MPUPleaseSelect"
         android:textSize="@dimen/mpu_text_size_headline_material"/>
 
 
@@ -55,7 +55,7 @@
             card_view:cardPreventCornerOverlap="false"
             card_view:cardUseCompatPadding="false">
             <ListView
-                android:id="@+id/mpu_application_list_view"
+                android:id="@+id/mpu_selection_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </android.support.v7.widget.CardView>

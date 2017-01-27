@@ -33,10 +33,10 @@ import java.util.List;
 import io.mpos.accessories.parameters.AccessoryParameters;
 import io.mpos.errors.MposError;
 import io.mpos.paymentdetails.ApplicationInformation;
+import io.mpos.transactionprovider.BaseTransactionProcessListener;
 import io.mpos.transactionprovider.TransactionProcess;
 import io.mpos.transactionprovider.TransactionProcessDetails;
 import io.mpos.transactionprovider.TransactionProcessDetailsState;
-import io.mpos.transactionprovider.TransactionProcessWithRegistrationListener;
 import io.mpos.transactionprovider.TransactionProvider;
 import io.mpos.transactionprovider.processparameters.TransactionProcessParameters;
 import io.mpos.transactions.Transaction;
@@ -47,13 +47,15 @@ import io.mpos.ui.shared.MposUi;
  * StatefulTransactionProviderProxy keeps the state of the ongoing transaction independent of the Fragment/Activity's lifecycle.
  * It also reissues the last event when a callback is attached. (during FragmentTransaction / orientation change)
  */
-public class StatefulTransactionProviderProxy implements TransactionProcessWithRegistrationListener {
+public class StatefulTransactionProviderProxy extends BaseTransactionProcessListener {
 
     private final static String TAG = "TxProviderProxy";
 
     public interface Callback {
 
         void onApplicationSelectionRequired(List<ApplicationInformation> applicationInformations);
+
+        void onCreditDebitSelectionRequired();
 
         void onCustomerSignatureRequired();
 
@@ -71,6 +73,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     private boolean mAwaitingSignature;
     private boolean mAwaitingApplicationSelection;
+    private boolean mAwaitingCreditDebitSelection;
     private boolean mTransactionSessionLookup;
 
     private boolean mTransactionIsOnGoing;
@@ -171,6 +174,14 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         }
     }
 
+    @Override
+    public void onCreditDebitSelectionRequired(TransactionProcess transactionProcess, Transaction transaction) {
+        mAwaitingCreditDebitSelection = true;
+        if (mCallback != null) {
+            mCallback.onCreditDebitSelectionRequired();
+        }
+    }
+
     public void continueWithSignature(Bitmap signature, boolean verified) {
         mAwaitingSignature = false;
         mCurrentTransactionProcess.continueWithCustomerSignature(signature, verified);
@@ -186,6 +197,16 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
         mCurrentTransactionProcess.continueWithSelectedApplication(selectedApplication);
     }
 
+    public void continueWithCreditSelection() {
+        mAwaitingCreditDebitSelection = false;
+        mCurrentTransactionProcess.continueCreditDebitSelectionWithCredit();
+    }
+
+    public void continueWithDebitSelection() {
+        mAwaitingCreditDebitSelection = false;
+        mCurrentTransactionProcess.continueCreditDebitSelectionWithDebit();
+    }
+
     public void attachCallback(Callback callback) {
         mCallback = callback;
         if (callback != null && mLastTransactionProcessDetails != null) {
@@ -195,6 +216,8 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
                     callback.onCustomerSignatureRequired();
                 } else if (mAwaitingApplicationSelection) {
                     callback.onApplicationSelectionRequired(mApplicationInformationList);
+                } else if (mAwaitingCreditDebitSelection) {
+                    callback.onCreditDebitSelectionRequired();
                 } else {
                     callback.onStatusChanged(mLastTransactionProcessDetails, mCurrentTransaction);
                 }
@@ -211,6 +234,7 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
     public boolean abortTransaction() {
         mAwaitingApplicationSelection = false;
         mAwaitingSignature = false;
+        mAwaitingCreditDebitSelection = false;
         return mCurrentTransactionProcess.requestAbort();
     }
 
@@ -249,6 +273,10 @@ public class StatefulTransactionProviderProxy implements TransactionProcessWithR
 
     public boolean isAwaitingApplicationSelection() {
         return mAwaitingApplicationSelection;
+    }
+
+    public boolean isAwaitingCreditDebitSelection() {
+        return mAwaitingCreditDebitSelection;
     }
 
     public boolean isTransactionSessionLookup() {

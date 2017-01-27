@@ -299,6 +299,12 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     }
 
     @Override
+    public void onCreditDebitSelectionRequired() {
+        Log.d(TAG, "onCreditDebitSelectionRequired");
+        showCreditDebitSelectionFragment();
+    }
+
+    @Override
     public void onCustomerSignatureRequired() {
         Log.d(TAG, "onCustomerSignatureRequired");
 
@@ -365,6 +371,16 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
     @Override
     public void onApplicationSelected(ApplicationInformation applicationInformation) {
         mStatefulTransactionProviderProxy.continueWithApplicationSelection(applicationInformation);
+    }
+
+    @Override
+    public void onCreditSelected() {
+        mStatefulTransactionProviderProxy.continueWithCreditSelection();
+    }
+
+    @Override
+    public void onDebitSelected() {
+        mStatefulTransactionProviderProxy.continueWithDebitSelection();
     }
 
     @Override
@@ -490,9 +506,14 @@ public class TransactionActivity extends AbstractTransactionActivity implements 
         finish();
     }
 
-    private void showApplicationSelectionFragment(List<ApplicationInformation> applicationInformations) {
-        ApplicationSelectionFragment fragment = ApplicationSelectionFragment.newInstance(applicationInformations);
-        showFragment(fragment, ApplicationSelectionFragment.TAG, UiState.TRANSACTION_WAITING_APPLICATION_SELECTION, false);
+    private void showApplicationSelectionFragment(List<ApplicationInformation> applicationInformation) {
+        SelectionFragment fragment = SelectionFragment.newInstanceForApplicationSelection(applicationInformation);
+        showFragment(fragment, SelectionFragment.TAG_APPLICATION_SELECTION, UiState.TRANSACTION_AWAITING_APPLICATION_SELECTION, false);
+    }
+
+    private void showCreditDebitSelectionFragment() {
+        SelectionFragment fragment = SelectionFragment.newInstanceForCreditDebitSelection();
+        showFragment(fragment, SelectionFragment.TAG_CREDIT_DEBIT_SELECTION, UiState.TRANSACTION_AWAITING_CREDIT_DEBIT_SELECTION, false);
     }
 
     private void showSignatureActivity() {

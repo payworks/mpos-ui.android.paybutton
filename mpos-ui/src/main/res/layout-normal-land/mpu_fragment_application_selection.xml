@@ -54,7 +54,7 @@
             card_view:cardPreventCornerOverlap="false"
             card_view:cardUseCompatPadding="false">
             <ListView
-                android:id="@+id/mpu_application_list_view"
+                android:id="@+id/mpu_selection_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </android.support.v7.widget.CardView>

@@ -93,10 +93,15 @@
 <string name="MPUUnionPay">"UnionPay"</string>
 <string name="MPUDiners">"Diners"</string>
 <string name="MPUDiscover">"Discover"</string>
+<string name="MPUGhLink">"Gh-Link"</string>
 <string name="MPUJcb">"JCB"</string>
 <string name="MPUPrinting">"Afdrukken..."</string>
 <string name="MPUReadCard">"Kaart lezen"</string>
 <string name="MPUPrintReceipt">"Betalingsbewijs afdrukken"</string>
 <string name="MPUReprintReceipt">"Betalingsbewijs opnieuw afdrukken"</string>
 <string name="MPUCapture">"Boeken"</string>
+<string name="MPUCredit">"Credit"</string>
+<string name="MPUDebit">"Debit"</string>
+<string name="MPUPleaseSelect">"Please select"</string>
+<string name="MPUClear">"Opnieuw Zetten"</string>
 </resources>

@@ -136,7 +136,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         StatefulTransactionProviderProxyIdlingResource idlingResource = new StatefulTransactionProviderProxyIdlingResource(false, true);
         Espresso.registerIdlingResources(idlingResource);
         Espresso.onData(Matchers.hasToString(Matchers.equalToIgnoringWhiteSpace("Mocked VISA")))
-                .inAdapterView(ViewMatchers.withId(R.id.mpu_application_list_view))
+                .inAdapterView(ViewMatchers.withId(R.id.mpu_selection_list_view))
                 .perform(ViewActions.click());
 
         Espresso.unregisterIdlingResources(idlingResource);

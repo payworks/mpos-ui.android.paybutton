@@ -42,7 +42,12 @@ public enum UiState {
     /**
      * Transaction is waiting for application selection
      */
-    TRANSACTION_WAITING_APPLICATION_SELECTION,
+    TRANSACTION_AWAITING_APPLICATION_SELECTION,
+
+    /**
+     * Transaction is waiting for Credit/Debit selection
+     */
+    TRANSACTION_AWAITING_CREDIT_DEBIT_SELECTION,
 
     /**
      * Error in transaction process
