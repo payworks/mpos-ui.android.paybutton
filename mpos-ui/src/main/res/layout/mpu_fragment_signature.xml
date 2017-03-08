@@ -25,6 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
+    android:filterTouchesWhenObscured="true"
     android:paddingBottom="@dimen/mpu_activity_vertical_margin"
     android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
@@ -119,6 +120,5 @@
         android:layout_alignRight="@+id/mpu_signature_view_separator"
         android:enabled="false"
         android:text="@string/MPUClear" />
-
 
 </RelativeLayout>

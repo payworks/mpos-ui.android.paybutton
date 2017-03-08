@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
   ~ The MIT License (MIT)
@@ -23,15 +22,15 @@
   ~ THE SOFTWARE.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:paddingBottom="@dimen/mpu_activity_vertical_margin"
-                android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
-                android:paddingRight="@dimen/mpu_activity_horizontal_margin"
-                android:paddingTop="@dimen/mpu_activity_vertical_margin">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:filterTouchesWhenObscured="true"
+    android:paddingBottom="@dimen/mpu_activity_vertical_margin"
+    android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
+    android:paddingRight="@dimen/mpu_activity_horizontal_margin"
+    android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
     <FrameLayout
         android:id="@+id/mpu_status_icon_view_container"
@@ -43,14 +42,13 @@
             android:id="@+id/mpu_progress_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:src="@drawable/mpu_transaction_progress_drawable"
-            />
+            android:src="@drawable/mpu_transaction_progress_drawable" />
 
         <TextView
             android:id="@+id/mpu_status_icon_view"
             style="@style/MpuTransactionStatusIconStyle"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
+
     </FrameLayout>
 
     <LinearLayout
@@ -67,13 +65,15 @@
             android:layout_weight="1"
             android:hint="@string/MPUEnterEmailAddress"
             android:inputType="textEmailAddress"
-            android:padding="@dimen/mpu_dialog_content_padding"/>
+            android:padding="@dimen/mpu_dialog_content_padding" />
 
         <Button
             android:id="@+id/mpu_send_button"
             style="@style/mpos.ui.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/MPUSend"/>
+            android:text="@string/MPUSend" />
+
     </LinearLayout>
+
 </RelativeLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
   ~ The MIT License (MIT)
@@ -22,29 +21,34 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<RelativeLayout
-    android:id="@+id/payment_fragment_error"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/payment_fragment_error"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@android:color/transparent"
+    android:filterTouchesWhenObscured="true"
     android:paddingBottom="@dimen/mpu_activity_vertical_margin"
     android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
     android:paddingRight="@dimen/mpu_activity_horizontal_margin"
     android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
-    <FrameLayout android:id="@+id/mpu_status_container"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
-        <include layout="@layout/mpu_layout_status_view"/>
+    <FrameLayout
+        android:id="@+id/mpu_status_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
+
+        <include layout="@layout/mpu_layout_status_view" />
+
     </FrameLayout>
 
-    <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
         <Button
             android:id="@+id/mpu_close_button"
 
@@ -53,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/MPUClose"
-            tools:ignore="RelativeOverlap"/>
+            tools:ignore="RelativeOverlap" />
 
         <Button
             android:id="@+id/mpu_retry_button"
@@ -62,7 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_gravity="center"
-            android:text="@string/MPURetry"/>
+            android:text="@string/MPURetry" />
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
   ~ The MIT License (MIT)
@@ -22,36 +21,41 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/payment_fragment_error"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
+    android:filterTouchesWhenObscured="true"
     android:paddingBottom="@dimen/mpu_activity_vertical_margin"
     android:paddingLeft="@dimen/mpu_activity_horizontal_margin"
     android:paddingRight="@dimen/mpu_activity_horizontal_margin"
     android:paddingTop="@dimen/mpu_activity_vertical_margin">
 
-    <FrameLayout android:id="@+id/mpu_status_container"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
-        <include layout="@layout/mpu_layout_status_view"/>
+    <FrameLayout
+        android:id="@+id/mpu_status_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mpu_payment_status_icon_view_margin_top">
+
+        <include layout="@layout/mpu_layout_status_view" />
+
     </FrameLayout>
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@id/mpu_status_container"
-                  android:layout_marginTop="@dimen/mpu_payment_action_button_margin_top"
-                  android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mpu_status_container"
+        android:layout_marginTop="@dimen/mpu_payment_action_button_margin_top"
+        android:orientation="vertical">
+
         <Button
             android:id="@+id/mpu_retry_button"
             style="@style/mpos.ui.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/MPURetry"/>
+            android:text="@string/MPURetry" />
 
         <Button
             android:id="@+id/mpu_close_button"
@@ -59,7 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/MPUClose"/>
+            android:text="@string/MPUClose" />
+
     </LinearLayout>
 
 </RelativeLayout>

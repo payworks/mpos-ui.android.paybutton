@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
   ~ The MIT License (MIT)
@@ -23,39 +22,41 @@
   ~ THE SOFTWARE.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingBottom="@dimen/mpu_content_padding_small"
-              android:paddingLeft="@dimen/mpu_content_padding"
-              android:paddingRight="@dimen/mpu_content_padding"
-              android:paddingTop="@dimen/mpu_content_padding_small">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/mpu_content_padding_small"
+    android:paddingLeft="@dimen/mpu_content_padding"
+    android:paddingRight="@dimen/mpu_content_padding"
+    android:paddingTop="@dimen/mpu_content_padding_small">
 
-    <LinearLayout android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/mpu_summary_tx_history_list_status_view"
             style="@style/MpuCardBodyTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Sale"/>
+            tools:text="Sale" />
 
         <TextView
             android:id="@+id/mpu_summary_tx_history_list_timestamp_view"
             style="@style/MpuTimestampTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="18th April 2016, 12:57"/>
+            tools:text="18th April 2016, 12:57" />
 
         <TextView
             android:id="@+id/mpu_summary_tx_history_list_partial_cp_view"
             style="@style/MpuTimestampTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="out of reserved $27.00"/>
+            tools:text="out of reserved $27.00" />
 
     </LinearLayout>
 
@@ -64,6 +65,6 @@
         style="@style/MpuCardBodyTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="$12.34"/>
+        tools:text="$12.34" />
 
 </LinearLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2016 Payworks GmbH (http://www.payworks.com)
   ~
   ~ The MIT License (MIT)
@@ -23,11 +22,12 @@
   ~ THE SOFTWARE.
   -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:filterTouchesWhenObscured="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,8 +46,7 @@
             card_view:cardPreventCornerOverlap="false"
             card_view:cardUseCompatPadding="false">
 
-            <LinearLayout
-                xmlns:tools="http://schemas.android.com/tools"
+            <LinearLayout xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -63,9 +62,11 @@
                     android:paddingRight="@dimen/mpu_content_padding"
                     android:paddingTop="@dimen/mpu_content_padding_small">
 
-                    <LinearLayout android:layout_width="match_parent"
-                                  android:layout_height="wrap_content"
-                                  android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/mpu_summary_status_view"
                             style="@style/MpuCardHeaderTextStyle"
@@ -73,7 +74,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            tools:text="Approved"/>
+                            tools:text="Approved" />
 
                         <TextView
                             android:id="@+id/mpu_summary_amount_view"
@@ -81,7 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            tools:text="$12.34"/>
+                            tools:text="$12.34" />
 
                     </LinearLayout>
 
@@ -93,7 +94,7 @@
                         android:layout_gravity="center_vertical"
                         android:visibility="gone"
                         tools:text="Extra information"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible" />
 
                 </LinearLayout>
 
@@ -102,8 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
-                </LinearLayout>
+                    android:visibility="gone"></LinearLayout>
 
                 <View
                     android:id="@+id/mpu_summary_divider_header_view"
@@ -111,7 +111,7 @@
                     android:layout_height="@dimen/mpu_divider"
                     android:layout_marginLeft="@dimen/mpu_divider_padding"
                     android:layout_marginRight="@dimen/mpu_divider_padding"
-                    android:background="@color/mpu_divider"/>
+                    android:background="@color/mpu_divider" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -129,7 +129,7 @@
                         android:paddingRight="@dimen/mpu_card_image_padding"
                         android:paddingTop="@dimen/mpu_content_padding_small"
                         tools:drawableLeft="@drawable/mpu_visacard_image"
-                        tools:text="Unknown"/>
+                        tools:text="Unknown" />
 
                     <TextView
                         android:id="@+id/mpu_summary_account_number_view"
@@ -141,7 +141,7 @@
                         android:paddingLeft="@dimen/mpu_content_padding"
                         android:paddingRight="@dimen/mpu_content_padding"
                         android:paddingTop="@dimen/mpu_content_padding_small"
-                        tools:text="XXXX XXXX XXXX 1234"/>
+                        tools:text="XXXX XXXX XXXX 1234" />
                 </LinearLayout>
 
 
@@ -151,7 +151,7 @@
                     android:layout_height="@dimen/mpu_divider"
                     android:layout_marginLeft="@dimen/mpu_divider_padding"
                     android:layout_marginRight="@dimen/mpu_divider_padding"
-                    android:background="@color/mpu_divider"/>
+                    android:background="@color/mpu_divider" />
 
                 <TextView
                     android:id="@+id/mpu_summary_subject_view"
@@ -162,12 +162,12 @@
                     android:paddingLeft="@dimen/mpu_content_padding"
                     android:paddingRight="@dimen/mpu_content_padding"
                     android:paddingTop="@dimen/mpu_content_padding_small"
-                    tools:text="How much wood would a woodchuck chuck if a woodchuck could chuck wood?"/>
+                    tools:text="How much wood would a woodchuck chuck if a woodchuck could chuck wood?" />
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/mpu_divider"
-                    android:background="@color/mpu_divider"/>
+                    android:background="@color/mpu_divider" />
 
                 <TextView
                     android:id="@+id/mpu_summary_datetime_view"
@@ -179,8 +179,10 @@
                     android:paddingLeft="@dimen/mpu_content_padding"
                     android:paddingRight="@dimen/mpu_content_padding"
                     android:paddingTop="@dimen/mpu_content_padding_small"
-                    tools:text="9:05 am / Today"/>
+                    tools:text="9:05 am / Today" />
+
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
 
         <LinearLayout
@@ -194,7 +196,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/MPUCaptureTransaction"/>
+                android:text="@string/MPUCaptureTransaction" />
 
             <Button
                 android:id="@+id/mpu_summary_refund_button"
@@ -202,7 +204,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/MPURefundTransaction"/>
+                android:text="@string/MPURefundTransaction" />
 
             <Button
                 android:id="@+id/mpu_summary_retry_button"
@@ -210,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/MPURetry"/>
+                android:text="@string/MPURetry" />
 
             <Button
                 android:id="@+id/mpu_summary_send_receipt_button"
@@ -218,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/MPUSendReceipt"/>
+                android:text="@string/MPUSendReceipt" />
 
             <Button
                 android:id="@+id/mpu_summary_print_receipt_button"
@@ -226,7 +228,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/MPUPrintReceipt"/>
+                android:text="@string/MPUPrintReceipt" />
 
             <Button
                 android:id="@+id/mpu_summary_close_button"
@@ -234,7 +236,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/MPUClose"/>
+                android:text="@string/MPUClose" />
 
         </LinearLayout>
 
