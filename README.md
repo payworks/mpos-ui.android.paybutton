@@ -1,5 +1,7 @@
 ## Payworks Pay Button for Android
 
+**The repository is EOL and will no longer be updated. The latest binary builds can be accessed as usual at http://www.payworks.mpymnt.com/**
+
 <img src="http://www.payworks.mpymnt.com/sites/default/files/paybutton_android_2.png"/>
 
 The Payworks Pay Button makes the integration of card acceptance into your app insanely easy.
